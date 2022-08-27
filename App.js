@@ -23,6 +23,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import PushNotification from "react-native-push-notification";
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -37,17 +38,36 @@ const App: () => Node = () => {
     }
   }
 
+
+  PushNotification.createChannel(
+    {
+      channelId: "test1", // (required)
+      channelName: "firstChannelName", // (required)
+    },
+    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
+
   useEffect(()=>{
     requestUserPermission();
     NotificationListener();
+
+
+
   },[])
+
+  function triggerNotification(){
+    PushNotification.localNotification({
+      channelId: "test1", 
+      message: "My Notification Message"  
+    });
+  }
 
 
   return (
     <View style={styles.container}>
       <View style={{paddingHorizontal:20}}>
         <Text style={{fontSize:24,fontWeight:"bold",color:"black"}}>Title test</Text>
-        <Button
+        <Button onPress={()=>{triggerNotification()}}
             title="Add List"
             color="#841584"
             accessibilityLabel="Learn more about this purple button"/>
