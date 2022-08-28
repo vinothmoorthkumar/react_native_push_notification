@@ -1,16 +1,32 @@
 import React, {useState} from 'react'
-import { Button, TextInput, Text, View } from 'react-native';
+import { Button, TextInput, Text, View,useColorScheme } from 'react-native';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
+
+const colorSchemes = {
+  light: {
+    background: 'yellow',
+    text: 'red',
+  },
+  dark: {
+    background: '#333',
+    text: '#fff',
+  },
+};
+
+
 export const HomeScreen = ({ navigation }) => {
+
+  const colorScheme = useColorScheme();
+  const colors = colorSchemes[colorScheme] || colorSchemes.light;
   const [currency, setCurrency] = useState('US Dollar');
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{ backgroundColor: colors.background}]}>
       <View style={{flex:10}}>
-        <TextInput
+        <TextInput style={{ color: colors.text }}
           placeholder="Email" />
         <TextInput
           secureTextEntry={true}
