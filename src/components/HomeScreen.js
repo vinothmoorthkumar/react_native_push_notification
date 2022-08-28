@@ -9,7 +9,7 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={{flex:10}}>
         <TextInput
           placeholder="Email" />
         <TextInput
@@ -26,8 +26,15 @@ export const HomeScreen = ({ navigation }) => {
         <Text>
           Selected: {currency}
         </Text>
-      </View>
 
+      </View>
+      <View style={{flex:1}}>
+          <Button
+            title="Go to Notification"
+            onPress={() =>
+              navigation.navigate('Notification')
+            } />
+        </View>
 
 
 
