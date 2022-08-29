@@ -26,6 +26,7 @@ import { useColorScheme } from 'react-native';
 import {HomeScreen} from "./src/components/HomeScreen"
 import {ProfileScreen} from "./src/components/Profile"
 import {Notification} from "./src/components/Notification"
+import {AddTrip} from "./src/components/trip/AddTrip"
 
 
 const App = () => {
@@ -41,6 +42,9 @@ const App = () => {
                   component={HomeScreen}
                   options={{ title: 'Welcome' }}
                 />
+        
+        <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Add Trip' }} />
+
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Notification" component={Notification} />
 

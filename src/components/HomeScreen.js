@@ -40,7 +40,7 @@ export const HomeScreen = ({ navigation }) => {
         </Text>
 
         <View style={{ position: "absolute", bottom: 0, right: 0 }}>
-          <TouchableHighlight onPress={() => { navigation.navigate('Notification')}}>
+          <TouchableHighlight onPress={() => { navigation.navigate('AddTrip')}}>
             <View style={{
               position: 'relative',
               justifyContent: 'center',
