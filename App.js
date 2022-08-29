@@ -6,12 +6,13 @@
  * @flow strict-local
  */
 
-import React, { useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import { Appearance } from 'react-native';
-
-
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 
 import {
   Button,
@@ -21,7 +22,7 @@ import {
 } from 'react-native';
 
 
-
+import { useColorScheme } from 'react-native';
 import {HomeScreen} from "./src/components/HomeScreen"
 import {ProfileScreen} from "./src/components/Profile"
 import {Notification} from "./src/components/Notification"
@@ -30,9 +31,10 @@ import {Notification} from "./src/components/Notification"
 const App = () => {
 
   const Stack = createNativeStackNavigator();
+  const scheme = useColorScheme();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack.Navigator>
                 <Stack.Screen
                   name="Home"
