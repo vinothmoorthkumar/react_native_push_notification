@@ -29,18 +29,11 @@ export const AddTrip = ({ navigation, route }) => {
         createTable();
     }, [])
     const createTable = async () => {
-        
-        // await db.transaction((tx) => {
-        //     tx.executeSql(
-        //         "CREATE TABLE IF NOT EXISTS "
-        //         + "TRIP"
-        //         + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
-        //     )
-        // })
-
-
-
-
+        await db.createtable(
+            "CREATE TABLE IF NOT EXISTS "
+            + "TRIP"
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
+        )
     }
 
     const onChange = (event, selectedDate) => {
@@ -66,13 +59,6 @@ export const AddTrip = ({ navigation, route }) => {
 
     async function saveTrip() {
         let dataArr=[destination,name,startDate.toString(),endDate.toString()];
-        // await db.transaction(async (tx) => {
-        //     await tx.executeSql(
-        //         "INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)",
-        //         dataArr
-        //     );
-        // })
-
         await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)",dataArr)
        let result= await db.select("SELECT * FROM TRIP",[])
         console.log("result test",result.rows.item(0))
