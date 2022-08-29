@@ -32,12 +32,23 @@ import { Notification } from "./src/components/Notification"
 import { AddTrip } from "./src/components/trip/AddTrip"
 
 
-const theme = {
+const darkTheme = {
   ...DefaultTheme,
+  roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'tomato',
-    secondary: 'yellow',
+    primary: "#1A1A1A",
+    accent: "#FAFAFA"
+  },
+};
+
+const lightTheme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#FAFAFA",
+    accent: "#1A1A1A",
   },
 };
 
@@ -47,10 +58,10 @@ const App = () => {
   const scheme = useColorScheme();
 
   return (
-    <PaperProvider theme={theme} settings={{
+    <PaperProvider theme={scheme === 'dark' ? darkTheme : lightTheme} settings={{
       icon: props => <AwesomeIcon {...props} />,
     }}>
-      <NavigationContainer>
+      <NavigationContainer theme={scheme === 'dark' ? darkTheme : lightTheme}>
         <Stack.Navigator>
           <Stack.Screen
             name="Home"

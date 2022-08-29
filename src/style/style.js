@@ -11,12 +11,12 @@ export const styles = StyleSheet.create({
         backgroundColor: "#fff",
         color: "red"
     },
-    light: {
-        background: '#fff',
-        text: '#333',
-    },
-    dark: {
-        background: '#333',
-        text: '#fff',
-    },
+    // light: {
+    //     background: '#fff',
+    //     text: '#333',
+    // },
+    // dark: {
+    //     background: '#333',
+    //     text: '#fff',
+    // },
 });
