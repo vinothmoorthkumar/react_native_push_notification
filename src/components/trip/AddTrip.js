@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     View,
     Pressable
@@ -7,12 +7,9 @@ import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
-import { AsyncStorage } from 'react-native';
 
-
-import { Avatar, Button, Card, Title, Paragraph, TextInput,Text } from 'react-native-paper';
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
-
+import { Avatar, Button, Card, Title, Paragraph, TextInput, Text } from 'react-native-paper';
+import db from "../../db/db_connection"
 
 export const AddTrip = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -26,6 +23,25 @@ export const AddTrip = ({ navigation, route }) => {
     const [name, setName] = React.useState("");
     const [startDate, setStartdate] = React.useState(new Date());
     const [endDate, setEnddate] = React.useState(new Date());
+
+
+    useEffect(() => {
+        createTable();
+    }, [])
+    const createTable = async () => {
+        
+        // await db.transaction((tx) => {
+        //     tx.executeSql(
+        //         "CREATE TABLE IF NOT EXISTS "
+        //         + "TRIP"
+        //         + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
+        //     )
+        // })
+
+
+
+
+    }
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -46,6 +62,20 @@ export const AddTrip = ({ navigation, route }) => {
 
     function showEndDatePicker() {
         setVisibleEndDate(true);
+    }
+
+    async function saveTrip() {
+        let dataArr=[destination,name,startDate.toString(),endDate.toString()];
+        // await db.transaction(async (tx) => {
+        //     await tx.executeSql(
+        //         "INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)",
+        //         dataArr
+        //     );
+        // })
+
+        await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)",dataArr)
+       let result= await db.select("SELECT * FROM TRIP",[])
+        console.log("result test",result.rows.item(0))
     }
 
     return <View style={[styles.container, { backgroundColor: colors.primary }]}>
@@ -69,7 +99,7 @@ export const AddTrip = ({ navigation, route }) => {
 
         <Pressable onPress={() => showEndDatePicker()}>
             <View pointerEvents="none">
-                <TextInput  label="Start Date" value={endDate.toDateString()} />
+                <TextInput label="Start Date" value={endDate.toDateString()} />
             </View>
         </Pressable>
         {
@@ -86,7 +116,7 @@ export const AddTrip = ({ navigation, route }) => {
             alignSelf: 'flex-end',
         }}>
             <View style={{ width: 100 }}>
-                <Button mode="contained" onPress={() => console.log('Pressed')}>
+                <Button mode="contained" onPress={() => saveTrip()}>
                     <IconFA name='save' size={20} color='white' />
                 </Button>
             </View>
