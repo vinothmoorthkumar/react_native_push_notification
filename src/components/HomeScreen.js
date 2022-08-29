@@ -9,7 +9,6 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 
 export const HomeScreen = ({ navigation }) => {
 
-  const colorScheme = useColorScheme();
   // const colors = colorSchemes[colorScheme] || colorSchemes.light;
   const { colors } = useTheme();
 
