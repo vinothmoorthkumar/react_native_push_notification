@@ -1,21 +1,10 @@
 import React, { useState } from 'react'
-import { Button, TextInput, Text, View, useColorScheme, TouchableOpacity } from 'react-native';
+import { Button, TextInput, Text, View, useColorScheme, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useTheme } from '@react-navigation/native';
-
-
-// const colorSchemes = {
-//   light: {
-//     background: 'yellow',
-//     text: 'red',
-//   },
-//   dark: {
-//     background: '#333',
-//     text: '#fff',
-//   },
-// };
+import IconFA from 'react-native-vector-icons/FontAwesome';
 
 
 export const HomeScreen = ({ navigation }) => {
@@ -49,6 +38,24 @@ export const HomeScreen = ({ navigation }) => {
         <Text style={{ color: colors.text }}>
           Selected: {currency}
         </Text>
+
+        <View style={{ position: "absolute", bottom: 0, right: 0 }}>
+          <TouchableHighlight onPress={() => { navigation.navigate('Notification')}}>
+            <View style={{
+              position: 'relative',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 60,
+              height: 60,
+              borderRadius: 100,
+              backgroundColor: 'orange'
+            }}>
+              <IconFA size={40} />
+              <IconFA name='plus' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+            </View>
+          </TouchableHighlight>
+        </View>
+
 
       </View>
       <View style={{ flex: 1 }}>
