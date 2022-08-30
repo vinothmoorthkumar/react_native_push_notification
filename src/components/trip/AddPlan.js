@@ -29,7 +29,7 @@ export const AddPlan = ({ navigation, route }) => {
             let results = await db.select("SELECT * FROM PLAN WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
             setevent(data.event);
-            setName(data.name);
+            setvenue(data.venue);
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
         }
@@ -64,7 +64,7 @@ export const AddPlan = ({ navigation, route }) => {
 
     async function deleteTrip() {
         let result = await db.delete("DELETE FROM PLAN WHERE ID=" + route.params.id);
-        navigation.navigate('Plans')
+        navigation.navigate('Plans',{id:tripId})
 
     }
 
@@ -72,7 +72,7 @@ export const AddPlan = ({ navigation, route }) => {
         let dataArr = [event, venue, startDate.toString(), endDate.toString(),tripId];
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE PLAN SET event = ? , venue = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE PLAN SET event = ? , venue = ?, startDate = ?, endDate = ?, TripID = ? WHERE id = ?', dataArr);
         } else {
             let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
         }

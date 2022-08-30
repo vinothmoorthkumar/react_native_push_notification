@@ -32,7 +32,7 @@ export const Plans = ({ navigation, route }) => {
     const listItems = plans.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>
             <TouchableOpacity onPress={() =>
-                navigation.navigate('Plans', { id: ele.ID })
+                navigation.navigate('AddPlan', { tripId:route.params.id, id: ele.ID })
             } style={{ padding: 2 }}>
                 <Card>
                     <Card.Content>
