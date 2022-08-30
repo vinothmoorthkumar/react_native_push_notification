@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
@@ -15,21 +15,13 @@ import {
   DefaultTheme,
   DarkTheme
 } from '@react-navigation/native';
-import { Provider as PaperProvider, DarkTheme as PaperDarkTheme, DefaultTheme as PaperDefaultTheme } from 'react-native-paper';
-
-import {
-  Button,
-  StatusBar,
-  StyleSheet,
-  Text,
-} from 'react-native';
-
-
+import { Provider as PaperProvider, DefaultTheme as PaperDefaultTheme } from 'react-native-paper';
 import { useColorScheme } from 'react-native';
 import { HomeScreen } from "./src/components/HomeScreen"
 import { ProfileScreen } from "./src/components/Profile"
 import { Notification } from "./src/components/Notification"
 import { AddTrip } from "./src/components/trip/AddTrip"
+import { Plans } from "./src/components/trip/Plan"
 
 
 
@@ -73,7 +65,7 @@ const App = () => {
             component={HomeScreen}
             options={{ title: 'Welcome' }}
           />
-
+          <Stack.Screen name="Plans" component={Plans} options={{ title: 'Plans' }} />
           <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Trip' }} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Notification" component={Notification} />

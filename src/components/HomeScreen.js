@@ -34,7 +34,7 @@ export const HomeScreen = ({ navigation }) => {
     <View key={key} style={{ marginBottom: 10 }}>
 
       <TouchableOpacity onPress={() =>
-        navigation.navigate('AddTrip', { id: ele.ID })
+        navigation.navigate('Plans', { id: ele.ID })
       } style={{padding:2}}>
         <Card>
           <Card.Content>
@@ -73,42 +73,6 @@ export const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* <View style={{ flex: 10 }}>
-        <TextInput style={{ color: colors.text }}
-          placeholderTextColor={colors.text}
-          placeholder="Email" />
-        <TextInput
-          secureTextEntry={true}
-          placeholderTextColor={colors.text}
-          placeholder="Password"
-        />
-        <Picker
-          selectedValue={currency}
-          style={{ color: colors.text }}
-          onValueChange={currentCurrency => setCurrency(currentCurrency)}>
-          <Picker.Item label="USD" value="US Dollars" />
-          <Picker.Item label="EUR" value="Euro" />
-          <Picker.Item label="NGN" value="Naira" />
-        </Picker>
-        <Text style={{ color: colors.text }}>
-          Selected: {currency}
-        </Text>
-
- 
-
-
-      </View>
-      <View style={{ flex: 1 }}>
-        <TouchableOpacity style={{ backgroundColor: colors.card }}>
-          <Text style={{ color: colors.text }}>Button!</Text>
-        </TouchableOpacity>
-
-        <Button
-          title="Go to Notification"
-          onPress={() =>
-            navigation.navigate('Notification')
-          } />
-      </View> */}
     </View>
   );
 };
