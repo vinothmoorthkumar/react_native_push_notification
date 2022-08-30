@@ -13,9 +13,9 @@ import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {
   NavigationContainer,
   DefaultTheme,
-  DarkTheme,
+  DarkTheme
 } from '@react-navigation/native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, DarkTheme as PaperDarkTheme, DefaultTheme as PaperDefaultTheme } from 'react-native-paper';
 
 import {
   Button,
@@ -32,23 +32,27 @@ import { Notification } from "./src/components/Notification"
 import { AddTrip } from "./src/components/trip/AddTrip"
 
 
-const darkTheme = {
+
+
+const CustomlightTheme = {
   ...DefaultTheme,
-  roundness: 2,
+  ...PaperDefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#1A1A1A",
-    accent: "#FAFAFA"
+    ...PaperDefaultTheme.colors,
+    background:"#ffffff",
+    text:"#333333"
   },
 };
 
-const lightTheme = {
-  ...DefaultTheme,
-  roundness: 2,
+const CustomdarkTheme = {
+  ...DarkTheme,
+  ...PaperDefaultTheme,
   colors: {
-    ...DefaultTheme.colors,
-    primary: "#FAFAFA",
-    accent: "#1A1A1A",
+    ...DarkTheme.colors,
+    ...PaperDefaultTheme.colors,
+    background:"#333333",
+    text:"#ffffff"
   },
 };
 
@@ -56,12 +60,13 @@ const App = () => {
 
   const Stack = createNativeStackNavigator();
   const scheme = useColorScheme();
-
+  const theme=scheme == 'dark' ? CustomdarkTheme : CustomlightTheme
   return (
-    <PaperProvider theme={scheme === 'dark' ? darkTheme : lightTheme} settings={{
+    <PaperProvider settings={{
       icon: props => <AwesomeIcon {...props} />,
-    }}>
-      <NavigationContainer theme={scheme === 'dark' ? darkTheme : lightTheme}>
+    }} theme={theme}>
+      <NavigationContainer theme={theme}>
+
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
@@ -76,6 +81,7 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
+
 
   );
 }

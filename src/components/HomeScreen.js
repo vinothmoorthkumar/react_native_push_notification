@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View,ScrollView,TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph, Text } from 'react-native-paper';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
@@ -13,9 +13,6 @@ const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
 
 export const HomeScreen = ({ navigation }) => {
-
-  // const colors = colorSchemes[colorScheme] || colorSchemes.light;
-  const { colors } = useTheme();
   const [trips, setTrips] = useState([]);
   const isFocused = useIsFocused()
 
@@ -36,12 +33,12 @@ export const HomeScreen = ({ navigation }) => {
 
 
 
-  const listItems = trips.map((ele ,key) =>
-    <View key={key} style={{marginBottom:10}}>
-   
+  const listItems = trips.map((ele, key) =>
+    <View key={key} style={{ marginBottom: 10 }}>
+
       <TouchableOpacity onPress={() =>
-            navigation.navigate('AddTrip',{id:ele.ID})
-          } >
+        navigation.navigate('AddTrip', { id: ele.ID })
+      } style={{padding:2}}>
         <Card>
           <Card.Content>
             <Title>{ele.name}</Title>
@@ -55,28 +52,30 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
-        <ScrollView >
-        {listItems}
 
+
+
+      <ScrollView >
+        {listItems}
       </ScrollView>
 
       <View style={{ position: "absolute", bottom: 20, right: 20 }}>
-        
-          <TouchableOpacity onPress={() => { navigation.navigate('AddTrip')}}>
-            <View style={{
-              position: 'relative',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 60,
-              height: 60,
-              borderRadius: 100,
-              backgroundColor: 'orange'
-            }}>
-              <IconFA size={40} />
-              <IconFA name='plus' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
-            </View>
-          </TouchableOpacity>
-        </View>
+
+        <TouchableOpacity onPress={() => { navigation.navigate('AddTrip') }}>
+          <View style={{
+            position: 'relative',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 60,
+            height: 60,
+            borderRadius: 100,
+            backgroundColor: 'orange'
+          }}>
+            <IconFA size={40} />
+            <IconFA name='plus' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+          </View>
+        </TouchableOpacity>
+      </View>
 
       {/* <View style={{ flex: 10 }}>
         <TextInput style={{ color: colors.text }}

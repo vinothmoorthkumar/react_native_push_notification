@@ -35,6 +35,14 @@ const dbConnection = {
             );
         })
     },
+    update: async function (query, data) {
+        return await db.transaction(async (tx) => {
+            await tx.executeSql(
+                query,
+                data
+            );
+        })
+    },
     select: async function (query, data) {
         return new Promise(async function(resolve, reject) {
             await db.transaction(async (tx) => {

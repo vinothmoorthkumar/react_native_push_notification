@@ -65,19 +65,26 @@ export const AddTrip = ({ navigation, route }) => {
         setVisibleEndDate(true);
     }
 
-    async function deleteTrip(){
-        let result =await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
+    async function deleteTrip() {
+        let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
         navigation.navigate('Home')
 
     }
 
     async function saveTrip() {
         let dataArr = [destination, name, startDate.toString(), endDate.toString()];
-        await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)", dataArr)
+
+        if (editable) {
+            dataArr.push(route.params.id)
+            await db.update('UPDATE TRIP SET destination = ? , name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
+        } else {
+            await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)", dataArr)
+        }
         navigation.navigate('Home')
+
     }
 
-    return <View style={[styles.container, { backgroundColor: colors.primary }]}>
+    return <View style={[styles.container]}>
         <TextInput label="Destination" value={destination} onChangeText={destination => setDestination(destination)} />
         <TextInput label="Trip Name" value={name} onChangeText={name => setName(name)} />
         <Pressable onPress={() => showDatePicker()}>
@@ -111,8 +118,8 @@ export const AddTrip = ({ navigation, route }) => {
                 onChange={onChangeEndDate}
             />)
         }
-        <View style={{ alignSelf: 'flex-end',flexDirection:'row'}}>
-        <View style={{ width: 100 }}>
+        <View style={{ alignSelf: 'flex-end', justifyContent:"space-between", flexDirection: 'row', marginTop: 10  }}>
+            <View style={{ width: 100}}>
                 <Button mode="contained" onPress={() => deleteTrip()}>
                     <IconFA name='remove' size={20} color='white' />
                 </Button>
