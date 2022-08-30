@@ -41,7 +41,7 @@ const CustomlightTheme = {
     ...DefaultTheme.colors,
     ...PaperDefaultTheme.colors,
     background:"#ffffff",
-    text:"#333333"
+    text:"#333333",
   },
 };
 

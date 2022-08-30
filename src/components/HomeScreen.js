@@ -9,9 +9,6 @@ import { useTheme } from 'react-native-paper';
 
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import db from "../db/db_connection"
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
-
-
 export const HomeScreen = ({ navigation }) => {
   const [trips, setTrips] = useState([]);
   const isFocused = useIsFocused()
@@ -41,19 +38,18 @@ export const HomeScreen = ({ navigation }) => {
       } style={{padding:2}}>
         <Card>
           <Card.Content>
-            <Title>{ele.name}</Title>
-            <Paragraph>From {new Date(ele.startDate).toDateString()} to {new Date(ele.endDate).toDateString()}</Paragraph>
+            <Title>{ele.name} - {ele.destination}</Title>
+            <Paragraph>{new Date(ele.startDate).toDateString()}, {new Date(ele.endDate).toDateString()}</Paragraph>
           </Card.Content>
-          <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+          <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
         </Card>
       </TouchableOpacity>
     </View>
   );
 
+
   return (
     <View style={[styles.container]}>
-
-
 
       <ScrollView >
         {listItems}
