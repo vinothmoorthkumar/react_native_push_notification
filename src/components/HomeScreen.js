@@ -1,23 +1,59 @@
-import React, { useState } from 'react'
-import { Button, TextInput, Text, View, useColorScheme, TouchableOpacity, TouchableHighlight } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { View,ScrollView } from 'react-native';
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useTheme } from '@react-navigation/native';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import db from "../db/db_connection"
+const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
 
 export const HomeScreen = ({ navigation }) => {
 
   // const colors = colorSchemes[colorScheme] || colorSchemes.light;
   const { colors } = useTheme();
+  const [trips, setTrips] = useState([]);
+  useEffect(() => {
+    getTrip();
+  }, [])
+  async function getTrip() {
+    const lists = [];
+    let results = await db.select("SELECT * FROM TRIP", [])
+    const count = results.rows.length;
+    for (let i = 0; i < count; i++) {
+      const row = results.rows.item(i);
+      lists.push(row);
+    }
+    setTrips(lists)
+  }
 
-  const [currency, setCurrency] = useState('US Dollar');
+
+  const listItems = trips.map((ele ,key) =>
+    <View key={key} stye={{marginBottom:20}}>
+      <Card>
+        <Card.Content>
+          <Title>{ele.name}</Title>
+          <Paragraph>From {new Date(ele.startDate).toDateString()} to {new Date(ele.endDate).toDateString()}</Paragraph>
+        </Card.Content>
+        <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+        {/* <Card.Actions>
+      <Button>Cancel</Button>
+      <Button>Ok</Button>
+    </Card.Actions> */}
+      </Card>
+    </View>
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.card }]}>
+      <ScrollView style={styles.scrollView}>
+        {listItems}
+      </ScrollView>
 
-      <View style={{ flex: 10 }}>
+      {/* <View style={{ flex: 10 }}>
         <TextInput style={{ color: colors.text }}
           placeholderTextColor={colors.text}
           placeholder="Email" />
@@ -64,18 +100,6 @@ export const HomeScreen = ({ navigation }) => {
 
         <Button
           title="Go to Notification"
-          onPress={() =>
-            navigation.navigate('Notification')
-          } />
-      </View>
-
-
-
-      {/* <Text style={homeStyles.style1}>Text1</Text>
-      <Text style={homeStyles.style2}>Text2</Text>
-      <View style={homeStyles.style3}>
-        <Button
-          title="Go to Jane's profile"
           onPress={() =>
             navigation.navigate('Notification')
           } />

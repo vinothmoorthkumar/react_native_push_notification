@@ -60,8 +60,10 @@ export const AddTrip = ({ navigation, route }) => {
     async function saveTrip() {
         let dataArr=[destination,name,startDate.toString(),endDate.toString()];
         await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)",dataArr)
-       let result= await db.select("SELECT * FROM TRIP",[])
-        console.log("result test",result.rows.item(0))
+        navigation.navigate('Home')
+
+    //    let result= await db.select("SELECT * FROM TRIP",[])
+    //     console.log("result test",result.rows.item(0))
     }
 
     return <View style={[styles.container, { backgroundColor: colors.primary }]}>
