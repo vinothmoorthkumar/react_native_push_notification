@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View,ScrollView } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-
+import { View,ScrollView,TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Avatar, Button, Card, Title, Paragraph, Text } from 'react-native-paper';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useTheme } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
+
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import db from "../db/db_connection"
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
@@ -16,42 +17,66 @@ export const HomeScreen = ({ navigation }) => {
   // const colors = colorSchemes[colorScheme] || colorSchemes.light;
   const { colors } = useTheme();
   const [trips, setTrips] = useState([]);
+  const isFocused = useIsFocused()
+
   useEffect(() => {
-    getTrip();
-  }, [])
-  async function getTrip() {
-    const lists = [];
-    let results = await db.select("SELECT * FROM TRIP", [])
-    const count = results.rows.length;
-    for (let i = 0; i < count; i++) {
-      const row = results.rows.item(i);
-      lists.push(row);
+    async function getTrip() {
+      const lists = [];
+      let results = await db.select("SELECT * FROM TRIP", [])
+      const count = results.rows.length;
+      for (let i = 0; i < count; i++) {
+        const row = results.rows.item(i);
+        lists.push(row);
+      }
+      setTrips(lists)
     }
-    setTrips(lists)
-  }
+    getTrip();
+
+  }, [isFocused])
+
 
 
   const listItems = trips.map((ele ,key) =>
-    <View key={key} stye={{marginBottom:20}}>
-      <Card>
-        <Card.Content>
-          <Title>{ele.name}</Title>
-          <Paragraph>From {new Date(ele.startDate).toDateString()} to {new Date(ele.endDate).toDateString()}</Paragraph>
-        </Card.Content>
-        <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
-        {/* <Card.Actions>
-      <Button>Cancel</Button>
-      <Button>Ok</Button>
-    </Card.Actions> */}
-      </Card>
+    <View key={key} style={{marginBottom:10}}>
+   
+      <TouchableOpacity onPress={() =>
+            navigation.navigate('AddTrip',{id:ele.ID})
+          } >
+        <Card>
+          <Card.Content>
+            <Title>{ele.name}</Title>
+            <Paragraph>From {new Date(ele.startDate).toDateString()} to {new Date(ele.endDate).toDateString()}</Paragraph>
+          </Card.Content>
+          <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+        </Card>
+      </TouchableOpacity>
     </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.card }]}>
-      <ScrollView style={styles.scrollView}>
+    <View style={[styles.container]}>
+        <ScrollView >
         {listItems}
+
       </ScrollView>
+
+      <View style={{ position: "absolute", bottom: 20, right: 20 }}>
+        
+          <TouchableOpacity onPress={() => { navigation.navigate('AddTrip')}}>
+            <View style={{
+              position: 'relative',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 60,
+              height: 60,
+              borderRadius: 100,
+              backgroundColor: 'orange'
+            }}>
+              <IconFA size={40} />
+              <IconFA name='plus' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+            </View>
+          </TouchableOpacity>
+        </View>
 
       {/* <View style={{ flex: 10 }}>
         <TextInput style={{ color: colors.text }}
@@ -74,22 +99,7 @@ export const HomeScreen = ({ navigation }) => {
           Selected: {currency}
         </Text>
 
-        <View style={{ position: "absolute", bottom: 0, right: 0 }}>
-          <TouchableHighlight onPress={() => { navigation.navigate('AddTrip')}}>
-            <View style={{
-              position: 'relative',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 60,
-              height: 60,
-              borderRadius: 100,
-              backgroundColor: 'orange'
-            }}>
-              <IconFA size={40} />
-              <IconFA name='plus' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
-            </View>
-          </TouchableHighlight>
-        </View>
+ 
 
 
       </View>

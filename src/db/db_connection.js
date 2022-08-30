@@ -2,7 +2,18 @@ import SQLite from 'react-native-sqlite-storage';
 const db = SQLite.openDatabase({
     name: "mainDb",
     location: "default"
-}, () => { }, error => { console.log(error) })
+}, async () => { 
+
+    db.transaction(async (tx) => {
+        await tx.executeSql(
+            "CREATE TABLE IF NOT EXISTS "
+            + "TRIP"
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
+        );
+    })
+}, error => { console.log(error) })
+
+
 
 const dbConnection = {
     createtable: async function(query){
@@ -25,6 +36,15 @@ const dbConnection = {
         })
     },
     select: async function (query, data) {
+        return new Promise(async function(resolve, reject) {
+            await db.transaction(async (tx) => {
+                await tx.executeSql(query, data, (tx, results) => {
+                    resolve(results)
+                })
+            })
+          });
+    },
+    delete: async function (query, data) {
         return new Promise(async function(resolve, reject) {
             await db.transaction(async (tx) => {
                 await tx.executeSql(query, data, (tx, results) => {

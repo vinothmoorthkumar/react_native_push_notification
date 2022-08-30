@@ -10,6 +10,7 @@ import { useTheme } from 'react-native-paper';
 
 import { Avatar, Button, Card, Title, Paragraph, TextInput, Text } from 'react-native-paper';
 import db from "../../db/db_connection"
+import { Route } from 'express';
 
 export const AddTrip = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -23,18 +24,25 @@ export const AddTrip = ({ navigation, route }) => {
     const [name, setName] = React.useState("");
     const [startDate, setStartdate] = React.useState(new Date());
     const [endDate, setEnddate] = React.useState(new Date());
+    const [editable, seteditable] = React.useState(false);
 
 
     useEffect(() => {
-        createTable();
-    }, [])
-    const createTable = async () => {
-        await db.createtable(
-            "CREATE TABLE IF NOT EXISTS "
-            + "TRIP"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
-        )
-    }
+        async function getdata() {
+            let results = await db.select("SELECT * FROM TRIP WHERE ID=" + route.params.id, [])
+            let data = results.rows.item(0);
+            setDestination(data.destination);
+            setName(data.name);
+            setStartdate(new Date(data.startDate));
+            setEnddate(new Date(data.endDate));
+        }
+        if (route.params?.id) {
+            seteditable(true)
+            getdata();
+        }
+
+    }, [route.params?.post])
+
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -57,13 +65,17 @@ export const AddTrip = ({ navigation, route }) => {
         setVisibleEndDate(true);
     }
 
-    async function saveTrip() {
-        let dataArr=[destination,name,startDate.toString(),endDate.toString()];
-        await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)",dataArr)
+    async function deleteTrip(){
+        let result =await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
+        console.log("DDD",result)
         navigation.navigate('Home')
 
-    //    let result= await db.select("SELECT * FROM TRIP",[])
-    //     console.log("result test",result.rows.item(0))
+    }
+
+    async function saveTrip() {
+        let dataArr = [destination, name, startDate.toString(), endDate.toString()];
+        await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)", dataArr)
+        navigation.navigate('Home')
     }
 
     return <View style={[styles.container, { backgroundColor: colors.primary }]}>
@@ -100,9 +112,12 @@ export const AddTrip = ({ navigation, route }) => {
                 onChange={onChangeEndDate}
             />)
         }
-        <View style={{
-            alignSelf: 'flex-end',
-        }}>
+        <View style={{ alignSelf: 'flex-end',flexDirection:'row'}}>
+        <View style={{ width: 100 }}>
+                <Button mode="contained" onPress={() => deleteTrip()}>
+                    <IconFA name='remove' size={20} color='white' />
+                </Button>
+            </View>
             <View style={{ width: 100 }}>
                 <Button mode="contained" onPress={() => saveTrip()}>
                     <IconFA name='save' size={20} color='white' />

@@ -69,8 +69,7 @@ const App = () => {
             options={{ title: 'Welcome' }}
           />
 
-          <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Add Trip' }} />
-
+          <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Trip' }} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Notification" component={Notification} />
 
