@@ -22,6 +22,7 @@ import { ProfileScreen } from "./src/components/Profile"
 import { Notification } from "./src/components/Notification"
 import { AddTrip } from "./src/components/trip/AddTrip"
 import { Plans } from "./src/components/trip/Plan"
+import { AddPlan } from "./src/components/trip/AddPlan"
 
 
 
@@ -65,6 +66,7 @@ const App = () => {
             component={HomeScreen}
             options={{ title: 'Welcome' }}
           />
+          <Stack.Screen name="AddPlan" component={AddPlan} options={{ title: 'Plan' }} />
           <Stack.Screen name="Plans" component={Plans} options={{ title: 'Plans' }} />
           <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Trip' }} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
