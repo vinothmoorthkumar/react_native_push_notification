@@ -14,7 +14,7 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
     const PlansMenu = <>
         {route.name=="Plans" && <View>
             <Menu.Item onPress={() => { navigation.navigate('AddTrip', { id: route.params.id }) ,closeMenu()}} title="Edit Trip" />
-            <Menu.Item onPress={() => { console.log('Option 2 was pressed') }} title="Option 2" />
+            {/* <Menu.Item onPress={() => { console.log('Option 2 was pressed') }} title="Option 2" /> */}
         </View>}
 
     </>

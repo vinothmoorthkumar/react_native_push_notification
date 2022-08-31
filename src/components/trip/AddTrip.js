@@ -117,11 +117,17 @@ export const AddTrip = ({ navigation, route }) => {
                 onChange={onChangeEndDate}
             />)
         }
-        <View style={{ alignSelf: 'flex-end', justifyContent:"space-between", flexDirection: 'row', marginTop: 10  }}>
-            <View style={{ width: 100}}>
-                <Button mode="contained" onPress={() => deleteTrip()}>
-                    <IconFA name='trash' size={20} color='white' />
-                </Button>
+        <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
+            <View style={{ width: 100 }}>
+                {
+                    editable && (
+                        <Button mode="contained" onPress={() => deleteTrip()}>
+                            <IconFA name='trash' size={20} color='white' />
+                        </Button>
+                    )
+
+                }
+
             </View>
             <View style={{ width: 100 }}>
                 <Button mode="contained" onPress={() => saveTrip()}>
