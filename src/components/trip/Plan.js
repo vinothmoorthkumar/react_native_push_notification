@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Text } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Avatar, Button, Card, Title, Paragraph, TextInput, Appbar } from 'react-native-paper';
+import {Card, Title, Paragraph } from 'react-native-paper';
 import db from "../../db/db_connection"
 
 export const Plans = ({ navigation, route, options, back }) => {
@@ -38,7 +38,6 @@ export const Plans = ({ navigation, route, options, back }) => {
 
     const listItems = plans.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>
- 
             <TouchableOpacity onPress={() =>
                 navigation.navigate('AddPlan', { tripId: route.params.id, id: ele.ID })
             } style={{ padding: 2 }}>
@@ -53,9 +52,9 @@ export const Plans = ({ navigation, route, options, back }) => {
     );
 
     return <View style={[styles.container]}>
-        <ScrollView >
-            {listItems}
-        </ScrollView>
+        {listItems.length > 0 ? (<ScrollView >
+        {listItems}
+      </ScrollView>) : <Text>Press + button to create trip</Text>}
         <View style={{ position: "absolute", bottom: 20, right: 20 }}>
 
             <TouchableOpacity onPress={() => { navigation.navigate('AddPlan', { tripId: route.params.id }) }}>

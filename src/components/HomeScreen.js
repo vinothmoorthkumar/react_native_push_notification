@@ -35,7 +35,7 @@ export const HomeScreen = ({ navigation }) => {
 
       <TouchableOpacity onPress={() =>
         navigation.navigate('Plans', { id: ele.ID })
-      } style={{padding:2}}>
+      } style={{ padding: 2 }}>
         <Card>
           <Card.Content>
             <Title>{ele.name} - {ele.destination}</Title>
@@ -50,12 +50,11 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
-      <ScrollView >
+      {listItems.length > 0 ? (<ScrollView >
         {listItems}
-      </ScrollView>
+      </ScrollView>) : <Text>Press + button to create plans</Text>}
 
       <View style={{ position: "absolute", bottom: 20, right: 20 }}>
-
         <TouchableOpacity onPress={() => { navigation.navigate('AddTrip') }}>
           <View style={{
             position: 'relative',
