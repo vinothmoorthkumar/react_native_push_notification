@@ -117,7 +117,7 @@ export const AddPlan = ({ navigation, route }) => {
         <View style={{ alignSelf: 'flex-end', justifyContent:"space-between", flexDirection: 'row', marginTop: 10  }}>
             <View style={{ width: 100}}>
                 <Button mode="contained" onPress={() => deleteTrip()}>
-                    <IconFA name='remove' size={20} color='white' />
+                    <IconFA name='trash' size={20} color='white' />
                 </Button>
             </View>
             <View style={{ width: 100 }}>

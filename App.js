@@ -23,6 +23,7 @@ import { Notification } from "./src/components/Notification"
 import { AddTrip } from "./src/components/trip/AddTrip"
 import { Plans } from "./src/components/trip/Plan"
 import { AddPlan } from "./src/components/trip/AddPlan"
+import { CustomNavigationBar } from "./src/components/customNavbar"
 
 
 
@@ -33,8 +34,8 @@ const CustomlightTheme = {
   colors: {
     ...DefaultTheme.colors,
     ...PaperDefaultTheme.colors,
-    background:"#ffffff",
-    text:"#333333",
+    background: "#ffffff",
+    text: "#333333",
   },
 };
 
@@ -44,8 +45,8 @@ const CustomdarkTheme = {
   colors: {
     ...DarkTheme.colors,
     ...PaperDefaultTheme.colors,
-    background:"#333333",
-    text:"#ffffff"
+    background: "#333333",
+    text: "#ffffff"
   },
 };
 
@@ -53,14 +54,18 @@ const App = () => {
 
   const Stack = createNativeStackNavigator();
   const scheme = useColorScheme();
-  const theme=scheme == 'dark' ? CustomdarkTheme : CustomlightTheme
+  const theme = scheme == 'dark' ? CustomdarkTheme : CustomlightTheme
   return (
     <PaperProvider settings={{
       icon: props => <AwesomeIcon {...props} />,
     }} theme={theme}>
       <NavigationContainer theme={theme}>
 
-        <Stack.Navigator>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            header: (props) => <CustomNavigationBar {...props} />,
+          }}>
           <Stack.Screen
             name="Home"
             component={HomeScreen}

@@ -26,7 +26,6 @@ export const AddTrip = ({ navigation, route }) => {
     const [endDate, setEnddate] = React.useState(new Date());
     const [editable, seteditable] = React.useState(false);
 
-
     useEffect(() => {
         async function getdata() {
             let results = await db.select("SELECT * FROM TRIP WHERE ID=" + route.params.id, [])
@@ -121,7 +120,7 @@ export const AddTrip = ({ navigation, route }) => {
         <View style={{ alignSelf: 'flex-end', justifyContent:"space-between", flexDirection: 'row', marginTop: 10  }}>
             <View style={{ width: 100}}>
                 <Button mode="contained" onPress={() => deleteTrip()}>
-                    <IconFA name='remove' size={20} color='white' />
+                    <IconFA name='trash' size={20} color='white' />
                 </Button>
             </View>
             <View style={{ width: 100 }}>

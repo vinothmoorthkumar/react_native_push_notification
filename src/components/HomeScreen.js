@@ -50,7 +50,6 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
-
       <ScrollView >
         {listItems}
       </ScrollView>

@@ -5,10 +5,10 @@ import { useIsFocused } from '@react-navigation/native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Avatar, Button, Card, Title, Paragraph, TextInput, Text } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph, TextInput, Appbar } from 'react-native-paper';
 import db from "../../db/db_connection"
 
-export const Plans = ({ navigation, route }) => {
+export const Plans = ({ navigation, route, options, back }) => {
     const [plans, setPlans] = useState([]);
     const isFocused = useIsFocused()
 
@@ -16,7 +16,7 @@ export const Plans = ({ navigation, route }) => {
     useEffect(() => {
         async function getdata() {
             const lists = [];
-            let results = await db.select("SELECT * FROM PLAN WHERE TripID="+route.params.id, [])
+            let results = await db.select("SELECT * FROM PLAN WHERE TripID=" + route.params.id, [])
             const count = results.rows.length;
             for (let i = 0; i < count; i++) {
                 const row = results.rows.item(i);
@@ -28,11 +28,19 @@ export const Plans = ({ navigation, route }) => {
         getdata();
     }, [isFocused])
 
+    const _goBack = () => console.log('Went back');
+
+    const _handleSearch = () => console.log('Searching');
+
+    const _handleMore = () => console.log('Shown more');
+
+
 
     const listItems = plans.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>
+ 
             <TouchableOpacity onPress={() =>
-                navigation.navigate('AddPlan', { tripId:route.params.id, id: ele.ID })
+                navigation.navigate('AddPlan', { tripId: route.params.id, id: ele.ID })
             } style={{ padding: 2 }}>
                 <Card>
                     <Card.Content>
@@ -50,7 +58,7 @@ export const Plans = ({ navigation, route }) => {
         </ScrollView>
         <View style={{ position: "absolute", bottom: 20, right: 20 }}>
 
-            <TouchableOpacity onPress={() => { navigation.navigate('AddPlan', { tripId: route.params.id }) }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('AddPlan', { id: route.params.id }) }}>
                 <View style={{
                     position: 'relative',
                     justifyContent: 'center',
