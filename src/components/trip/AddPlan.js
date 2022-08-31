@@ -37,6 +37,8 @@ export const AddPlan = ({ navigation, route }) => {
             setvenue(data.venue);
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
+            setStartTime(new Date(data.startTime));
+            setEndTime(new Date(data.endTime));
         }
         if (route.params?.id) {
             seteditable(true)
@@ -74,12 +76,12 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     async function saveTrip() {
-        let dataArr = [event, venue, startDate.toString(), endDate.toString(), tripId];
+        let dataArr = [event, venue, startDate.toString(),startTime.toString(),endDate.toString(),endTime.toString(), tripId];
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE PLAN SET event = ? , venue = ?, startDate = ?, endDate = ?, TripID = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?,startTime=?, endDate = ?,endTime = ?, TripID = ? WHERE id = ?', dataArr);
         } else {
-            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
+            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate,startTime, endDate,endTime, TripID) VALUES (?,?,?,?,?,?,?)", dataArr);
         }
         navigation.navigate('Plans', { id: tripId })
 
@@ -157,7 +159,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleEndTime(true)}>
             <View pointerEvents="none">
-                <TextInput label="Start Time" value={endTime.toLocaleTimeString()} />
+                <TextInput label="End Time" value={endTime.toLocaleTimeString()} />
             </View>
         </Pressable>
 

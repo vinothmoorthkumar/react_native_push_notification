@@ -11,10 +11,10 @@ const db = SQLite.openDatabase({
             + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
         );
         await tx.executeSql(
-            // "DROP TABLE PLAN;"
+            // "DROP TABLE PLAN;",
             "CREATE TABLE IF NOT EXISTS "
             + "PLAN"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, event TEXT,venue TEXT,startDate TEXT,endDate TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, event TEXT,venue TEXT,startDate TEXT,startTime Text,endDate TEXT,endTime TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
         [],(tx, results) => {
         }, (error)=>{
             console.log('Failed to select:', error);
@@ -41,7 +41,7 @@ const dbConnection = {
             await tx.executeSql(
                 query,
                 data,(tx, results) => {
-                    console.log("insert",results)
+                    console.log("insert")
                 }, (error)=>{
                     console.log('Failed to select:', error);
                 }
