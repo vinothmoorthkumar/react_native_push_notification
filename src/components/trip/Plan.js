@@ -22,7 +22,6 @@ export const Plans = ({ navigation, route, options, back }) => {
                 const row = results.rows.item(i);
                 lists.push(row);
             }
-            console.log("lists", lists)
             setPlans(lists)
         }
         getdata();

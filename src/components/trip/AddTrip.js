@@ -102,6 +102,7 @@ export const AddTrip = ({ navigation, route }) => {
             />)
         }
 
+
         <Pressable onPress={() => showEndDatePicker()}>
             <View pointerEvents="none">
                 <TextInput label="Start Date" value={endDate.toDateString()} />
