@@ -8,7 +8,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import {Card, Title, Paragraph } from 'react-native-paper';
 import db from "../../db/db_connection"
 
-export const Plans = ({ navigation, route, options, back }) => {
+export const Plans = ({ navigation, route }) => {
     const [plans, setPlans] = useState([]);
     const isFocused = useIsFocused()
 
@@ -26,14 +26,6 @@ export const Plans = ({ navigation, route, options, back }) => {
         }
         getdata();
     }, [isFocused])
-
-    const _goBack = () => console.log('Went back');
-
-    const _handleSearch = () => console.log('Searching');
-
-    const _handleMore = () => console.log('Shown more');
-
-
 
     const listItems = plans.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>

@@ -3,9 +3,7 @@ import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph, Text } from 'react-native-paper';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { useIsFocused } from '@react-navigation/native';
-import { useTheme } from 'react-native-paper';
 
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import db from "../db/db_connection"
