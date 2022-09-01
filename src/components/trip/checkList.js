@@ -9,8 +9,18 @@ import db from "../../db/db_connection"
 export const CheckList = ({ navigation, route }) => {
   useEffect(() => {
     async function getdata() {
-      let results = await db.select("SELECT * FROM TRIP WHERE ID=" + route.params.id, [])
-      let data = results.rows.item(0);
+      const lists = [];
+      let results = await db.select("SELECT * FROM CHECKLIST WHERE TripID=" + route.params.id, [])
+      const count = results.rows.length;
+      for (let i = 0; i < count; i++) {
+        const row = results.rows.item(i);
+        lists.push(row);
+      }
+
+      let checkedData=lists.filter(ele=>ele.checked)
+      let uncheckedData=lists.filter(ele=>!ele.checked)
+      setItem(uncheckedData);
+      setCheckedItem(checkedData)
     }
     if (route.params?.id) {
       getdata();
@@ -22,64 +32,60 @@ export const CheckList = ({ navigation, route }) => {
   const [checkedItem, setCheckedItem] = React.useState([]);
 
   async function saveTrip() {
-    let dataArr = [destination, name, startDate.toString(), endDate.toString()];
+    await db.delete("DELETE FROM CHECKLIST WHERE TripID=" + route.params.id);
 
-    if (editable) {
-      dataArr.push(route.params.id)
-      await db.update('UPDATE TRIP SET destination = ? , name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
-    } else {
-      await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)", dataArr)
-    }
-    navigation.navigate('Home')
-
+    let concatArray=[...item,...checkedItem]
+    concatArray.forEach(element => {
+      let dataArr = [element.item, element.checked, route.params.id];
+      db.insert("INSERT INTO CHECKLIST (item, checked, TripID) VALUES (?,?,?)", dataArr)
+    });
   }
 
-  function setData(data,ele){
-    item[ele]["item"]=data;
+  function setData(data, ele) {
+    item[ele]["item"] = data;
     setItem([...item])
   }
 
-  function setChecked(data,ele){
-    if(data){
-      item[ele]["checked"]=data;
-      setCheckedItem([...checkedItem,item[ele]])
+  function setChecked(data, ele) {
+    if (data) {
+      item[ele]["checked"] = data;
+      setCheckedItem([...checkedItem, item[ele]])
       item.splice(ele, 1)
       setItem([...item])
-    }else{
-      checkedItem[ele]["checked"]=data;
-      setItem([...item,checkedItem[ele]])
+    } else {
+      checkedItem[ele]["checked"] = data;
+      setItem([...item, checkedItem[ele]])
       checkedItem.splice(ele, 1)
       setCheckedItem([...checkedItem])
     }
-    console.log("checkedItem",checkedItem)
   }
 
 
 
   const addItem = () => {
-    setItem([...item,{item:"",checked:false}])
+    setItem([...item, { item: "", checked: false }])
   }
 
   const listItems = item.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
-      <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked,key)}} />
-      <TextInput style={{ alignSelf: "stretch", width: 300, height: 40 }} value={ele.item} onChangeText={eleData => setData(eleData,key)} />
+      <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
+      <TextInput style={{ alignSelf: "stretch", width: 300, height: 40 }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
     </View>
   );
 
   const unlistItems = checkedItem.map((ele, key) =>
-  <View key={key} style={{ flexDirection: 'row' }}>
-    <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked,key)}} />
-    <Text style={{fontSize:15, margin:10, textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>{ele.item}</Text>
-  </View>
-);
+    <View key={key} style={{ flexDirection: 'row' }}>
+      <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
+      <Text style={{ fontSize: 15, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid' }}>{ele.item}</Text>
+    </View>
+  );
 
   return <View style={[styles.container]}>
-        { listItems.length>0 &&   <Title>UnChecked List</Title>
-}
+    {listItems.length > 0 && <Title>UnChecked List</Title>
+    }
     {listItems}
-    { unlistItems.length>0 &&   <Title>Checked List</Title>
-}
+    {unlistItems.length > 0 && <Title>Checked List</Title>
+    }
     {unlistItems}
     {
       listItems.length > 0 && (<View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
@@ -89,7 +95,6 @@ export const CheckList = ({ navigation, route }) => {
           </Button>
         </View>
       </View>)
-
     }
     {/* <Portal>
       <Modal style={{ padding: 20 }} visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
