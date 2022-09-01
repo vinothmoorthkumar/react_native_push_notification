@@ -30,6 +30,8 @@ export const AddTrip = ({ navigation, route }) => {
     const [editable, seteditable] = React.useState(false);
     const [loading, setLoading] = useState(false)
     const [suggestionsList, setSuggestionsList] = useState(null)
+    const [showAutoComplete, setShowAutoComplete] = useState(false)
+
     const [selectedItem, setSelectedItem] = useState(null)
     const dropdownController = useRef(null)
 
@@ -75,6 +77,7 @@ export const AddTrip = ({ navigation, route }) => {
 
     const onOpenSuggestionsList = useCallback(isOpened => { }, [])
     useEffect(() => {
+ 
         async function getdata() {
             let results = await db.select("SELECT * FROM TRIP WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
@@ -87,6 +90,8 @@ export const AddTrip = ({ navigation, route }) => {
         if (route.params?.id) {
             seteditable(true)
             getdata();
+        }else{
+            setShowAutoComplete(true)
         }
 
 
@@ -139,7 +144,7 @@ export const AddTrip = ({ navigation, route }) => {
 
     }
 
-    function getbyplaceId(placeId){
+    function getbyplaceId(placeId) {
         var config = {
             method: 'get',
             url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
@@ -147,7 +152,9 @@ export const AddTrip = ({ navigation, route }) => {
         };
         axios(config)
             .then(function (response) {
-                setSuggestionsList([{id:placeId,title:response.data.result.name}])
+                setSuggestionsList([{ id: placeId, title: response.data.result.name }])
+                setShowAutoComplete(true)
+
             })
             .catch(function (error) {
                 console.log(error);
@@ -158,53 +165,53 @@ export const AddTrip = ({ navigation, route }) => {
 
 
         {
-            suggestionsList.length>0 && (
+            showAutoComplete  && (
                 <AutocompleteDropdown
-                ref={searchRef}
-                controller={controller => {
-                    dropdownController.current = controller
-                }}
-    
-                direction={Platform.select({ ios: 'down' })}
-                initialValue={{ id: destination }}
-                dataSet={suggestionsList}
-                onChangeText={getSuggestions}
-                onSelectItem={item => {
-                    item && setDestination(item.id)
-                }}
-                debounce={600}
-                suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
-                onClear={onClearPress}
-                //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
-                onOpenSuggestionsList={onOpenSuggestionsList}
-                loading={loading}
-                useFilter={false} // set false to prevent rerender twice
-                textInputProps={{
-                    placeholder: 'Destination',
-                    autoCorrect: false,
-                    autoCapitalize: 'none',
-                    style: {
-                        backgroundColor: colors.surfaceVariant,
-                        // placeholderTextColor:"blue" 
-    
-                    }
-                }}
-                rightButtonsContainerStyle={{
-                    right: 8,
-                    height: 30,
-                    alignSelf: 'center',
-                }}
-                inputContainerStyle={{
-                    backgroundColor: "black",
-                }}
-                suggestionsListContainerStyle={{
-                    backgroundColor: '#383b42',
-                }}
-                renderItem={(item, text) => <Text style={{ color: '#fff', padding: 15 }}>{item.title}</Text>}
-                inputHeight={50}
-                showChevron={false}
-                closeOnBlur={false}
-            />
+                    ref={searchRef}
+                    controller={controller => {
+                        dropdownController.current = controller
+                    }}
+
+                    direction={Platform.select({ ios: 'down' })}
+                    initialValue={{ id: destination }}
+                    dataSet={suggestionsList}
+                    onChangeText={getSuggestions}
+                    onSelectItem={item => {
+                        item && setDestination(item.id)
+                    }}
+                    debounce={600}
+                    suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
+                    onClear={onClearPress}
+                    //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
+                    onOpenSuggestionsList={onOpenSuggestionsList}
+                    loading={loading}
+                    useFilter={false} // set false to prevent rerender twice
+                    textInputProps={{
+                        placeholder: 'Destination',
+                        autoCorrect: false,
+                        autoCapitalize: 'none',
+                        style: {
+                            backgroundColor: colors.surfaceVariant,
+                            // placeholderTextColor:"blue" 
+
+                        }
+                    }}
+                    rightButtonsContainerStyle={{
+                        right: 8,
+                        height: 30,
+                        alignSelf: 'center',
+                    }}
+                    inputContainerStyle={{
+                        backgroundColor: "black",
+                    }}
+                    suggestionsListContainerStyle={{
+                        backgroundColor: '#383b42',
+                    }}
+                    renderItem={(item, text) => <Text style={{ color: '#fff', padding: 15 }}>{item.title}</Text>}
+                    inputHeight={50}
+                    showChevron={false}
+                    closeOnBlur={false}
+                />
             )
         }
 
