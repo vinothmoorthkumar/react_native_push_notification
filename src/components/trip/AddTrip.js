@@ -202,7 +202,7 @@ export const AddTrip = ({ navigation, route }) => {
                         alignSelf: 'center',
                     }}
                     inputContainerStyle={{
-                        backgroundColor: "black",
+                        backgroundColor: colors.surfaceVariant,
                     }}
                     suggestionsListContainerStyle={{
                         backgroundColor: '#383b42',
