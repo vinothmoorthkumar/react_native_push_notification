@@ -126,7 +126,6 @@ export const AddTrip = ({ navigation, route }) => {
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
                     )
-
                 }
 
             </View>
