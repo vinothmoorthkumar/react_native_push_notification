@@ -7,7 +7,6 @@ import {
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-
 import { Button, TextInput } from 'react-native-paper';
 import db from "../../db/db_connection"
 
@@ -44,6 +43,8 @@ export const AddPlan = ({ navigation, route }) => {
             seteditable(true)
             getdata();
         }
+
+
 
     }, [route.params?.post])
 

@@ -36,7 +36,7 @@ export const HomeScreen = ({ navigation }) => {
       } style={{ padding: 2 }}>
         <Card>
           <Card.Content>
-            <Title>{ele.name} - {ele.destination}</Title>
+            <Title>{ele.name}</Title>
             <Paragraph>{new Date(ele.startDate).toDateString()}, {new Date(ele.endDate).toDateString()}</Paragraph>
           </Card.Content>
           <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
