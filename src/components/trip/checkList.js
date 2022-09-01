@@ -60,6 +60,15 @@ export const CheckList = ({ navigation, route }) => {
     }
   }
 
+  function deleteFromUnChecked(key){
+    item.splice(key, 1)
+    setItem([...item])
+  }
+  
+  function deleteFromChecked(key){
+    checkedItem.splice(key, 1)
+    setCheckedItem([...checkedItem])
+  }
 
 
   const addItem = () => {
@@ -69,14 +78,16 @@ export const CheckList = ({ navigation, route }) => {
   const listItems = item.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <TextInput style={{ alignSelf: "stretch", width: 300, height: 40 }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
+      <TextInput style={{ alignSelf: "stretch", width: 250, height: 40 }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
+      <IconFA onPress={() => { deleteFromUnChecked(key) }}  name='remove' style={{margin: 10}} size={20} color={styles.Button} />
     </View>
   );
 
   const unlistItems = checkedItem.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <Text style={{ fontSize: 15, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid' }}>{ele.item}</Text>
+      <Text style={{ fontSize: 15, width:230, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid' }}>{ele.item}</Text>
+      <IconFA onPress={() => { deleteFromChecked(key) }} name='remove' style={{margin: 10}} size={20} color={styles.Button} />
     </View>
   );
 

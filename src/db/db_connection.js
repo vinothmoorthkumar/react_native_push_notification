@@ -51,7 +51,7 @@ const dbConnection = {
             await tx.executeSql(
                 query,
                 data,(tx, results) => {
-                    console.log("insert")
+                    // console.log("insert")
                 }, (error)=>{
                     console.log('Failed to select:', error);
                 }
