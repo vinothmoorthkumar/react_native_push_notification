@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Modal, Title, TextInput, Button, Text, Checkbox } from 'react-native-paper';
+import { Snackbar, Title, TextInput, Button, Text, Checkbox } from 'react-native-paper';
 import db from "../../db/db_connection"
 
 export const CheckList = ({ navigation, route }) => {
@@ -30,6 +30,7 @@ export const CheckList = ({ navigation, route }) => {
 
   const [item, setItem] = React.useState([]);
   const [checkedItem, setCheckedItem] = React.useState([]);
+  const [visible, setVisible] = React.useState(false);
 
   async function saveTrip() {
     await db.delete("DELETE FROM CHECKLIST WHERE TripID=" + route.params.id);
@@ -39,6 +40,16 @@ export const CheckList = ({ navigation, route }) => {
       let dataArr = [element.item, element.checked, route.params.id];
       db.insert("INSERT INTO CHECKLIST (item, checked, TripID) VALUES (?,?,?)", dataArr)
     });
+    setVisible(!visible);
+
+    setTimeout(
+      function() {
+        setVisible(false);
+      }
+      .bind(this),
+      2000
+    );
+
   }
 
   function setData(data, ele) {
@@ -107,21 +118,6 @@ export const CheckList = ({ navigation, route }) => {
         </View>
       </View>)
     }
-    {/* <Portal>
-      <Modal style={{ padding: 20 }} visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-        <TextInput label="Event" value={value} onChangeText={event => setValue(event)} />
-
-        <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
-            <Button mode="contained" onPress={hideModal}>
-              <IconFA name='remove' size={20} color='white' />
-            </Button>
-            <Button mode="contained" onPress={() => { }}>
-              <IconFA name='save' size={20} color='white' />
-            </Button>
-        </View>
-
-      </Modal>
-    </Portal> */}
 
     <View style={{ position: "absolute", bottom: 20, right: 20 }}>
       <TouchableOpacity onPress={addItem}>
@@ -140,5 +136,15 @@ export const CheckList = ({ navigation, route }) => {
       </TouchableOpacity>
     </View>
 
+
+    <Snackbar
+        visible={visible}
+        action={{
+          onPress: () => {
+            // Do something
+          },
+        }}>
+        Updated Successfully
+      </Snackbar>
   </View>;
 };
