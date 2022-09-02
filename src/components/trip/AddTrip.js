@@ -50,13 +50,13 @@ export const AddTrip = ({ navigation, route }) => {
 
         var config = {
             method: 'get',
-            url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${q}&types=establishment&location=37.76999%2C-122.44696&radius=500&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
+            url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${q}&types=geocode&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
             headers: {}
         };
         axios(config)
             .then(function (response) {
                 const items = response.data.predictions;
-
+                console.log("DDD",items)
                 const suggestions = items
                     .filter(item => item.description.toLowerCase().includes(filterToken))
                     .map(item => ({
