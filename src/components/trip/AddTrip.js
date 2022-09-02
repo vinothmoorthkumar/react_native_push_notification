@@ -11,8 +11,9 @@ import { useTheme } from 'react-native-paper';
 
 import { Avatar, Button, Card, Title, Paragraph, TextInput, Text } from 'react-native-paper';
 import db from "../../db/db_connection"
+import geo from "../../utlis/geoService"
+
 import { Route } from 'express';
-import axios from "axios";
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
 export const AddTrip = ({ navigation, route }) => {
@@ -46,17 +47,8 @@ export const AddTrip = ({ navigation, route }) => {
             return
         }
         setLoading(true)
-
-
-        var config = {
-            method: 'get',
-            url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${q}&types=geocode&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
-            headers: {}
-        };
-        axios(config)
-            .then(function (response) {
+        geo.suggestions(q).then(function (response) {
                 const items = response.data.predictions;
-                console.log("DDD",items)
                 const suggestions = items
                     .filter(item => item.description.toLowerCase().includes(filterToken))
                     .map(item => ({
@@ -153,22 +145,22 @@ export const AddTrip = ({ navigation, route }) => {
         setplaceId(item.id)
     }
 
-    function getbyplaceId(placeId) {
-        var config = {
-            method: 'get',
-            url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
-            headers: {}
-        };
-        axios(config)
-            .then(function (response) {
-                setSuggestionsList([{ id: placeId, title: response.data.result.name }])
-                setShowAutoComplete(true)
+    // function getbyplaceId(placeId) {
+    //     var config = {
+    //         method: 'get',
+    //         url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
+    //         headers: {}
+    //     };
+    //     axios(config)
+    //         .then(function (response) {
+    //             setSuggestionsList([{ id: placeId, title: response.data.result.name }])
+    //             setShowAutoComplete(true)
 
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
+    // }
 
     return <View style={[styles.container]}>
 
