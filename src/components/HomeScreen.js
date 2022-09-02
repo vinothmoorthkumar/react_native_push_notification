@@ -48,9 +48,8 @@ export const HomeScreen = ({ navigation }) => {
 
   const listItems = trips.map((ele, key) =>
     <View key={key} style={{ marginBottom: 10 }}>
-
       <TouchableOpacity onPress={() =>
-        navigation.navigate('Plans', { id: ele.ID })
+        navigation.navigate('Plans', { id: ele.ID,placeId: ele.placeId })
       } style={{ padding: 2 }}>
 
         <List.Item
@@ -58,8 +57,6 @@ export const HomeScreen = ({ navigation }) => {
           description={new Date(ele.startDate).toDateString()+", "+new Date(ele.startDate).toDateString()}
           left={props => <List.Icon {...props} icon="plane" />}
         />
-
-       
       </TouchableOpacity>
     </View>
   );
