@@ -31,7 +31,6 @@ export const HomeScreen = ({ navigation }) => {
 
   // const listItems = trips.map((ele, key) =>
   //   <View key={key} style={{ marginBottom: 10 }}>
-
   //     <TouchableOpacity onPress={() =>
   //       navigation.navigate('Plans', { id: ele.ID })
   //     } style={{ padding: 2 }}>

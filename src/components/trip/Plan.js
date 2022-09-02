@@ -60,26 +60,6 @@ export const Plans = ({ navigation, route }) => {
             .catch(function (error) {
                 console.log(error);
             });
-        // geo.nearBy(route.params.placeId).then(function (response) {
-        //     setVisible(true);
-        //     let cstArr = [];
-        //     response.forEach(element => {
-        //         if(element.photos && element.photos.length>0){
-        //             element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
-
-        //         }else{
-        //             element["photoUri"] = "https://picsum.photos/700"
-        //         }
-        //         cstArr.push(element)
-
-        //     });
-
-        //     setLocations(response)
-
-        // })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
     }
 
     async function photoByref(ref) {
