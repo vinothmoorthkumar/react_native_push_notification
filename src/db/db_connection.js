@@ -8,7 +8,7 @@ const db = SQLite.openDatabase({
         await tx.executeSql(
             "CREATE TABLE IF NOT EXISTS "
             + "TRIP"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT,name TEXT,startDate TEXT,endDate TEXT);"
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, destination TEXT, placeId TEXT,name TEXT,startDate TEXT,endDate TEXT);"
         );
         await tx.executeSql(
             // "DROP TABLE PLAN;",

@@ -27,6 +27,8 @@ export const AddTrip = ({ navigation, route }) => {
     const [name, setName] = React.useState("");
     const [startDate, setStartdate] = React.useState(new Date());
     const [endDate, setEnddate] = React.useState(new Date());
+    const [placeId, setplaceId] = React.useState("");
+
     const [editable, seteditable] = React.useState(false);
     const [loading, setLoading] = useState(false)
     const [suggestionsList, setSuggestionsList] = useState(null)
@@ -77,20 +79,23 @@ export const AddTrip = ({ navigation, route }) => {
 
     const onOpenSuggestionsList = useCallback(isOpened => { }, [])
     useEffect(() => {
- 
+
         async function getdata() {
             let results = await db.select("SELECT * FROM TRIP WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
-            getbyplaceId(data.destination)
+            setplaceId(data.placeId);
             setDestination(data.destination);
             setName(data.name);
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
+
+            setSuggestionsList([{ id: data.placeId, title: data.destination }])
+            setShowAutoComplete(true)
         }
         if (route.params?.id) {
             seteditable(true)
             getdata();
-        }else{
+        } else {
             setShowAutoComplete(true)
         }
 
@@ -132,16 +137,20 @@ export const AddTrip = ({ navigation, route }) => {
     }
 
     async function saveTrip() {
-        let dataArr = [destination, name, startDate.toString(), endDate.toString()];
-
+        let dataArr = [destination, placeId, name, startDate.toString(), endDate.toString()];
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE TRIP SET destination = ? , name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE TRIP SET destination = ? , placeId = ?, name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
         } else {
-            await db.insert("INSERT INTO TRIP (destination, name, startDate, endDate) VALUES (?,?,?,?)", dataArr)
+            await db.insert("INSERT INTO TRIP (destination,placeId, name, startDate, endDate) VALUES (?,?,?,?,?)", dataArr)
         }
         navigation.navigate('Home')
 
+    }
+
+    function setDest(item) {
+        setDestination(item.title)
+        setplaceId(item.id)
     }
 
     function getbyplaceId(placeId) {
@@ -165,7 +174,7 @@ export const AddTrip = ({ navigation, route }) => {
 
 
         {
-            showAutoComplete  && (
+            showAutoComplete && (
                 <AutocompleteDropdown
                     ref={searchRef}
                     controller={controller => {
@@ -173,11 +182,11 @@ export const AddTrip = ({ navigation, route }) => {
                     }}
 
                     direction={Platform.select({ ios: 'down' })}
-                    initialValue={{ id: destination }}
+                    initialValue={{ id: placeId }}
                     dataSet={suggestionsList}
                     onChangeText={getSuggestions}
                     onSelectItem={item => {
-                        item && setDestination(item.id)
+                        item && setDest(item)
                     }}
                     debounce={600}
                     suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}

@@ -12,6 +12,7 @@ export const HomeScreen = ({ navigation }) => {
   const isFocused = useIsFocused()
 
   useEffect(() => {
+    // db.delete("DROP TABLE TRIP");
     async function getTrip() {
       const lists = [];
       let results = await db.select("SELECT * FROM TRIP", [])
