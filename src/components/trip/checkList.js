@@ -103,10 +103,10 @@ export const CheckList = ({ navigation, route }) => {
   );
 
   return <View style={[styles.container]}>
-    {listItems.length > 0 && <Title>UnChecked List</Title>
+    {listItems.length > 0 && <Title>Yet to pack</Title>
     }
     {listItems}
-    {unlistItems.length > 0 && <Title>Checked List</Title>
+    {unlistItems.length > 0 && <Title>Packed</Title>
     }
     {unlistItems}
     {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image,Linking,Platform } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import geo from "../../utlis/geoService"
 
@@ -20,6 +20,11 @@ export const Plans = ({ navigation, route }) => {
     const hideModal = () => setVisible(false);
     const containerStyle = { backgroundColor: 'white', padding: 20 };
 
+    // const url = Platform.select({
+    //     ios: `${scheme}${label}@${latLng}`,
+    //     android: `${scheme}${latLng}(${label})`
+    // });
+
     useEffect(() => {
         async function getdata() {
             const lists = [];
@@ -39,10 +44,10 @@ export const Plans = ({ navigation, route }) => {
             setVisible(true);
             let cstArr = [];
             response.forEach(element => {
-                if(element.photos && element.photos.length>0){
+                if (element.photos && element.photos.length > 0) {
                     element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
-                    
-                }else{
+
+                } else {
                     element["photoUri"] = "https://picsum.photos/700"
                 }
                 cstArr.push(element)
@@ -61,7 +66,7 @@ export const Plans = ({ navigation, route }) => {
         //     response.forEach(element => {
         //         if(element.photos && element.photos.length>0){
         //             element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
-                    
+
         //         }else{
         //             element["photoUri"] = "https://picsum.photos/700"
         //         }
@@ -82,11 +87,18 @@ export const Plans = ({ navigation, route }) => {
         return result
     }
 
+    function redirecToMap(ele){
+        let location=ele.geometry.location
+        var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        var url = scheme + `${location.lat},${location.lng}`;
+        Linking.openURL(url);
+    }
+
 
     const listLocation = locations.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>
             <TouchableOpacity onPress={() =>
-                navigation.navigate('Plans', {})
+                redirecToMap(ele)
             } style={{ padding: 2 }}>
 
                 <List.Item
