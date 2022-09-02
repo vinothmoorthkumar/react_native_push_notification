@@ -171,6 +171,8 @@ export const Plans = ({ navigation, route }) => {
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <Appbar.Header>
                     <Appbar.Content title="Things to do" />
+                    <Appbar.Action icon="close" onPress={() => {setVisible(false)}} />
+
                 </Appbar.Header>
                 <ScrollView style={{ height: 400 }}>
                     {listLocation}
