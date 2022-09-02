@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, TouchableOpacity } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph, Text } from 'react-native-paper';
+import { List, Button, Card, Title, Paragraph, Text } from 'react-native-paper';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
@@ -29,19 +29,37 @@ export const HomeScreen = ({ navigation }) => {
 
 
 
+  // const listItems = trips.map((ele, key) =>
+  //   <View key={key} style={{ marginBottom: 10 }}>
+
+  //     <TouchableOpacity onPress={() =>
+  //       navigation.navigate('Plans', { id: ele.ID })
+  //     } style={{ padding: 2 }}>
+  //       <Card>
+  //         <Card.Content>
+  //           <Title>{ele.name}</Title>
+  //           <Paragraph>{new Date(ele.startDate).toDateString()}, {new Date(ele.endDate).toDateString()}</Paragraph>
+  //         </Card.Content>
+  //         <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+  //       </Card>
+  //     </TouchableOpacity>
+  //   </View>
+  // );
+
   const listItems = trips.map((ele, key) =>
     <View key={key} style={{ marginBottom: 10 }}>
 
       <TouchableOpacity onPress={() =>
         navigation.navigate('Plans', { id: ele.ID })
       } style={{ padding: 2 }}>
-        <Card>
-          <Card.Content>
-            <Title>{ele.name}</Title>
-            <Paragraph>{new Date(ele.startDate).toDateString()}, {new Date(ele.endDate).toDateString()}</Paragraph>
-          </Card.Content>
-          <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-        </Card>
+
+        <List.Item
+          title={ele.name}
+          description={new Date(ele.startDate).toDateString()+", "+new Date(ele.startDate).toDateString()}
+          left={props => <List.Icon {...props} icon="plane" />}
+        />
+
+       
       </TouchableOpacity>
     </View>
   );
