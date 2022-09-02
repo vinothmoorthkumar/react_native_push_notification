@@ -49,7 +49,7 @@ export const HomeScreen = ({ navigation }) => {
   const listItems = trips.map((ele, key) =>
     <View key={key} style={{ marginBottom: 10 }}>
       <TouchableOpacity onPress={() =>
-        navigation.navigate('Plans', { id: ele.ID,placeId: ele.placeId })
+        navigation.navigate('Plans', { id: ele.ID,placeId: ele.placeId,destination: ele.destination })
       } style={{ padding: 2 }}>
 
         <List.Item

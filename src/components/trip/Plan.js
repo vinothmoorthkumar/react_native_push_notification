@@ -6,7 +6,7 @@ import geo from "../../utlis/geoService"
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Title, Paragraph, Modal, Portal, Text, Button, List } from 'react-native-paper';
+import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List } from 'react-native-paper';
 
 import db from "../../db/db_connection"
 
@@ -31,27 +31,57 @@ export const Plans = ({ navigation, route }) => {
             }
             setPlans(lists)
         }
-
-
-
-
-
         getdata();
-
-
     }, [isFocused])
 
     async function getNearyby() {
-        geo.nearBy(route.params.placeId).then(function (response) {
+        geo.thingstodo(route.params.destination).then(function (response) {
             setVisible(true);
+            let cstArr = [];
+            response.forEach(element => {
+                if(element.photos && element.photos.length>0){
+                    element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
+                    
+                }else{
+                    element["photoUri"] = "https://picsum.photos/700"
+                }
+                cstArr.push(element)
+
+            });
+
             setLocations(response)
-            console.log("response", response[0].photos)
 
         })
             .catch(function (error) {
                 console.log(error);
             });
+        // geo.nearBy(route.params.placeId).then(function (response) {
+        //     setVisible(true);
+        //     let cstArr = [];
+        //     response.forEach(element => {
+        //         if(element.photos && element.photos.length>0){
+        //             element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
+                    
+        //         }else{
+        //             element["photoUri"] = "https://picsum.photos/700"
+        //         }
+        //         cstArr.push(element)
+
+        //     });
+
+        //     setLocations(response)
+
+        // })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
     }
+
+    async function photoByref(ref) {
+        let result = geo.getPhotosByRef(ref[0].photo_reference)
+        return result
+    }
+
 
     const listLocation = locations.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>
@@ -62,7 +92,7 @@ export const Plans = ({ navigation, route }) => {
                 <List.Item
                     title={ele.name}
                     description=""
-                    left={props => <Image source={{ uri: 'https://i.picsum.photos/id/738/700/700.jpg?hmac=xlH5ucgV4pzJ84HvPGcJBPkFYq3HTnBZ2PeDAWaRxhk' }} style={{ width: 50, height: 50 }} />
+                    left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
                     }
                 />
             </TouchableOpacity>
@@ -127,7 +157,10 @@ export const Plans = ({ navigation, route }) => {
 
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                <ScrollView >
+                <Appbar.Header>
+                    <Appbar.Content title="Things to do" />
+                </Appbar.Header>
+                <ScrollView style={{ height: 400 }}>
                     {listLocation}
                 </ScrollView>
             </Modal>

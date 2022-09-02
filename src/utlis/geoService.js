@@ -4,8 +4,6 @@ const API= "AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88"
 const geoLocation = {
     suggestions: async function (q) {
         return new Promise(async function(resolve, reject) {
-
-
             var config = {
                 method: 'get',
                 url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${q}&types=geocode&key=${API}`,
@@ -35,6 +33,21 @@ const geoLocation = {
                 resolve(result2.data.results)
             }
       
+          });
+    },
+    getPhotosByRef: async function (ref) {
+        return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=60&photo_reference=${ref}&key=${API}`;
+    },
+    thingstodo: async function (place) {
+        return new Promise(async function(resolve, reject) {
+            var config = {
+                method: 'get',
+                url: `https://maps.googleapis.com/maps/api/place/textsearch/json?query=things+to+do+in+${place}&language=en&key=${API}`,
+                headers: {}
+            };
+            let results1 = await axios(config)
+            resolve(results1.data.results)
+
           });
     },
   

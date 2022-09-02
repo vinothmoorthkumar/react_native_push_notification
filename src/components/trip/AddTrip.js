@@ -145,23 +145,6 @@ export const AddTrip = ({ navigation, route }) => {
         setplaceId(item.id)
     }
 
-    // function getbyplaceId(placeId) {
-    //     var config = {
-    //         method: 'get',
-    //         url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88`,
-    //         headers: {}
-    //     };
-    //     axios(config)
-    //         .then(function (response) {
-    //             setSuggestionsList([{ id: placeId, title: response.data.result.name }])
-    //             setShowAutoComplete(true)
-
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // }
-
     return <View style={[styles.container]}>
 
 
