@@ -20,7 +20,7 @@ export default Toast = forwardRef((props, ref) => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", textAlign: "center" }}>
       <Snackbar
-        duration={2000}
+        duration={1000}
         visible={visible}
         onDismiss={dismiss}
         style={{ textAlign: "center" }}>

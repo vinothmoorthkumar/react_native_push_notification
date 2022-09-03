@@ -36,6 +36,9 @@ export const AddTrip = ({ navigation, route }) => {
     const [suggestionsList, setSuggestionsList] = useState(null)
     const [showAutoComplete, setShowAutoComplete] = useState(false)
     const [visible, setVisible] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
+
+    const childRef=useRef(null);
     const hideDialog = () => setVisible(false);
 
     const [selectedItem, setSelectedItem] = useState(null)
@@ -137,6 +140,11 @@ export const AddTrip = ({ navigation, route }) => {
 
 
     async function saveTrip() {
+        if(!name.trim()){
+            setErrorText("Please Enter Trip Name")
+            childRef.current.alert();
+            return 
+        }
         let dataArr = [destination, placeId, name, getstartDateFormate(startDate), getendDateFormate(endDate)];
         if (editable) {
             dataArr.push(route.params.id)
@@ -293,5 +301,7 @@ export const AddTrip = ({ navigation, route }) => {
                 </Portal>
             </View>
         </Provider>
+        <Toast ref={childRef} text={errorText}></Toast>
+
     </View>;
 };
