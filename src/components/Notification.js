@@ -62,7 +62,7 @@ export const Notification = () => {
 
 
   return (
-    <View style={styles.container}>
+    <View>
       {/* <View style={{ paddingHorizontal: 20 }}>
         <Text style={{ fontSize: 24, fontWeight: "bold", color: "black" }}>Title test</Text>
         <Button onPress={() => { triggerNotification() }}
