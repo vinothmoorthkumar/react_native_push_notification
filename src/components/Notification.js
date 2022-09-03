@@ -32,7 +32,6 @@ export const Notification = () => {
     console.log("//listner added")
     
     NetInfo.addEventListener(state => {
-      console.log("!!!!!! 1",state.isInternetReachable)
       throttleFunction(state,3000)
 
     })
@@ -47,7 +46,6 @@ export const Notification = () => {
   
     // Schedule a setTimeout after delay seconds
     timerId  =  setTimeout(function () {
-      console.log("!!!!!! 2",state.isInternetReachable)
       if (state.isInternetReachable) {
         triggerNotification()
       }
