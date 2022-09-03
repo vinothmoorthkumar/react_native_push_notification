@@ -4,18 +4,22 @@ import { List, Button, Card, Title, Paragraph, Text } from 'react-native-paper';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
 
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import db from "../db/db_connection"
 export const HomeScreen = ({ navigation }) => {
   const [trips, setTrips] = useState([]);
   const isFocused = useIsFocused()
+  const { colors } = useTheme();
 
   useEffect(() => {
     // db.delete("DROP TABLE TRIP");
     async function getTrip() {
       const lists = [];
-      let results = await db.select("SELECT * FROM TRIP", [])
+      // let results = await db.select("SELECT ID,destination,placeId,name,DATE(startDate) AS started_date,endDate FROM TRIP ORDER BY DATE(startDate) DESC", [])
+      let results = await db.select("SELECT * FROM TRIP ORDER BY startDate ASC", [])
+
       const count = results.rows.length;
       for (let i = 0; i < count; i++) {
         const row = results.rows.item(i);
@@ -27,7 +31,11 @@ export const HomeScreen = ({ navigation }) => {
 
   }, [isFocused])
 
-
+  function randomIcon(){
+    const icons=["plan","remove","camera","plus"]
+    const random= Math.floor(Math.random()* icons.length);
+    return icons[random]
+  }
 
   // const listItems = trips.map((ele, key) =>
   //   <View key={key} style={{ marginBottom: 10 }}>
@@ -51,10 +59,10 @@ export const HomeScreen = ({ navigation }) => {
         navigation.navigate('Plans', { id: ele.ID,placeId: ele.placeId,destination: ele.destination })
       } style={{ padding: 2 }}>
 
-        <List.Item
+        <List.Item style={{backgroundColor:"#fff"}}
           title={ele.name}
-          description={new Date(ele.startDate).toDateString()+", "+new Date(ele.startDate).toDateString()}
-          left={props => <List.Icon {...props} icon="plane" />}
+          description={new Date(ele.startDate).toDateString()+", "+new Date(ele.endDate).toDateString()}
+          left={props => <List.Icon {...props} icon={randomIcon()}/>}
         />
       </TouchableOpacity>
     </View>
@@ -65,7 +73,7 @@ export const HomeScreen = ({ navigation }) => {
     <View style={[styles.container]}>
       {listItems.length > 0 ? (<ScrollView >
         {listItems}
-      </ScrollView>) : <Text>Press + button to create plans</Text>}
+      </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create plans</Text>}
 
       <View style={{ position: "absolute", bottom: 20, right: 20 }}>
         <TouchableOpacity onPress={() => { navigation.navigate('AddTrip') }}>

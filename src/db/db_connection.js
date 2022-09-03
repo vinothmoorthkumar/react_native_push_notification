@@ -14,7 +14,7 @@ const db = SQLite.openDatabase({
             // "DROP TABLE PLAN;",
             "CREATE TABLE IF NOT EXISTS "
             + "PLAN"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, event TEXT,venue TEXT,startDate TEXT,startTime Text,endDate TEXT,endTime TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, event TEXT,venue TEXT,startDate TEXT,endDate TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
         [],(tx, results) => {
         }, (error)=>{
             console.log('Failed to select:', error);

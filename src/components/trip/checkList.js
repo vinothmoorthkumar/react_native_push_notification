@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity } from 'react-native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import { useTheme } from 'react-native-paper';
 
 import { Snackbar, Title, TextInput, Button, Text, Checkbox } from 'react-native-paper';
 import db from "../../db/db_connection"
 
 export const CheckList = ({ navigation, route }) => {
+  const { colors } = useTheme();
+
   useEffect(() => {
     async function getdata() {
       const lists = [];
@@ -89,7 +92,7 @@ export const CheckList = ({ navigation, route }) => {
   const listItems = item.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <TextInput style={{ alignSelf: "stretch", width: 250, height: 40 }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
+      <TextInput autoFocus={true} style={{ alignSelf: "stretch", width: 250, height: 40, color: colors.TextInput}} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
       <IconFA onPress={() => { deleteFromUnChecked(key) }}  name='remove' style={{margin: 10}} size={20} color={styles.Button} />
     </View>
   );
@@ -97,16 +100,16 @@ export const CheckList = ({ navigation, route }) => {
   const unlistItems = checkedItem.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <Text style={{ fontSize: 15, width:230, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid' }}>{ele.item}</Text>
+      <Text style={{ fontSize: 15, width:230, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid', color: colors.Text }}>{ele.item}</Text>
       <IconFA onPress={() => { deleteFromChecked(key) }} name='remove' style={{margin: 10}} size={20} color={styles.Button} />
     </View>
   );
 
   return <View style={[styles.container]}>
-    {listItems.length > 0 && <Title>Yet to pack</Title>
+    {listItems.length > 0 && <Title style={{color:colors.Text}}>Yet to pack</Title>
     }
     {listItems}
-    {unlistItems.length > 0 && <Title>Packed</Title>
+    {unlistItems.length > 0 && <Title style={{color:colors.Text}}>Packed</Title>
     }
     {unlistItems}
     {

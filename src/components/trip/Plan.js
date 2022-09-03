@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity, ScrollView, Image,Linking,Platform } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import geo from "../../utlis/geoService"
+import { useTheme } from 'react-native-paper';
 
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
@@ -11,6 +12,8 @@ import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List } from 'react
 import db from "../../db/db_connection"
 
 export const Plans = ({ navigation, route }) => {
+    const { colors } = useTheme();
+
     const [plans, setPlans] = useState([]);
     const isFocused = useIsFocused()
     const [visible, setVisible] = React.useState(false);
@@ -28,7 +31,7 @@ export const Plans = ({ navigation, route }) => {
     useEffect(() => {
         async function getdata() {
             const lists = [];
-            let results = await db.select("SELECT * FROM PLAN WHERE TripID=" + route.params.id, [])
+            let results = await db.select("SELECT * FROM PLAN WHERE TripID=" + route.params.id + " ORDER BY startDate ASC", [])
             const count = results.rows.length;
             for (let i = 0; i < count; i++) {
                 const row = results.rows.item(i);
@@ -99,7 +102,7 @@ export const Plans = ({ navigation, route }) => {
                 <Card>
                     <Card.Content>
                         <Title>{ele.event} - {ele.venue}</Title>
-                        <Paragraph>{new Date(ele.startDate).toDateString()}, {new Date(ele.endDate).toDateString()}</Paragraph>
+                        <Paragraph>{new Date(ele.startDate).toDateString()} {new Date(ele.startDate).toLocaleTimeString()}, {new Date(ele.endDate).toDateString()} {new Date(ele.endDate).toLocaleTimeString()}</Paragraph>
                     </Card.Content>
                 </Card>
             </TouchableOpacity>
@@ -109,7 +112,7 @@ export const Plans = ({ navigation, route }) => {
     return <View style={[styles.container]}>
         {listItems.length > 0 ? (<ScrollView >
             {listItems}
-        </ScrollView>) : <Text>Press + button to create trip</Text>}
+        </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create trip</Text>}
 
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
             <TouchableOpacity onPress={() => { getNearyby() }}>

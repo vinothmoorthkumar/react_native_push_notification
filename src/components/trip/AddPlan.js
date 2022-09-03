@@ -36,8 +36,8 @@ export const AddPlan = ({ navigation, route }) => {
             setvenue(data.venue);
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
-            setStartTime(new Date(data.startTime));
-            setEndTime(new Date(data.endTime));
+            setStartTime(new Date(data.startDate));
+            setEndTime(new Date(data.endDate));
         }
         if (route.params?.id) {
             seteditable(true)
@@ -49,11 +49,12 @@ export const AddPlan = ({ navigation, route }) => {
     }, [route.params?.post])
 
 
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setStartdate(currentDate);
-        setVisibleStarDate(false);
-    };
+    const formatDate=(date,time)=>{
+        let dateObj=`${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${time.getHours()}:${time.getMinutes()}`
+        var x = new Date(dateObj).toISOString()
+        return x;
+    }
+
 
 
     function showDatePicker() {
@@ -77,16 +78,22 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     async function saveTrip() {
-        let dataArr = [event, venue, startDate.toString(),startTime.toString(),endDate.toString(),endTime.toString(), tripId];
+        let dataArr = [event, venue, formatDate(startDate,startTime),formatDate(endDate,endTime), tripId];
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?,startTime=?, endDate = ?,endTime = ?, TripID = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?, endDate = ?, TripID = ? WHERE id = ?', dataArr);
         } else {
-            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate,startTime, endDate,endTime, TripID) VALUES (?,?,?,?,?,?,?)", dataArr);
+            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
         }
         navigation.navigate('Plans', { id: tripId })
-
     }
+
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setStartdate(currentDate);
+        setVisibleStarDate(false);
+    };
 
 
     const onChangeStartTime = (event, selectedTime) => {

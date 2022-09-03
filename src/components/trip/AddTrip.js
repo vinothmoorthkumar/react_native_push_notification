@@ -123,13 +123,13 @@ export const AddTrip = ({ navigation, route }) => {
     }
 
     async function deleteTrip() {
-        let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
+        let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id+" ORDER BY startDate ASC");
         navigation.navigate('Home')
 
     }
 
     async function saveTrip() {
-        let dataArr = [destination, placeId, name, startDate.toString(), endDate.toString()];
+        let dataArr = [destination, placeId, name, startDate.toISOString(), endDate.toISOString()];
         if (editable) {
             dataArr.push(route.params.id)
             await db.update('UPDATE TRIP SET destination = ? , placeId = ?, name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
@@ -175,18 +175,21 @@ export const AddTrip = ({ navigation, route }) => {
                         autoCorrect: false,
                         autoCapitalize: 'none',
                         style: {
-                            backgroundColor: colors.surfaceVariant,
-                            // placeholderTextColor:"blue" 
-
-                        }
+                            backgroundColor: colors.label,
+                            color: colors.inputText,
+                        },
+                        placeholderTextColor:colors.inputText
                     }}
+
                     rightButtonsContainerStyle={{
                         right: 8,
                         height: 30,
                         alignSelf: 'center',
+               
                     }}
                     inputContainerStyle={{
                         backgroundColor: colors.surfaceVariant,
+                        
                     }}
                     suggestionsListContainerStyle={{
                         backgroundColor: '#383b42',
@@ -203,7 +206,7 @@ export const AddTrip = ({ navigation, route }) => {
 
 
         {/* <TextInput label="Destination" value={destination} onChangeText={destination => getLocations(destination)} /> */}
-        <TextInput label="Trip Name" value={name} onChangeText={name => setName(name)} />
+        <TextInput label="Trip Name"  placeholderTextColor="red" style={{color:"red"}} value={name} onChangeText={name => setName(name)} />
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
                 <TextInput label="Start Date" value={startDate.toDateString()} />
