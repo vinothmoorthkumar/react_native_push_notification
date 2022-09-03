@@ -2,6 +2,7 @@ import React from 'react'
 import { Appbar, Menu } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 
 export function CustomNavigationBar({ options, navigation, back, title }) {
 
@@ -9,9 +10,14 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
     const route = useRoute();
-    const allowedPages = ["Plans"];
+    const allowedPages = ["Plans","Home"];
     const checkRoute = allowedPages.some(ele => ele == route.name)
     const PlansMenu = <>
+
+        {route.name=="Home" && <View>
+            <Menu.Item onPress={() => { navigation.navigate('Documents') ,closeMenu()}} title="Documents" />
+        </View>}
+
         {route.name=="Plans" && <View>
             <Menu.Item onPress={() => { navigation.navigate('AddTrip', { id: route.params.id }) ,closeMenu()}} title="Edit Trip" />
             <Menu.Item onPress={() => { navigation.navigate('CheckList', { id: route.params.id }) ,closeMenu()}}  title="Check List" />
