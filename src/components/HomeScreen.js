@@ -24,7 +24,7 @@ export const HomeScreen = ({ navigation }) => {
       let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate<=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day') and endDate>=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day')", [])
       // let currentresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate <= datetime('now','start of day') and TRIP.endDate >= datetime('now') ORDER BY startDate ASC ", [])
 
-      
+
       let upcomingresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate > date('now', '+1 day') ORDER BY startDate ASC ", [])
 
       setpast(structureArr(pastresults))
@@ -89,18 +89,23 @@ export const HomeScreen = ({ navigation }) => {
       {/* {listItems.length > 0 ? (<ScrollView >
         {listItems}
       </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create plans</Text>} */}
-      <ScrollView >
 
-        <Title style={{ color: colors.text }}>OnGoing Trip</Title>
-        {currentlistItems}
+      {
+        (PastlistItems.length > 0 || currentlistItems.length > 0 || upcominglistItems.length > 0) ? (
+          <ScrollView >
 
-        <Title style={{ color: colors.text }}>UpComing Trip</Title>
-        {upcominglistItems}
+            {currentlistItems.length > 0 && <Title style={{ color: colors.text }}>OnGoing Trip</Title>} 
+            {currentlistItems}
+            {upcominglistItems.length > 0 && (<Title style={{ color: colors.text }}>UpComing Trip</Title>)}
+            {upcominglistItems}
 
-        <Title style={{ color: colors.text }}>Past Trip</Title>
-        {PastlistItems}
+            {PastlistItems.length > 0 && (<Title style={{ color: colors.text }}>Past Trip</Title>)}
+            {PastlistItems}
 
-      </ScrollView>
+          </ScrollView>
+        ) : <Text style={{ color: colors.TextInput }}>Press + button to create trip</Text>}
+
+
 
       <View style={{ position: "absolute", bottom: 20, right: 20 }}>
         <TouchableOpacity onPress={() => { navigation.navigate('AddTrip') }}>

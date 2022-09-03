@@ -112,7 +112,7 @@ export const Plans = ({ navigation, route }) => {
     return <View style={[styles.container]}>
         {listItems.length > 0 ? (<ScrollView >
             {listItems}
-        </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create trip</Text>}
+        </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create Plan</Text>}
 
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
             <TouchableOpacity onPress={() => { getNearyby() }}>
@@ -153,7 +153,7 @@ export const Plans = ({ navigation, route }) => {
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <Appbar.Header>
-                    <Appbar.Content title="Things to do" />
+                    <Appbar.Content title="Top Sights" />
                     <Appbar.Action icon="close" onPress={() => {setVisible(false)}} />
 
                 </Appbar.Header>
