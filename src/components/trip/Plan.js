@@ -21,7 +21,7 @@ export const Plans = ({ navigation, route }) => {
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-    const containerStyle = { backgroundColor: 'white', padding: 20 };
+    const containerStyle = { backgroundColor: 'white', padding: 10, marginHorizontal:20 };
 
     // const url = Platform.select({
     //     ios: `${scheme}${label}@${latLng}`,
