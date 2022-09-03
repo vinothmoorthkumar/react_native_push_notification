@@ -123,7 +123,7 @@ export const AddTrip = ({ navigation, route }) => {
     }
 
     async function deleteTrip() {
-        let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id+" ORDER BY startDate ASC");
+        let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
         navigation.navigate('Home')
 
     }
