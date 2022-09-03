@@ -32,7 +32,7 @@ export const HomeScreen = ({ navigation }) => {
   }, [isFocused])
 
   function randomIcon(){
-    const icons=["plan","remove","camera","plus"]
+    const icons=["plane","bed","globe","ship","umbrella"]
     const random= Math.floor(Math.random()* icons.length);
     return icons[random]
   }
