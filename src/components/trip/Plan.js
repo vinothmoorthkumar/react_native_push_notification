@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity, ScrollView, Image, Linking, Platform } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, Linking, Platform,Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import geo from "../../utlis/geoService"
 import { useTheme } from 'react-native-paper';
@@ -7,13 +7,13 @@ import { useTheme } from 'react-native-paper';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Provider, Button } from 'react-native-paper';
-
+import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Provider } from 'react-native-paper';
+import NetInfo from "@react-native-community/netinfo";
 import db from "../../db/db_connection"
 
 export const Plans = ({ navigation, route }) => {
     const { colors } = useTheme();
-
+    // const netInfo = useNetInfo();
     const [plans, setPlans] = useState([]);
     const isFocused = useIsFocused()
     const [visible, setVisible] = React.useState(false);
@@ -41,27 +41,39 @@ export const Plans = ({ navigation, route }) => {
         getdata();
     }, [isFocused])
 
+    // NetInfo.addEventListener(state=>{
+    //     console.log("DDD",state.isInternetReachable)
+    // })
     async function getNearyby() {
-        geo.thingstodo(route.params.destination).then(function (response) {
-            setVisible(true);
-            let cstArr = [];
-            response.forEach(element => {
-                if (element.photos && element.photos.length > 0) {
-                    element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
-
-                } else {
-                    element["photoUri"] = "https://picsum.photos/700"
-                }
-                cstArr.push(element)
-
-            });
-
-            setLocations(response)
-
+      
+        NetInfo.fetch().then(state=>{
+            if(state.isInternetReachable){
+                geo.thingstodo(route.params.destination).then(function (response) {
+                    setVisible(true);
+                    let cstArr = [];
+                    response.forEach(element => {
+                        if (element.photos && element.photos.length > 0) {
+                            element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
+        
+                        } else {
+                            element["photoUri"] = "https://picsum.photos/700"
+                        }
+                        cstArr.push(element)
+        
+                    });
+        
+                    setLocations(response)
+        
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }else{
+                Alert.alert("You are offline!")
+            }
         })
-            .catch(function (error) {
-                console.log(error);
-            });
+    
+
     }
 
     async function photoByref(ref) {

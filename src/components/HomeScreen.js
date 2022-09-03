@@ -8,6 +8,8 @@ import { useTheme } from 'react-native-paper';
 
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import db from "../db/db_connection"
+import {Notification} from "../components/Notification"
+
 export const HomeScreen = ({ navigation }) => {
   const [trips, setTrips] = useState([]);
   const [upcomingtrips, setUpcomingtrips] = useState([]);
@@ -59,6 +61,7 @@ export const HomeScreen = ({ navigation }) => {
             left={props => <List.Icon {...props} icon={randomIcon()} />}
           /> */}
         </TouchableOpacity>
+        
       </View>
     );
   }
@@ -133,7 +136,7 @@ export const HomeScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
-
+      <Notification />
     </View>
   );
 };

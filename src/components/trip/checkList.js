@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { View, TouchableOpacity } from 'react-native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
-
-import { Snackbar, Title, TextInput, Button, Text, Checkbox } from 'react-native-paper';
+import Toast from "../shared/Toast"
+import { Title, TextInput, Button, Text, Checkbox } from 'react-native-paper';
 import db from "../../db/db_connection"
-
 export const CheckList = ({ navigation, route }) => {
   const { colors } = useTheme();
+  const childRef=useRef(null);
 
+  
   useEffect(() => {
     async function getdata() {
       const lists = [];
@@ -20,8 +21,8 @@ export const CheckList = ({ navigation, route }) => {
         lists.push(row);
       }
 
-      let checkedData=lists.filter(ele=>ele.checked)
-      let uncheckedData=lists.filter(ele=>!ele.checked)
+      let checkedData = lists.filter(ele => ele.checked)
+      let uncheckedData = lists.filter(ele => !ele.checked)
       setItem(uncheckedData);
       setCheckedItem(checkedData)
     }
@@ -34,25 +35,28 @@ export const CheckList = ({ navigation, route }) => {
   const [item, setItem] = React.useState([]);
   const [checkedItem, setCheckedItem] = React.useState([]);
   const [visible, setVisible] = React.useState(false);
-
   async function saveTrip() {
     await db.delete("DELETE FROM CHECKLIST WHERE TripID=" + route.params.id);
 
-    let concatArray=[...item,...checkedItem]
+    let concatArray = [...item, ...checkedItem]
     concatArray.forEach(element => {
       let dataArr = [element.item, element.checked, route.params.id];
       db.insert("INSERT INTO CHECKLIST (item, checked, TripID) VALUES (?,?,?)", dataArr)
     });
-    setVisible(!visible);
+    // setVisible(!visible);
+    childRef.current.alert();
+    // setTimeout(
+    //   function() {
+    //     setVisible(false);
+    //   }
+    //   .bind(this),
+    //   2000
+    // );
 
-    setTimeout(
-      function() {
-        setVisible(false);
-      }
-      .bind(this),
-      2000
-    );
+  }
 
+  function dismiss() {
+    setVisible(false);
   }
 
   function setData(data, ele) {
@@ -74,12 +78,12 @@ export const CheckList = ({ navigation, route }) => {
     }
   }
 
-  function deleteFromUnChecked(key){
+  function deleteFromUnChecked(key) {
     item.splice(key, 1)
     setItem([...item])
   }
-  
-  function deleteFromChecked(key){
+
+  function deleteFromChecked(key) {
     checkedItem.splice(key, 1)
     setCheckedItem([...checkedItem])
   }
@@ -92,24 +96,24 @@ export const CheckList = ({ navigation, route }) => {
   const listItems = item.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <TextInput autoFocus={true} style={{ alignSelf: "stretch", width: 250, height: 40, color: colors.TextInput}} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
-      <IconFA onPress={() => { deleteFromUnChecked(key) }}  name='remove' style={{margin: 10}} size={20} color={styles.Button} />
+      <TextInput autoFocus={true} style={{ alignSelf: "stretch", width: 250, height: 40, color: colors.TextInput }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
+      <IconFA onPress={() => { deleteFromUnChecked(key) }} name='remove' style={{ margin: 10 }} size={20} color={styles.Button} />
     </View>
   );
 
   const unlistItems = checkedItem.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <Text style={{ fontSize: 15, width:230, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid', color: colors.Text }}>{ele.item}</Text>
-      <IconFA onPress={() => { deleteFromChecked(key) }} name='remove' style={{margin: 10}} size={20} color={styles.Button} />
+      <Text style={{ fontSize: 15, width: 230, margin: 10, textDecorationLine: 'line-through', textDecorationStyle: 'solid', color: colors.Text }}>{ele.item}</Text>
+      <IconFA onPress={() => { deleteFromChecked(key) }} name='remove' style={{ margin: 10 }} size={20} color={styles.Button} />
     </View>
   );
 
   return <View style={[styles.container]}>
-    {listItems.length > 0 && <Title style={{color:colors.Text}}>Yet to pack</Title>
+    {listItems.length > 0 && <Title style={{ color: colors.Text }}>Yet to pack</Title>
     }
     {listItems}
-    {unlistItems.length > 0 && <Title style={{color:colors.Text}}>Packed</Title>
+    {unlistItems.length > 0 && <Title style={{ color: colors.Text }}>Packed</Title>
     }
     {unlistItems}
     {
@@ -138,16 +142,17 @@ export const CheckList = ({ navigation, route }) => {
         </View>
       </TouchableOpacity>
     </View>
+    <Toast ref={childRef} text="Updated Successfully"></Toast>
 
-
-    <Snackbar
+    {/* <View style={{flex:1, justifyContent:"center",alignItems:"center", textAlign:"center"}}>
+      <Snackbar
+        duration={100000}
         visible={visible}
-        action={{
-          onPress: () => {
-            // Do something
-          },
-        }}>
-        Updated Successfully
+        onDismiss={dismiss}
+        style={{textAlign:"center"}}
+        >
+        <Text style={{color:"white",textAlign:"center"}}> Updated Successfully</Text>
       </Snackbar>
-  </View>;
+    </View> */}
+  </View>
 };

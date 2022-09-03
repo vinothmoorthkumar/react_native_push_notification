@@ -40,14 +40,19 @@ const geoLocation = {
     },
     thingstodo: async function (place) {
         return new Promise(async function(resolve, reject) {
-            var config = {
-                method: 'get',
-                url: `https://maps.googleapis.com/maps/api/place/textsearch/json?query=top+sights+in+${place}&language=en&key=${API}`,
-                // url: `https://maps.googleapis.com/maps/api/place/textsearch/json?query=things+to+do+in+${place}&language=en&key=${API}`,
-                headers: {}
-            };
-            let results1 = await axios(config)
-            resolve(results1.data.results)
+            try{
+                var config = {
+                    method: 'get',
+                    url: `https://maps.googleapis.com/maps/api/place/textsearch/json?query=top+sights+in+${place}&language=en&key=${API}`,
+                    // url: `https://maps.googleapis.com/maps/api/place/textsearch/json?query=things+to+do+in+${place}&language=en&key=${API}`,
+                    headers: {}
+                };
+                let results1 = await axios(config)
+                resolve(results1.data.results)
+            }catch(err){
+                reject(err)
+            }
+
 
           });
     },
