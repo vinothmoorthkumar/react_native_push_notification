@@ -9,8 +9,6 @@ import db from "../../db/db_connection"
 export const CheckList = ({ navigation, route }) => {
   const { colors } = useTheme();
   const childRef=useRef(null);
-
-  
   useEffect(() => {
     async function getdata() {
       const lists = [];
@@ -37,22 +35,12 @@ export const CheckList = ({ navigation, route }) => {
   const [visible, setVisible] = React.useState(false);
   async function saveTrip() {
     await db.delete("DELETE FROM CHECKLIST WHERE TripID=" + route.params.id);
-
     let concatArray = [...item, ...checkedItem]
     concatArray.forEach(element => {
       let dataArr = [element.item, element.checked, route.params.id];
       db.insert("INSERT INTO CHECKLIST (item, checked, TripID) VALUES (?,?,?)", dataArr)
     });
-    // setVisible(!visible);
     childRef.current.alert();
-    // setTimeout(
-    //   function() {
-    //     setVisible(false);
-    //   }
-    //   .bind(this),
-    //   2000
-    // );
-
   }
 
   function dismiss() {

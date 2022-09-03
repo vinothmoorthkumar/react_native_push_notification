@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
     View,
     Pressable,
@@ -27,6 +27,10 @@ export const AddPlan = ({ navigation, route }) => {
     const [startTime, setStartTime] = React.useState(new Date());
     const [endTime, setEndTime] = React.useState(new Date());
     const [visible, setVisible] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
+
+    const childRef=useRef(null);
+
     const hideDialog = () => setVisible(false);
 
 
@@ -82,6 +86,13 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     async function saveTrip() {
+        if(!event.trim()){
+            setErrorText("Please Enter Event")
+            childRef.current.alert();
+            return 
+        }
+
+     
         let dataArr = [event, venue, formatDate(startDate,startTime),formatDate(endDate,endTime), tripId];
         if (editable) {
             dataArr.push(route.params.id)
@@ -224,5 +235,8 @@ export const AddPlan = ({ navigation, route }) => {
                 </Portal>
             </View>
         </Provider>
+
+        <Toast ref={childRef} text={errorText}></Toast>
+
     </View>;
 };

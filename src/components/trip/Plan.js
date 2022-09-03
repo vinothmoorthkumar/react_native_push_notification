@@ -41,9 +41,6 @@ export const Plans = ({ navigation, route }) => {
         getdata();
     }, [isFocused])
 
-    // NetInfo.addEventListener(state=>{
-    //     console.log("DDD",state.isInternetReachable)
-    // })
     async function getNearyby() {
       
         NetInfo.fetch().then(state=>{
