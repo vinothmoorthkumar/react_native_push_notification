@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity, ScrollView, Image,Linking,Platform } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, Linking, Platform } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import geo from "../../utlis/geoService"
 import { useTheme } from 'react-native-paper';
@@ -7,7 +7,7 @@ import { useTheme } from 'react-native-paper';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List } from 'react-native-paper';
+import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Provider, Button } from 'react-native-paper';
 
 import db from "../../db/db_connection"
 
@@ -19,9 +19,8 @@ export const Plans = ({ navigation, route }) => {
     const [visible, setVisible] = React.useState(false);
     const [locations, setLocations] = React.useState([]);
 
-    const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-    const containerStyle = { backgroundColor: 'white', padding: 10, marginHorizontal:20 };
+    const containerStyle = { backgroundColor: 'white', padding: 10, marginHorizontal: 20 };
 
     // const url = Platform.select({
     //     ios: `${scheme}${label}@${latLng}`,
@@ -70,8 +69,8 @@ export const Plans = ({ navigation, route }) => {
         return result
     }
 
-    function redirecToMap(ele){
-        let location=ele.geometry.location
+    function redirecToMap(ele) {
+        let location = ele.geometry.location
         var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
         var url = scheme + `${location.lat},${location.lng}`;
         Linking.openURL(url);
@@ -112,7 +111,7 @@ export const Plans = ({ navigation, route }) => {
     return <View style={[styles.container]}>
         {listItems.length > 0 ? (<ScrollView >
             {listItems}
-        </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create Plan</Text>}
+        </ScrollView>) : <Text style={{ color: colors.TextInput }}>Press + button to create Plan</Text>}
 
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
             <TouchableOpacity onPress={() => { getNearyby() }}>
@@ -154,7 +153,7 @@ export const Plans = ({ navigation, route }) => {
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <Appbar.Header>
                     <Appbar.Content title="Top Sights" />
-                    <Appbar.Action icon="close" onPress={() => {setVisible(false)}} />
+                    <Appbar.Action icon="close" onPress={() => { setVisible(false) }} />
 
                 </Appbar.Header>
                 <ScrollView style={{ height: 400 }}>
@@ -162,6 +161,8 @@ export const Plans = ({ navigation, route }) => {
                 </ScrollView>
             </Modal>
         </Portal>
+
+
 
     </View>;
 };

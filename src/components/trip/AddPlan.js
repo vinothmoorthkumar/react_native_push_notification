@@ -7,7 +7,7 @@ import {
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, TextInput,  Dialog, Provider, Portal, Paragraph } from 'react-native-paper';
 import db from "../../db/db_connection"
 
 export const AddPlan = ({ navigation, route }) => {
@@ -26,6 +26,8 @@ export const AddPlan = ({ navigation, route }) => {
     const [tripId, settripId] = React.useState(route.params.tripId);
     const [startTime, setStartTime] = React.useState(new Date());
     const [endTime, setEndTime] = React.useState(new Date());
+    const [visible, setVisible] = React.useState(false);
+    const hideDialog = () => setVisible(false);
 
 
     useEffect(() => {
@@ -71,10 +73,12 @@ export const AddPlan = ({ navigation, route }) => {
         setVisibleEndDate(true);
     }
 
-    async function deleteTrip() {
-        let result = await db.delete("DELETE FROM PLAN WHERE ID=" + route.params.id);
+     function deleteTrip() {
+        setVisible(true)
+    }
+    function confirmDelete(){
+        db.delete("DELETE FROM PLAN WHERE ID=" + route.params.id);
         navigation.navigate('Plans', { id: tripId })
-
     }
 
     async function saveTrip() {
@@ -202,5 +206,23 @@ export const AddPlan = ({ navigation, route }) => {
                 </Button>
             </View>
         </View>
+
+
+        <Provider>
+            <View>
+                <Portal>
+                    <Dialog visible={visible} onDismiss={hideDialog}>
+                        <Dialog.Title>Are you sure want to delete?</Dialog.Title>
+                        {/* <Dialog.Content>
+                            <Paragraph>This is simple dialog</Paragraph>
+                        </Dialog.Content> */}
+                        <Dialog.Actions>
+                            <Button onPress={hideDialog}>Cancel</Button>
+                            <Button onPress={confirmDelete}>Confirm</Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+            </View>
+        </Provider>
     </View>;
 };
