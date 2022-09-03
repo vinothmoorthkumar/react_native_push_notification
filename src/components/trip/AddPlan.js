@@ -7,7 +7,7 @@ import {
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button, TextInput,  Dialog, Provider, Portal, Paragraph } from 'react-native-paper';
+import { Button, TextInput,  Dialog, Provider, Portal } from 'react-native-paper';
 import db from "../../db/db_connection"
 
 export const AddPlan = ({ navigation, route }) => {

@@ -9,7 +9,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 
-import { Avatar, Button, Card, Title, Paragraph, TextInput, Text } from 'react-native-paper';
+import { Button, TextInput, Text, Dialog, Provider, Portal } from 'react-native-paper';
+
 import db from "../../db/db_connection"
 import geo from "../../utlis/geoService"
 
@@ -34,6 +35,8 @@ export const AddTrip = ({ navigation, route }) => {
     const [loading, setLoading] = useState(false)
     const [suggestionsList, setSuggestionsList] = useState(null)
     const [showAutoComplete, setShowAutoComplete] = useState(false)
+    const [visible, setVisible] = React.useState(false);
+    const hideDialog = () => setVisible(false);
 
     const [selectedItem, setSelectedItem] = useState(null)
     const dropdownController = useRef(null)
@@ -48,17 +51,17 @@ export const AddTrip = ({ navigation, route }) => {
         }
         setLoading(true)
         geo.suggestions(q).then(function (response) {
-                const items = response.data.predictions;
-                const suggestions = items
-                    .filter(item => item.description.toLowerCase().includes(filterToken))
-                    .map(item => ({
-                        id: item.place_id,
-                        title: item.description,
-                    }))
-                setSuggestionsList(suggestions)
-                setLoading(false)
+            const items = response.data.predictions;
+            const suggestions = items
+                .filter(item => item.description.toLowerCase().includes(filterToken))
+                .map(item => ({
+                    id: item.place_id,
+                    title: item.description,
+                }))
+            setSuggestionsList(suggestions)
+            setLoading(false)
 
-            })
+        })
             .catch(function (error) {
                 console.log(error);
             });
@@ -122,10 +125,16 @@ export const AddTrip = ({ navigation, route }) => {
         setVisibleEndDate(true);
     }
 
-    async function deleteTrip() {
-        let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
+    function deleteTrip() {
+        setVisible(true)
+    }
+
+
+    function confirmDelete() {
+        db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
         navigation.navigate('Home')
     }
+
 
     async function saveTrip() {
         let dataArr = [destination, placeId, name, getstartDateFormate(startDate), getendDateFormate(endDate)];
@@ -144,14 +153,14 @@ export const AddTrip = ({ navigation, route }) => {
         setplaceId(item.id)
     }
 
-    function getstartDateFormate(date){
-        date.setUTCHours(0,0,0,0)
+    function getstartDateFormate(date) {
+        date.setUTCHours(0, 0, 0, 0)
         var isoDate = date.toISOString()
         return isoDate;
     }
 
-    function getendDateFormate(date){
-        date.setUTCHours(23,59,59,999);
+    function getendDateFormate(date) {
+        date.setUTCHours(23, 59, 59, 999);
         var isoDate = date.toISOString()
         return isoDate;
     }
@@ -189,18 +198,18 @@ export const AddTrip = ({ navigation, route }) => {
                             backgroundColor: colors.label,
                             color: colors.inputText,
                         },
-                        placeholderTextColor:colors.inputText
+                        placeholderTextColor: colors.inputText
                     }}
 
                     rightButtonsContainerStyle={{
                         right: 8,
                         height: 30,
                         alignSelf: 'center',
-               
+
                     }}
                     inputContainerStyle={{
                         backgroundColor: colors.surfaceVariant,
-                        
+
                     }}
                     suggestionsListContainerStyle={{
                         backgroundColor: '#383b42',
@@ -217,7 +226,7 @@ export const AddTrip = ({ navigation, route }) => {
 
 
         {/* <TextInput label="Destination" value={destination} onChangeText={destination => getLocations(destination)} /> */}
-        <TextInput label="Trip Name"  placeholderTextColor="red" style={{color:"red"}} value={name} onChangeText={name => setName(name)} />
+        <TextInput label="Trip Name" placeholderTextColor="red" style={{ color: "red" }} value={name} onChangeText={name => setName(name)} />
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
                 <TextInput label="Start Date" value={startDate.toDateString()} />
@@ -267,5 +276,22 @@ export const AddTrip = ({ navigation, route }) => {
                 </Button>
             </View>
         </View>
+
+        <Provider>
+            <View>
+                <Portal>
+                    <Dialog visible={visible} onDismiss={hideDialog}>
+                        <Dialog.Title>Are you sure want to delete?</Dialog.Title>
+                        {/* <Dialog.Content>
+                            <Paragraph>This is simple dialog</Paragraph>
+                        </Dialog.Content> */}
+                        <Dialog.Actions>
+                            <Button onPress={hideDialog}>Cancel</Button>
+                            <Button onPress={confirmDelete}>Confirm</Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+            </View>
+        </Provider>
     </View>;
 };
