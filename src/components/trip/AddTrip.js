@@ -125,11 +125,10 @@ export const AddTrip = ({ navigation, route }) => {
     async function deleteTrip() {
         let result = await db.delete("DELETE FROM TRIP WHERE ID=" + route.params.id);
         navigation.navigate('Home')
-
     }
 
     async function saveTrip() {
-        let dataArr = [destination, placeId, name, startDate.toISOString(), endDate.toISOString()];
+        let dataArr = [destination, placeId, name, getstartDateFormate(startDate), getendDateFormate(endDate)];
         if (editable) {
             dataArr.push(route.params.id)
             await db.update('UPDATE TRIP SET destination = ? , placeId = ?, name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
@@ -143,6 +142,18 @@ export const AddTrip = ({ navigation, route }) => {
     function setDest(item) {
         setDestination(item.title)
         setplaceId(item.id)
+    }
+
+    function getstartDateFormate(date){
+        date.setUTCHours(0,0,0,0)
+        var isoDate = date.toISOString()
+        return isoDate;
+    }
+
+    function getendDateFormate(date){
+        date.setUTCHours(23,59,59,999);
+        var isoDate = date.toISOString()
+        return isoDate;
     }
 
     return <View style={[styles.container]}>

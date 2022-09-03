@@ -10,70 +10,97 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import db from "../db/db_connection"
 export const HomeScreen = ({ navigation }) => {
   const [trips, setTrips] = useState([]);
+  const [upcomingtrips, setUpcomingtrips] = useState([]);
+  const [pastrips, setpast] = useState([]);
+
   const isFocused = useIsFocused()
   const { colors } = useTheme();
 
   useEffect(() => {
     // db.delete("DROP TABLE TRIP");
     async function getTrip() {
-      const lists = [];
-      // let results = await db.select("SELECT ID,destination,placeId,name,DATE(startDate) AS started_date,endDate FROM TRIP ORDER BY DATE(startDate) DESC", [])
-      let results = await db.select("SELECT * FROM TRIP ORDER BY startDate ASC", [])
+      let pastresults = await db.select("SELECT * FROM TRIP WHERE TRIP.endDate < date('now') ORDER BY startDate ASC", [])
 
-      const count = results.rows.length;
-      for (let i = 0; i < count; i++) {
-        const row = results.rows.item(i);
-        lists.push(row);
-      }
-      setTrips(lists)
+      let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate<=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day') and endDate>=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day')", [])
+      // let currentresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate <= datetime('now','start of day') and TRIP.endDate >= datetime('now') ORDER BY startDate ASC ", [])
+
+      
+      let upcomingresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate > date('now', '+1 day') ORDER BY startDate ASC ", [])
+
+      setpast(structureArr(pastresults))
+      setTrips(structureArr(currentresults))
+      setUpcomingtrips(structureArr(upcomingresults))
+
     }
     getTrip();
 
   }, [isFocused])
 
-  function randomIcon(){
-    const icons=["plane","bed","globe","ship","umbrella"]
-    const random= Math.floor(Math.random()* icons.length);
+  function ListComponent({ ele }) {
+    return (
+      <View style={{ marginBottom: 10 }}>
+        <TouchableOpacity onPress={() =>
+          navigation.navigate('Plans', { id: ele.ID, placeId: ele.placeId, destination: ele.destination })
+        } style={{ padding: 2 }}>
+
+          <List.Item style={{ backgroundColor: "#fff" }}
+            title={ele.name}
+            description={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()}
+            left={props => <List.Icon {...props} icon={randomIcon()} />}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  function randomIcon() {
+    const icons = ["plane", "bed", "globe", "ship", "umbrella"]
+    const random = Math.floor(Math.random() * icons.length);
     return icons[random]
   }
 
-  // const listItems = trips.map((ele, key) =>
-  //   <View key={key} style={{ marginBottom: 10 }}>
-  //     <TouchableOpacity onPress={() =>
-  //       navigation.navigate('Plans', { id: ele.ID })
-  //     } style={{ padding: 2 }}>
-  //       <Card>
-  //         <Card.Content>
-  //           <Title>{ele.name}</Title>
-  //           <Paragraph>{new Date(ele.startDate).toDateString()}, {new Date(ele.endDate).toDateString()}</Paragraph>
-  //         </Card.Content>
-  //         <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-  //       </Card>
-  //     </TouchableOpacity>
-  //   </View>
-  // );
 
-  const listItems = trips.map((ele, key) =>
-    <View key={key} style={{ marginBottom: 10 }}>
-      <TouchableOpacity onPress={() =>
-        navigation.navigate('Plans', { id: ele.ID,placeId: ele.placeId,destination: ele.destination })
-      } style={{ padding: 2 }}>
+  function structureArr(results) {
+    const lists = [];
+    const count = results.rows.length;
 
-        <List.Item style={{backgroundColor:"#fff"}}
-          title={ele.name}
-          description={new Date(ele.startDate).toDateString()+", "+new Date(ele.endDate).toDateString()}
-          left={props => <List.Icon {...props} icon={randomIcon()}/>}
-        />
-      </TouchableOpacity>
-    </View>
+    for (let i = 0; i < count; i++) {
+      const row = results.rows.item(i);
+      lists.push(row);
+    }
+    return lists;
+  }
+
+  const PastlistItems = pastrips.map((ele, key) =>
+    <ListComponent ele={ele} key={key} />
+  );
+
+  const currentlistItems = trips.map((ele, key) =>
+    <ListComponent ele={ele} key={key} />
+  );
+
+  const upcominglistItems = upcomingtrips.map((ele, key) =>
+    <ListComponent ele={ele} key={key} />
   );
 
 
   return (
     <View style={[styles.container]}>
-      {listItems.length > 0 ? (<ScrollView >
+      {/* {listItems.length > 0 ? (<ScrollView >
         {listItems}
-      </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create plans</Text>}
+      </ScrollView>) : <Text style={{color: colors.TextInput}}>Press + button to create plans</Text>} */}
+      <ScrollView >
+
+        <Title style={{ color: colors.text }}>OnGoing Trip</Title>
+        {currentlistItems}
+
+        <Title style={{ color: colors.text }}>UpComing Trip</Title>
+        {upcominglistItems}
+
+        <Title style={{ color: colors.text }}>Past Trip</Title>
+        {PastlistItems}
+
+      </ScrollView>
 
       <View style={{ position: "absolute", bottom: 20, right: 20 }}>
         <TouchableOpacity onPress={() => { navigation.navigate('AddTrip') }}>
@@ -112,3 +139,5 @@ const homeStyles = StyleSheet.create({
     backgroundColor: "orange"
   }
 });
+
+

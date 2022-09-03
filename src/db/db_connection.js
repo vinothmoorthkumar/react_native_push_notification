@@ -74,6 +74,8 @@ const dbConnection = {
             await db.transaction(async (tx) => {
                 await tx.executeSql(query, data, (tx, results) => {
                     resolve(results)
+                }, (error)=>{
+                    console.log('Failed to select:', error);
                 })
             })
           });
