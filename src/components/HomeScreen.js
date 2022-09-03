@@ -22,8 +22,6 @@ export const HomeScreen = ({ navigation }) => {
       let pastresults = await db.select("SELECT * FROM TRIP WHERE TRIP.endDate < date('now') ORDER BY startDate ASC", [])
 
       let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate<=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day') and endDate>=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day')", [])
-      // let currentresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate <= datetime('now','start of day') and TRIP.endDate >= datetime('now') ORDER BY startDate ASC ", [])
-
 
       let upcomingresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate > date('now', '+1 day') ORDER BY startDate ASC ", [])
 
@@ -42,12 +40,24 @@ export const HomeScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() =>
           navigation.navigate('Plans', { id: ele.ID, placeId: ele.placeId, destination: ele.destination })
         } style={{ padding: 2 }}>
+          <Card>
+            <Card.Title title={ele.name} subtitle={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()} left={props => <List.Icon {...props} icon={randomIcon()} />} />
+            <Card.Content>
+              {/* <Title>Card title</Title>
+              <Paragraph>Card content</Paragraph> */}
+            </Card.Content>
+            {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
+            {/* <Card.Actions>
+              <Button>Cancel</Button>
+              <Button>Ok</Button>
+            </Card.Actions> */}
+          </Card>
 
-          <List.Item style={{ backgroundColor: "#fff" }}
+          {/* <List.Item style={{ backgroundColor: "#fff" }}
             title={ele.name}
             description={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()}
             left={props => <List.Icon {...props} icon={randomIcon()} />}
-          />
+          /> */}
         </TouchableOpacity>
       </View>
     );
@@ -94,7 +104,7 @@ export const HomeScreen = ({ navigation }) => {
         (PastlistItems.length > 0 || currentlistItems.length > 0 || upcominglistItems.length > 0) ? (
           <ScrollView >
 
-            {currentlistItems.length > 0 && <Title style={{ color: colors.text }}>OnGoing Trip</Title>} 
+            {currentlistItems.length > 0 && <Title style={{ color: colors.text }}>OnGoing Trip</Title>}
             {currentlistItems}
             {upcominglistItems.length > 0 && (<Title style={{ color: colors.text }}>UpComing Trip</Title>)}
             {upcominglistItems}
