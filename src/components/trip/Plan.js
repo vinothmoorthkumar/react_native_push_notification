@@ -123,7 +123,7 @@ export const Plans = ({ navigation, route }) => {
         </ScrollView>) : <Text style={{ color: colors.TextInput }}>Press + button to create Plan</Text>}
 
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
-            <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination }) }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination,tripId: route.params.id  }) }}>
                 <View style={{
                     position: 'relative',
                     justifyContent: 'center',

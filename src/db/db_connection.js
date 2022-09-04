@@ -20,6 +20,17 @@ const db = SQLite.openDatabase({
             console.log('Failed to select:', error);
         });
 
+
+        await tx.executeSql(
+            // "DROP TABLE PLAN;",
+            "CREATE TABLE IF NOT EXISTS "
+            + "Destination"
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, image TEXT,name TEXT,long TEXT,lat TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
+        [],(tx, results) => {
+        }, (error)=>{
+            console.log('Failed to select:', error);
+        });
+
         await tx.executeSql(
             // "DROP TABLE PLAN;",
             "CREATE TABLE IF NOT EXISTS "
