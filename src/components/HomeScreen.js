@@ -136,7 +136,7 @@ export const HomeScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
-      <Notification />
+      {/* <Notification /> */}
     </View>
   );
 };
