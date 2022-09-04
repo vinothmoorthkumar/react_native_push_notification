@@ -26,6 +26,7 @@ import { AddPlan } from "./src/components/trip/AddPlan"
 import { CustomNavigationBar } from "./src/components/customNavbar"
 import { CheckList } from "./src/components/trip/checkList"
 import { Documents } from "./src/components/trip/Documents"
+import { TopSights } from "./src/components/trip/topSight"
 
 
 
@@ -79,6 +80,7 @@ const App = () => {
           <Stack.Screen name="Plans" component={Plans} options={{ title: 'Plans' }} />
           <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Trip' }} />
           <Stack.Screen name="CheckList" component={CheckList} options={{ title: 'Check List' }} />
+          <Stack.Screen name="TopSights" component={TopSights} options={{ title: 'Top Sights' }} />
 
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Notification" component={Notification} />
