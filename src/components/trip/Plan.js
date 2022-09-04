@@ -51,12 +51,12 @@ export const Plans = ({ navigation, route }) => {
                     response.forEach(element => {
                         if (element.photos && element.photos.length > 0) {
                             element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
-        
+                            
                         } else {
                             element["photoUri"] = "https://picsum.photos/700"
                         }
+                        
                         cstArr.push(element)
-        
                     });
         
                     setLocations(response)
@@ -71,11 +71,6 @@ export const Plans = ({ navigation, route }) => {
         })
     
 
-    }
-
-    async function photoByref(ref) {
-        let result = geo.getPhotosByRef(ref[0].photo_reference)
-        return result
     }
 
     function redirecToMap(ele) {
