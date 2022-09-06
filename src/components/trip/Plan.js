@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity, ScrollView, Image, Linking, Platform,Alert } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, Linking, Platform, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import geo from "../../utlis/geoService"
 import { useTheme } from 'react-native-paper';
@@ -10,6 +10,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Provider } from 'react-native-paper';
 import NetInfo from "@react-native-community/netinfo";
 import db from "../../db/db_connection"
+import moment from "moment";
 
 export const Plans = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -36,79 +37,56 @@ export const Plans = ({ navigation, route }) => {
                 const row = results.rows.item(i);
                 lists.push(row);
             }
-            setPlans(lists)
+            setPlans(groupByDate(lists))
         }
         getdata();
     }, [isFocused])
 
-    async function getNearyby() {
-      
-        NetInfo.fetch().then(state=>{
-            if(state.isInternetReachable){
-                geo.thingstodo(route.params.destination).then(function (response) {
-                    setVisible(true);
-                    let cstArr = [];
-                    response.forEach(element => {
-                        if (element.photos && element.photos.length > 0) {
-                            element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
-                            
-                        } else {
-                            element["photoUri"] = "https://picsum.photos/700"
-                        }
-                        
-                        cstArr.push(element)
-                    });
-        
-                    setLocations(response)
-        
-                })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }else{
-                Alert.alert("You are offline!")
+    function groupByDate(data) {
+        // this gives an object with dates as keys
+        const groups = data.reduce((groups, plan) => {
+            const date = plan.startDate.split('T')[0];
+            if (!groups[date]) {
+                groups[date] = [];
             }
-        })
-    
+            groups[date].push(plan);
+            return groups;
+        }, {});
 
+        // Edit: to add it in the array format instead
+        const groupArrays = Object.keys(groups).map((date) => {
+            return {
+                date,
+                plans: groups[date]
+            };
+        });
+        return groupArrays;
     }
 
-    function redirecToMap(ele) {
-        let location = ele.geometry.location
-        var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
-        var url = scheme + `${location.lat},${location.lng}`;
-        Linking.openURL(url);
+    function datetimeFormate(date){
+        return moment(new Date(date)).format("MMM DD h:mm a")
     }
 
+    const listItems = plans.map((eledate, datekey) =>
+        <View key={datekey} style={{ marginBottom: 10 }}>
+            <Title style={{ color: colors.text }}>{eledate.date}</Title>
+            {
+                eledate.plans.map((ele, key) => 
+                    <View key={key}>
+                        <TouchableOpacity onPress={() =>
+                            navigation.navigate('AddPlan', { tripId: route.params.id, id: ele.ID })
+                        } style={{ padding: 2 }}>
+                            <Card>
+                                <Card.Content>
+                                    <Title>{ele.event} - {ele.venue}</Title>
+                                    <Paragraph>{datetimeFormate(ele.startDate)}, {datetimeFormate(ele.endDate)}</Paragraph>
+                                </Card.Content>
+                            </Card>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
 
-    const listLocation = locations.map((ele, key) =>
-        <View key={key} style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() =>
-                redirecToMap(ele)
-            } style={{ padding: 2 }}>
-
-                <List.Item
-                    title={ele.name}
-                    description=""
-                    left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
-                    }
-                />
-            </TouchableOpacity>
-        </View>
-    );
-
-    const listItems = plans.map((ele, key) =>
-        <View key={key} style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() =>
-                navigation.navigate('AddPlan', { tripId: route.params.id, id: ele.ID })
-            } style={{ padding: 2 }}>
-                <Card>
-                    <Card.Content>
-                        <Title>{ele.event} - {ele.venue}</Title>
-                        <Paragraph>{new Date(ele.startDate).toDateString()} {new Date(ele.startDate).toLocaleTimeString()}, {new Date(ele.endDate).toDateString()} {new Date(ele.endDate).toLocaleTimeString()}</Paragraph>
-                    </Card.Content>
-                </Card>
-            </TouchableOpacity>
         </View>
     );
 
@@ -118,7 +96,7 @@ export const Plans = ({ navigation, route }) => {
         </ScrollView>) : <Text style={{ color: colors.TextInput }}>Press + button to create Plan</Text>}
 
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
-            <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination,tripId: route.params.id  }) }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination, tripId: route.params.id }) }}>
                 <View style={{
                     position: 'relative',
                     justifyContent: 'center',
@@ -151,22 +129,5 @@ export const Plans = ({ navigation, route }) => {
                 </View>
             </TouchableOpacity>
         </View>
-
-
-        <Portal>
-            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                <Appbar.Header>
-                    <Appbar.Content title="Top Sights" />
-                    <Appbar.Action icon="close" onPress={() => { setVisible(false) }} />
-
-                </Appbar.Header>
-                <ScrollView style={{ height: 400 }}>
-                    {listLocation}
-                </ScrollView>
-            </Modal>
-        </Portal>
-
-
-
     </View>;
 };
