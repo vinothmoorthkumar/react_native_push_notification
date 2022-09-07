@@ -6,13 +6,14 @@ import geo from "../../utlis/geoService"
 import axios from "axios";
 import { Avatar, Button, Card, Title, Paragraph, TextInput, List } from 'react-native-paper';
 import db from "../../db/db_connection"
+import IconFA from 'react-native-vector-icons/FontAwesome';
 
 export const TopSights = ({ navigation, route }) => {
 
     const [locations, setLocations] = React.useState([]);
 
     useEffect(() => {
-            // db.delete("DROP TABLE Destination");
+        // db.delete("DROP TABLE Destination");
 
         async function getdata() {
             let results = await db.select("SELECT * FROM Destination WHERE TripID=" + route.params.tripId, [])
@@ -21,7 +22,10 @@ export const TopSights = ({ navigation, route }) => {
             for (let i = 0; i < count; i++) {
                 const row = results.rows.item(i);
                 let obj = {
+                    ID:row.ID,
                     name: row.name,
+                    fav: row.fav,
+                    custom: row.custom,
                     photoUri: row.image,
                     geometry: {
                         location: {
@@ -33,7 +37,7 @@ export const TopSights = ({ navigation, route }) => {
                 lists.push(obj);
             }
             setLocations(lists)
-            if (lists.length===0) {
+            if (lists.length === 0) {
                 console.log("online list")
                 NetInfo.fetch().then(state => {
                     if (state.isInternetReachable) {
@@ -90,9 +94,28 @@ export const TopSights = ({ navigation, route }) => {
         Linking.openURL(url);
     }
 
+    function addtofav(index){
+        let markers = [ ...locations ];
+        markers[index] = {...markers[index], fav: !markers[index].fav};
+        let updateArr=[1,markers[index].ID];
+        console.log("updateArr",updateArr)
+        db.update('UPDATE Destination SET fav = ? WHERE ID = ?', updateArr);
+        setLocations(markers);
+    }
+
     const listLocation = locations.map((ele, key) =>
         <View key={key} style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() =>
+            <List.Item
+                title={<Title onPress={() =>
+                    redirecToMap(ele)
+                }>{ele.name}</Title>}
+                description=""
+                left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
+                }
+                right={props => <IconFA onPress={() => { addtofav(key) }} name={ele.fav?'heart':'heart-o'} size={20} color='red' />}
+            />
+
+            {/* <TouchableOpacity onPress={() =>
                 redirecToMap(ele)
             } style={{ padding: 2 }}>
 
@@ -101,8 +124,14 @@ export const TopSights = ({ navigation, route }) => {
                     description=""
                     left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
                     }
+                    // rightIcon={{ 
+                    //     name: 'edit', 
+                    //     color:"red",
+                    //     onPress: () => { console.log('my right press') } 
+                    //   }} 
+                    right={props => <IconFA name='heart-o' size={20} color='red' />}
                 />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
 

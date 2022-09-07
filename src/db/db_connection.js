@@ -22,17 +22,16 @@ const db = SQLite.openDatabase({
 
 
         await tx.executeSql(
-            // "DROP TABLE PLAN;",
+            // "DROP TABLE Destination;",
             "CREATE TABLE IF NOT EXISTS "
             + "Destination"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, image TEXT,name TEXT,long TEXT,lat TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, image TEXT,name TEXT,long TEXT,lat TEXT,fav INTEGER DEFAULT 0, custom INTEGER DEFAULT 0, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
         [],(tx, results) => {
         }, (error)=>{
             console.log('Failed to select:', error);
         });
 
         await tx.executeSql(
-            // "DROP TABLE PLAN;",
             "CREATE TABLE IF NOT EXISTS "
             + "CHECKLIST"
             + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, item TEXT,checked INTEGER, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
