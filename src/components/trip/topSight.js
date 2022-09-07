@@ -55,10 +55,13 @@ export const TopSights = ({ navigation, route }) => {
 
                                 var reader = new window.FileReader();
                                 reader.readAsDataURL(imageresponse.data);
-                                reader.onload = function () {
+                                reader.onload = async function () {
                                     var imageDataUrl = reader.result;
                                     let dataArr = [imageDataUrl, element.name, element.geometry.location.lat, element.geometry.location.lng, route.params.tripId];
-                                    db.insert("INSERT INTO Destination (image, name,lat,long, TripID) VALUES (?,?,?,?,?)", dataArr)
+                                    let insertData =await db.insert("INSERT INTO Destination (image, name,lat,long, TripID) VALUES (?,?,?,?,?)", dataArr);
+                                    element.ID=insertData.insertId;
+                                    element.fav=0;
+                                    element.custom=0;
                                     cstArr.push(element)
                                 }
                             });

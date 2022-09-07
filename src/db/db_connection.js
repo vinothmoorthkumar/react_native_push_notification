@@ -57,16 +57,27 @@ const dbConnection = {
   
     },
     insert: async function (query, data) {
-        return await db.transaction(async (tx) => {
-            await tx.executeSql(
-                query,
-                data,(tx, results) => {
-                    // console.log("insert")
+        return new Promise(async function(resolve, reject) {
+            await db.transaction(async (tx) => {
+                await tx.executeSql(query,
+                    data, (tx, results) => {
+                    resolve(results)
                 }, (error)=>{
                     console.log('Failed to select:', error);
-                }
-            )
-        })
+                })
+            })
+          });
+
+        // return await db.transaction(async (tx) => {
+        //     await tx.executeSql(
+        //         query,
+        //         data,(tx, results) => {
+        //             // console.log("insert")
+        //         }, (error)=>{
+        //             console.log('Failed to select:', error);
+        //         }
+        //     )
+        // })
     },
     update: async function (query, data) {
         return await db.transaction(async (tx) => {
