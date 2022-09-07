@@ -100,7 +100,7 @@ export const TopSights = ({ navigation, route }) => {
     function addtofav(index){
         let markers = [ ...locations ];
         markers[index] = {...markers[index], fav: !markers[index].fav};
-        let updateArr=[1,markers[index].ID];
+        let updateArr=[markers[index].fav,markers[index].ID];
         db.update('UPDATE Destination SET fav = ? WHERE ID = ?', updateArr);
         setLocations(markers);
     }
