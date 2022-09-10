@@ -142,20 +142,20 @@ export const HomeScreen = ({ navigation }) => {
 };
 
 
-const homeStyles = StyleSheet.create({
-  style1: {
-    flex: 1,
-    backgroundColor: "red"
-  },
-  style2: {
-    flex: 2,
-    backgroundColor: "yellow"
+// const homeStyles = StyleSheet.create({
+//   style1: {
+//     flex: 1,
+//     backgroundColor: "red"
+//   },
+//   style2: {
+//     flex: 2,
+//     backgroundColor: "yellow"
 
-  },
-  style3: {
-    flex: 3,
-    backgroundColor: "orange"
-  }
-});
+//   },
+//   style3: {
+//     flex: 3,
+//     backgroundColor: "orange"
+//   }
+// });
 
 

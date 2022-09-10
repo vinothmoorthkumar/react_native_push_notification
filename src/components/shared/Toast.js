@@ -18,12 +18,12 @@ export default Toast = forwardRef((props, ref) => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+    <View style={{ flex: 1, width:200 , justifyContent: "center", alignItems: "center", textAlign: "center", zIndex: 10 }}>
       <Snackbar
         duration={1000}
         visible={visible}
         onDismiss={dismiss}
-        style={{ textAlign: "center" }}>
+        style={{ textAlign: "center"}}>
         <Text style={{ color: "white", textAlign: "center" }}> {props.text}</Text>
       </Snackbar>
     </View>

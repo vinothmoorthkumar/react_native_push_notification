@@ -77,8 +77,8 @@ export const Notification = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-    flex: 1,
-    backgroundColor: "#fff",
+    // marginTop: 20,
+    // flex: 1,
+    // backgroundColor: "#fff",
   }
 });

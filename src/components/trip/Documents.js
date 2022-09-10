@@ -59,7 +59,7 @@ export const Documents = ({ navigation, route }) => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView>
             <Text style={styles.titleText}>
                 Example of File Picker in React Native
             </Text>

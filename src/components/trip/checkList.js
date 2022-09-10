@@ -131,16 +131,5 @@ export const CheckList = ({ navigation, route }) => {
       </TouchableOpacity>
     </View>
     <Toast ref={childRef} text="Updated Successfully"></Toast>
-
-    {/* <View style={{flex:1, justifyContent:"center",alignItems:"center", textAlign:"center"}}>
-      <Snackbar
-        duration={100000}
-        visible={visible}
-        onDismiss={dismiss}
-        style={{textAlign:"center"}}
-        >
-        <Text style={{color:"white",textAlign:"center"}}> Updated Successfully</Text>
-      </Snackbar>
-    </View> */}
   </View>
 };

@@ -7,6 +7,6 @@ export const styles = StyleSheet.create({
         alignCenter: 'center',
         padding: 20,
         flex: 1,
-    },
+    }
  
 });
