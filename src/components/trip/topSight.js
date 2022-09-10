@@ -114,7 +114,7 @@ export const TopSights = ({ navigation, route }) => {
                 description=""
                 left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
                 }
-                right={props => <IconFA onPress={() => { addtofav(key) }} name={ele.fav?'heart':'heart-o'} size={20} color='red' />}
+                right={props => <IconFA onPress={() => { addtofav(key) }} name={ele.fav?'heart':'heart-o'} style={{ marginTop:15 }}  size={20} color='red' />}
             />
 
             {/* <TouchableOpacity onPress={() =>
