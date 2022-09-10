@@ -27,7 +27,7 @@ import { CustomNavigationBar } from "./src/components/customNavbar"
 import { CheckList } from "./src/components/trip/checkList"
 import { Documents } from "./src/components/trip/Documents"
 import { TopSights } from "./src/components/trip/topSight"
-
+import { PlaceCategories } from "./src/components/trip/placeCategories"
 
 
 
@@ -81,6 +81,8 @@ const App = () => {
           <Stack.Screen name="AddTrip" component={AddTrip} options={{ title: 'Trip' }} />
           <Stack.Screen name="CheckList" component={CheckList} options={{ title: 'Check List' }} />
           <Stack.Screen name="TopSights" component={TopSights} options={{ title: 'Top Sights' }} />
+
+          <Stack.Screen name="placeCategories" component={PlaceCategories} options={{ title: 'Place Categories' }} />
 
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Notification" component={Notification} />
