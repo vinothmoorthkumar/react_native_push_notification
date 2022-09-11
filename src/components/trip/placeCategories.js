@@ -100,7 +100,7 @@ export const PlaceCategories = ({ navigation, route }) => {
                         }>{ele.name}</Title>}
                     // subtitle="Card Subtitle"
                     style={{backgroundColor:colors.text}}
-                    right={(props) => <IconFA onPress={() => { edit(key) }} style={{paddingRight:5 }} size={20} color="gray" name="bars"/>}
+                    right={(props) => <IconFA onPress={() => { edit(key) }} style={{paddingRight:5 }} size={20} color="gray" name="pencil"/>}
                 />
               
             </TouchableOpacity>
