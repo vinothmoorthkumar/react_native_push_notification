@@ -1,5 +1,29 @@
 import axios from "axios";
 
+// const geturl = async link => {
+//     try {
+//         let result=await axios({
+//             method: "get",
+//             url: link,
+//         });
+
+//         let text=result.data.resolved_url
+//         let pattern = /\@[-?\d\.]*\,([-?\d\.]*)/g;
+//         let data = text.match(pattern);
+//         let modifyData=data.toString().split(",");
+//         let lat = modifyData[0].substring(1);
+//         let lang = modifyData[1];
+//         console.log("$$$$",lat,lang)
+//         return result;
+//     } catch (e) {
+     
+//     }
+// };
+
+// geturl("https://unshorten.me/json/https://goo.gl/maps/Lu1xF4mdvj6LWprN6").then(x => x.status).then(console.log);
+
+
+
 const API= "AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88"
 const geoLocation = {
     suggestions: async function (q) {

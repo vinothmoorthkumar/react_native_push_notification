@@ -40,10 +40,18 @@ const db = SQLite.openDatabase({
         });
 
         await tx.executeSql(
-            
             "CREATE TABLE IF NOT EXISTS "
             + "CATEGORY"
             + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
+        [],(tx, results) => {
+        }, (error)=>{
+            console.log('Failed to select:', error);
+        });
+
+        await tx.executeSql(
+            "CREATE TABLE IF NOT EXISTS "
+            + "PLACES"
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,CATID int, FOREIGN KEY (CATID) REFERENCES CATEGORY(ID));",
         [],(tx, results) => {
         }, (error)=>{
             console.log('Failed to select:', error);

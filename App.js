@@ -28,6 +28,7 @@ import { CheckList } from "./src/components/trip/checkList"
 import { Documents } from "./src/components/trip/Documents"
 import { TopSights } from "./src/components/trip/topSight"
 import { PlaceCategories } from "./src/components/trip/placeCategories"
+import { Places } from "./src/components/trip/places"
 
 
 
@@ -83,6 +84,7 @@ const App = () => {
           <Stack.Screen name="TopSights" component={TopSights} options={{ title: 'Top Sights' }} />
 
           <Stack.Screen name="placeCategories" component={PlaceCategories} options={{ title: 'Place Categories' }} />
+          <Stack.Screen name="Places" component={Places} options={{ title: 'Places' }} />
 
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Notification" component={Notification} />
