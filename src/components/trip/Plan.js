@@ -121,7 +121,7 @@ export const Plans = ({ navigation, route }) => {
                     width: 40,
                     height: 40,
                     borderRadius: 100,
-                    backgroundColor: 'gray'
+                    backgroundColor: 'green'
                 }}>
                     <IconFA size={40} />
                     <IconFA name='street-view' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
