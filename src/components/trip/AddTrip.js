@@ -164,6 +164,9 @@ export const AddTrip = ({ navigation, route }) => {
                 let dataArr = [destination, placeId, destinationImage, name, getstartDateFormate(startDate), getendDateFormate(endDate)];
                 allProcessDone(dataArr)
             }
+        }else{
+            let dataArr = [destination, placeId, "", name, getstartDateFormate(startDate), getendDateFormate(endDate)];
+            allProcessDone(dataArr)   
         }
     }
 
