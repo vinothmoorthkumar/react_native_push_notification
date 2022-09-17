@@ -93,12 +93,12 @@ export const PlaceCategories = ({ navigation, route }) => {
 
     const listItems = list.map((ele, key) =>
         <View key={key}>
-            <TouchableOpacity style={{ padding: 2 }}>
+            <TouchableOpacity onPress={() =>
+                            navigation.navigate('Places', {catId:ele.ID})
+                        } style={{ padding: 2 }}>
                 <Card>
                     <Card.Title
-                        title={<Title onPress={() =>
-                            navigation.navigate('Places', {catId:ele.ID})
-                        }>{ele.name}</Title>}
+                        title={<Title >{ele.name}</Title>}
                         onPress={() =>
                             navigation.navigate('Places', { catId: ele.ID })
                         }

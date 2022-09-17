@@ -123,16 +123,16 @@ export const Places = ({ navigation, route }) => {
 
     const listItems = list.map((ele, key) =>
         <View key={key}>
-            <TouchableOpacity style={{ padding: 5 }}>
+            <TouchableOpacity onPress={() =>
+                            redirecToMap(ele)
+                        } style={{ padding: 5 }}>
             {/* <Card>
     <Card.Title title="Card Title" subtitle="Card Subtitle" />
 
   </Card> */}
                 <Card>
                     <Card.Title
-                        title={<Title onPress={() =>
-                            redirecToMap(ele)
-                        }>{ele.name}</Title>}
+                        title={<Title>{ele.name}</Title>}
                         // subtitle="Card Subtitle"
                         // style={{ backgroundColor: colors.text }}
                         right={(props) => <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} />}
