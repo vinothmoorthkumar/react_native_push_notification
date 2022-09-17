@@ -57,12 +57,12 @@ export const Places = ({ navigation, route }) => {
 
 
         let response = { lat: "", long: "" }
-        if (url && url != "") {
-            let location = url.split(",")
-            response.lat = location[0]
-            response.long = location[1]
-            // response = await geo.getlatlngByURL(url)
-        }
+        // if (url && url != "") {
+        //     let location = url.split(",")
+        //     response.lat = location[0]
+        //     response.long = location[1]
+        //     // response = await geo.getlatlngByURL(url)
+        // }
         let dataArr = [name, url, response.lat, response.long, route.params.catId];
         if (editable) {
             dataArr.push(editableId)
@@ -108,9 +108,9 @@ export const Places = ({ navigation, route }) => {
     }
 
     function redirecToMap(ele) {
-        var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
-        var url = scheme + `${ele.lat},${ele.long}`;
-        Linking.openURL(url);
+        // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        // var url = scheme + `${ele.lat},${ele.long}`;
+        Linking.openURL(ele.url);
     }
 
 
@@ -144,7 +144,7 @@ export const Places = ({ navigation, route }) => {
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <TextInput label="Place Name" value={name} onChangeText={name => setName(name)} />
                 {/* <TextInput label="Gmap Location URL" value={url} onChangeText={url => setURL(url)} /> */}
-                <TextInput label="Coordinates" value={url} onChangeText={url => setURL(url)} />
+                <TextInput label="Map URl" value={url} onChangeText={url => setURL(url)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
                     <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={hideModal}>
