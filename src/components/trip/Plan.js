@@ -107,7 +107,7 @@ export const Plans = ({ navigation, route }) => {
                     backgroundColor: 'red'
                 }}>
                     <IconFA size={40} />
-                    <IconFA name='map-marker' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+                    <IconFA name='street-view' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
                 </View>
             </TouchableOpacity>
         </View>
@@ -124,7 +124,7 @@ export const Plans = ({ navigation, route }) => {
                     backgroundColor: 'green'
                 }}>
                     <IconFA size={40} />
-                    <IconFA name='street-view' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+                    <IconFA name='map-marker' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
                 </View>
             </TouchableOpacity>
         </View>

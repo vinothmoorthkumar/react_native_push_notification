@@ -46,7 +46,7 @@ export const TopSights = ({ navigation, route }) => {
                             let cstArr = [];
                             response.forEach(async element => {
                                 if (element.photos && element.photos.length > 0) {
-                                    element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference)._W
+                                    element["photoUri"] = geo.getPhotosByRef(element.photos[0].photo_reference,60)._W
 
                                 } else {
                                     element["photoUri"] = "https://picsum.photos/700"

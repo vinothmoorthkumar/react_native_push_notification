@@ -151,7 +151,7 @@ export const AddTrip = ({ navigation, route }) => {
             let placeDetails = await geo.getPlaceDetails(placeId)
             let photoData="";
             if(placeDetails.result && placeDetails.result.photos){
-                photoData = await geo.getPhotosByRef(placeDetails.result.photos[0].photo_reference)._W
+                photoData = await geo.getPhotosByRef(placeDetails.result.photos[0].photo_reference,500)._W
             }else{
                 photoData = "https://picsum.photos/700"
             }
