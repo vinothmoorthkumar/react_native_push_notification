@@ -4,7 +4,7 @@ import { styles } from "../../style/style";
 import NetInfo from "@react-native-community/netinfo";
 import geo from "../../utlis/geoService"
 import axios from "axios";
-import { Avatar, Button, Card, Title, Paragraph, Divider, List } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph, ActivityIndicator, MD2Colors, List } from 'react-native-paper';
 import db from "../../db/db_connection"
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
@@ -120,6 +120,9 @@ export const TopSights = ({ navigation, route }) => {
     );
 
     return <View style={[styles.container, {  }]}>
+            {/* <View style={styles.loader} >
+                <ActivityIndicator size='large' animation={true} />
+            </View> */}
         <ScrollView >
             {listLocation}
 
