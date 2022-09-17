@@ -82,7 +82,7 @@ export const AddPlan = ({ navigation, route }) => {
     }
     function confirmDelete(){
         db.delete("DELETE FROM PLAN WHERE ID=" + route.params.id);
-        navigation.navigate('Plans', { id: tripId })
+        navigation.navigate('Plans', { destination: route.params.destination, id: tripId })
     }
 
     async function saveTrip() {
@@ -100,7 +100,7 @@ export const AddPlan = ({ navigation, route }) => {
         } else {
             let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
         }
-        navigation.navigate('Plans', { id: tripId })
+        navigation.navigate('Plans', {destination: route.params.destination,  id: tripId })
     }
 
 

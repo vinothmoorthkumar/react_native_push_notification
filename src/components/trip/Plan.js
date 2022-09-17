@@ -23,11 +23,6 @@ export const Plans = ({ navigation, route }) => {
     const hideModal = () => setVisible(false);
     const containerStyle = { backgroundColor: 'white', padding: 10, marginHorizontal: 20 };
 
-    // const url = Platform.select({
-    //     ios: `${scheme}${label}@${latLng}`,
-    //     android: `${scheme}${latLng}(${label})`
-    // });
-
     useEffect(() => {
         async function getdata() {
             const lists = [];
@@ -74,7 +69,7 @@ export const Plans = ({ navigation, route }) => {
                 eledate.plans.map((ele, key) => 
                     <View key={key}>
                         <TouchableOpacity onPress={() =>
-                            navigation.navigate('AddPlan', { tripId: route.params.id, id: ele.ID })
+                            navigation.navigate('AddPlan', { destination: route.params.destination,tripId: route.params.id, id: ele.ID })
                         } style={{ padding: 2 }}>
                             <Card>
                                 <Card.Content>
@@ -131,7 +126,7 @@ export const Plans = ({ navigation, route }) => {
 
 
         <View style={{ position: "absolute", bottom: 20, right: 20 }}>
-            <TouchableOpacity onPress={() => { navigation.navigate('AddPlan', { tripId: route.params.id }) }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('AddPlan', { destination: route.params.destination,tripId: route.params.id }) }}>
                 <View style={{
                     position: 'relative',
                     justifyContent: 'center',

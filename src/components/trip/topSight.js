@@ -14,7 +14,6 @@ export const TopSights = ({ navigation, route }) => {
 
     useEffect(() => {
         // db.delete("DROP TABLE Destination");
-
         async function getdata() {
             let results = await db.select("SELECT * FROM Destination WHERE TripID=" + route.params.tripId, [])
             let lists = [];
