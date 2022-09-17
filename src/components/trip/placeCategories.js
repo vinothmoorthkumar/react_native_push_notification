@@ -40,7 +40,16 @@ export const PlaceCategories = ({ navigation, route }) => {
             const row = results.rows.item(i);
             lists.push(row);
         }
-        setList(lists)
+
+        if(lists.length<=0){
+            ["Food","Must Visit","Other"].forEach(async element => {
+                let insertedData= await db.insert("INSERT INTO CATEGORY (name,TripID) VALUES (?,?)", [element,route.params.tripId])
+                lists.push({ID:insertedData.insertId,name:element})
+                setList([...lists])
+            });
+        }else{
+            setList(lists)
+        }
     }
 
     async function saveCategory() {
