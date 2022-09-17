@@ -113,21 +113,16 @@ export const PlaceCategories = ({ navigation, route }) => {
         {listItems}
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+            <IconFA onPress={hideModal} style={{textAlign:"right",paddingBottom:20}} name='remove' size={20} color='gray' />
                 <TextInput label="Category Name" value={name} onChangeText={name => setName(name)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
-
-                    <View style={{ width: 100 }}>
-                        <Button mode="contained" onPress={hideModal}>
-                            <IconFA name='close' size={20} color='white' />
-                        </Button>
-                    </View>
 
                     <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={() => deleteCat()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
                     </View>
-                    <View style={{ width: 100 }}>
+                    <View style={{ width: 100,marginLeft:10 }}>
                         <Button mode="contained" onPress={() => saveCategory()}>
                             <IconFA name='save' size={20} color='white' />
                         </Button>
