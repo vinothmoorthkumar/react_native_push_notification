@@ -95,6 +95,23 @@ export const Plans = ({ navigation, route }) => {
             {listItems}
         </ScrollView>) : <Text style={{ color: colors.TextInput }}>Press + button to create Plan</Text>}
 
+        <View style={{ position: "absolute", bottom: 150, right: 25 }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination, tripId: route.params.id }) }}>
+                <View style={{
+                    position: 'relative',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 40,
+                    height: 40,
+                    borderRadius: 100,
+                    backgroundColor: 'red'
+                }}>
+                    <IconFA size={40} />
+                    <IconFA name='map-marker' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+                </View>
+            </TouchableOpacity>
+        </View>
+
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
             <TouchableOpacity onPress={() => { navigation.navigate('placeCategories', { destination: route.params.destination, tripId: route.params.id }) }}>
                 <View style={{
