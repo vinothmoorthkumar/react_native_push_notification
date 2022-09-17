@@ -19,7 +19,7 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
         </View>}
 
         {route.name=="Plans" && <View>
-            <Menu.Item onPress={() => { navigation.navigate('AddTrip', { id: route.params.id }) ,closeMenu()}} title="Edit Trip" />
+            {/* <Menu.Item onPress={() => { navigation.navigate('AddTrip', { id: route.params.id }) ,closeMenu()}} title="Edit Trip" /> */}
             <Menu.Item onPress={() => { navigation.navigate('CheckList', { id: route.params.id }) ,closeMenu()}}  title="Check List" />
         </View>}
 
