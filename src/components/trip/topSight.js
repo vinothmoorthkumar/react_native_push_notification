@@ -4,7 +4,7 @@ import { styles } from "../../style/style";
 import NetInfo from "@react-native-community/netinfo";
 import geo from "../../utlis/geoService"
 import axios from "axios";
-import { Avatar, Button, Card, Title, Paragraph, TextInput, List } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph, Divider, List } from 'react-native-paper';
 import db from "../../db/db_connection"
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
@@ -111,32 +111,15 @@ export const TopSights = ({ navigation, route }) => {
                     redirecToMap(ele)
                 }>{ele.name}</Title>}
                 description=""
-                left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
+                style={{backgroundColor:"white", padding:10}}
+                left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50, borderRadius: 40 }} />
                 }
                 right={props => <IconFA onPress={() => { addtofav(key) }} name={ele.fav?'heart':'heart-o'} style={{ marginTop:15 }}  size={20} color='red' />}
             />
-
-            {/* <TouchableOpacity onPress={() =>
-                redirecToMap(ele)
-            } style={{ padding: 2 }}>
-
-                <List.Item
-                    title={ele.name}
-                    description=""
-                    left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50 }} />
-                    }
-                    // rightIcon={{ 
-                    //     name: 'edit', 
-                    //     color:"red",
-                    //     onPress: () => { console.log('my right press') } 
-                    //   }} 
-                    right={props => <IconFA name='heart-o' size={20} color='red' />}
-                />
-            </TouchableOpacity> */}
         </View>
     );
 
-    return <View style={[styles.container, { backgroundColor: "white" }]}>
+    return <View style={[styles.container, {  }]}>
         <ScrollView >
             {listLocation}
 
