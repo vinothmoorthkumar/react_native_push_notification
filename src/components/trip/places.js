@@ -123,9 +123,7 @@ export const Places = ({ navigation, route }) => {
 
     const listItems = list.map((ele, key) =>
         <View key={key}>
-            <TouchableOpacity onPress={() =>
-                            redirecToMap(ele)
-                        } style={{ padding: 5 }}>
+            <TouchableOpacity>
             {/* <Card>
     <Card.Title title="Card Title" subtitle="Card Subtitle" />
 
@@ -135,7 +133,12 @@ export const Places = ({ navigation, route }) => {
                         title={<Title>{ele.name}</Title>}
                         // subtitle="Card Subtitle"
                         // style={{ backgroundColor: colors.text }}
-                        right={(props) => <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} />}
+                        right={(props) => {
+                            return <View style={{flexDirection:"row"}}>
+                                <IconButton {...props} icon="location-arrow" onPress={() => {redirecToMap(ele)}} />
+                                <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} /> 
+                            </View>
+                        }}
                         // right={(props) => <IconFA onPress={() => { edit(key) }} style={{ paddingRight: 5 }} size={20} color="gray" name="pencil" />}
                     />
                 </ Card>
