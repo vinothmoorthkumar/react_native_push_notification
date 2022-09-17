@@ -49,9 +49,11 @@ const db = SQLite.openDatabase({
         });
 
         await tx.executeSql(
+                        // "DROP TABLE PLACES",
+
             "CREATE TABLE IF NOT EXISTS "
             + "PLACES"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,CATID int, FOREIGN KEY (CATID) REFERENCES CATEGORY(ID));",
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,url TEXT,lat TEXT,long TEXT,CATID int, FOREIGN KEY (CATID) REFERENCES CATEGORY(ID));",
         [],(tx, results) => {
         }, (error)=>{
             console.log('Failed to select:', error);

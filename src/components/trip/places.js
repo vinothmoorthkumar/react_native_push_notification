@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Linking } from 'react-native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 import Toast from "../shared/Toast"
 import { Title, TextInput, Button, Card, Portal, Modal, Dialog } from 'react-native-paper';
 import db from "../../db/db_connection"
+import geo from "../../utlis/geoService"
+
 export const Places = ({ navigation, route }) => {
     const { colors } = useTheme();
     const childRef = useRef(null);
 
     const [visible, setVisible] = React.useState(false);
     const [name, setName] = React.useState(false);
+    const [url, setURL] = React.useState("");
+
     const [list, setList] = React.useState([]);
     const [editable, seteditable] = React.useState(false);
     const [editableId, seteditableId] = React.useState(false);
@@ -43,24 +47,35 @@ export const Places = ({ navigation, route }) => {
         setList(lists)
     }
 
+
     async function saveCategory() {
         if (!name.trim()) {
             setErrorText("Please Enter Trip Name")
             childRef.current.alert();
             return
         }
-        let dataArr = [name, route.params.catId];
+
+
+        let response={lat:"",long:""}
+        if(url && url != ""){
+            let location=url.split(",")
+            response.lat=location[0]
+            response.long=location[1]
+            // response = await geo.getlatlngByURL(url)
+        }
+        let dataArr = [name,url,response.lat,response.long, route.params.catId];
         if (editable) {
             dataArr.push(editableId)
-            await db.update('UPDATE PLACES SET name = ?, CATID = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE PLACES SET name = ?,url = ?,lat = ?,long = ?, CATID = ? WHERE id = ?', dataArr);
         } else {
-        await db.insert("INSERT INTO PLACES (name,CATID) VALUES (?,?)", dataArr)
+            await db.insert("INSERT INTO PLACES (name,url,lat,long,CATID) VALUES (?,?,?,?,?)", dataArr)
         }
 
         getdata()
 
         seteditable(false);
         setName("");
+        setURL("");
         seteditableId(0)
         hideModal();
 
@@ -71,6 +86,7 @@ export const Places = ({ navigation, route }) => {
         seteditable(true);
         let data = list[key]
         setName(data.name);
+        setURL(data.url);
         seteditableId(data.ID)
     }
 
@@ -85,10 +101,18 @@ export const Places = ({ navigation, route }) => {
         setvisibleDialog(false)
         seteditable(false);
         setName("");
+        setURL("");
         seteditableId(0)
         hideModal();
         getdata()
     }
+
+    function redirecToMap(ele) {
+        var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        var url = scheme + `${ele.lat},${ele.long}`;
+        Linking.openURL(url);
+    }
+
 
 
     const listItems = list.map((ele, key) =>
@@ -96,7 +120,7 @@ export const Places = ({ navigation, route }) => {
             <TouchableOpacity  style={{ padding: 5 }}>
                 <Card.Title
                          title={<Title onPress={() =>
-                            edit(ele)
+                            redirecToMap(ele)
                         }>{ele.name}</Title>}
                     // subtitle="Card Subtitle"
                     style={{backgroundColor:colors.text}}
@@ -112,6 +136,8 @@ export const Places = ({ navigation, route }) => {
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <TextInput label="Place Name" value={name} onChangeText={name => setName(name)} />
+                {/* <TextInput label="Gmap Location URL" value={url} onChangeText={url => setURL(url)} /> */}
+                <TextInput label="Coordinates" value={url} onChangeText={url => setURL(url)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
                     <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={hideModal}>

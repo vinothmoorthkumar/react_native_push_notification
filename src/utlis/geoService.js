@@ -37,6 +37,22 @@ const geoLocation = {
             resolve(results)
           });
     },
+    getlatlngByURL: async function (link) {
+        return new Promise(async function(resolve, reject) {
+            let result=await axios({
+                method: "get",
+                url: `https://unshorten.me/json/${link}`,
+            });
+    
+            let text=result.data.resolved_url
+            let pattern = /\@[-?\d\.]*\,([-?\d\.]*)/g;
+            let data = text.match(pattern);
+            let modifyData=data.toString().split(",");
+            let lat = modifyData[0].substring(1);
+            let long = modifyData[1];
+            resolve({lat,long})
+          });
+    },
     nearBy: async function (placeId) {
         return new Promise(async function(resolve, reject) {
             var config = {
