@@ -10,6 +10,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 
 import { Button, TextInput, Text, Dialog, Provider, Portal } from 'react-native-paper';
+import axios from "axios";
 
 import db from "../../db/db_connection"
 import geo from "../../utlis/geoService"
@@ -145,15 +146,35 @@ export const AddTrip = ({ navigation, route }) => {
             childRef.current.alert();
             return 
         }
-        let dataArr = [destination, placeId, name, getstartDateFormate(startDate), getendDateFormate(endDate)];
+        let destinationImage="";
+        if(destination){
+            let placeDetails = await geo.getPlaceDetails(placeId)
+            let photoData="";
+            if(placeDetails.result && placeDetails.result.photos){
+                photoData = await geo.getPhotosByRef(placeDetails.result.photos[0].photo_reference)._W
+            }else{
+                photoData = "https://picsum.photos/700"
+            }
+
+            let imageresponse = await axios.get(photoData, { responseType: 'blob' })
+            var reader = new window.FileReader();
+            reader.readAsDataURL(imageresponse.data);
+            reader.onload = async function () {
+                destinationImage = reader.result;
+                let dataArr = [destination, placeId, destinationImage, name, getstartDateFormate(startDate), getendDateFormate(endDate)];
+                allProcessDone(dataArr)
+            }
+        }
+    }
+
+    function allProcessDone(dataArr){
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE TRIP SET destination = ? , placeId = ?, name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
+            db.update('UPDATE TRIP SET destination = ? , placeId = ?,destinationImage = ?, name = ?, startDate = ?, endDate = ? WHERE id = ?', dataArr);
         } else {
-            await db.insert("INSERT INTO TRIP (destination,placeId, name, startDate, endDate) VALUES (?,?,?,?,?)", dataArr)
+            db.insert("INSERT INTO TRIP (destination,placeId,destinationImage, name, startDate, endDate) VALUES (?,?,?,?,?,?)", dataArr)
         }
         navigation.navigate('Home')
-
     }
 
     function setDest(item) {

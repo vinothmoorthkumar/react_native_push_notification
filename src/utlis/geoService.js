@@ -76,8 +76,27 @@ const geoLocation = {
           });
     },
     getPhotosByRef: async function (ref) {
-        return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=60&photo_reference=${ref}&key=${API}`;
+        return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photo_reference=${ref}&key=${API}`;
     },
+    getPlaceDetails: async function (place_id) {
+        return new Promise(async function(resolve, reject) {
+            try{
+                var config = {
+                    method: 'get',
+                    url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&fields=photos&key=${API}`,
+                    headers: {}
+                };
+                let results1 = await axios(config)
+                resolve(results1.data)
+            }catch(err){
+                reject(err)
+            }
+
+
+          });
+    },
+
+
     thingstodo: async function (place) {
         return new Promise(async function(resolve, reject) {
             try{

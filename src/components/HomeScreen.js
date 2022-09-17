@@ -36,6 +36,9 @@ export const HomeScreen = ({ navigation }) => {
 
   }, [isFocused])
 
+  const getrandomImage=()=>{
+    return "https://picsum.photos/700/?random&t=" + new Date().getTime() +")"
+  }
   function ListComponent({ ele }) {
     return (
       <View style={{ marginBottom: 10 }}>
@@ -43,12 +46,13 @@ export const HomeScreen = ({ navigation }) => {
           navigation.navigate('Plans', { id: ele.ID, placeId: ele.placeId, destination: ele.destination })
         } style={{ padding: 2 }}>
           <Card>
-            <Card.Title title={ele.name} subtitle={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()} left={props => <List.Icon {...props} icon={randomIcon()} />} />
+            {/* <Card.Title title={ele.name} subtitle={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()} left={props => <List.Icon {...props} icon={randomIcon()} />} /> */}
+            <Card.Title title={ele.name} subtitle={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()}/>
             <Card.Content>
               {/* <Title>Card title</Title>
               <Paragraph>Card content</Paragraph> */}
             </Card.Content>
-            {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
+            <Card.Cover source={{ uri: ele.destinationImage}} />
             {/* <Card.Actions>
               <Button>Cancel</Button>
               <Button>Ok</Button>
