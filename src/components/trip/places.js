@@ -63,7 +63,13 @@ export const Places = ({ navigation, route }) => {
         //     response.long = location[1]
         //     // response = await geo.getlatlngByURL(url)
         // }
-        let dataArr = [name, url, response.lat, response.long, route.params.catId];
+        let pattern = /\bhttps?:\/\/\S+/;
+        console.log("url",url)
+        let data = url.match(pattern);
+        console.log("data",data)
+        let convertedUrl=data[0]
+
+        let dataArr = [name, convertedUrl, response.lat, response.long, route.params.catId];
         if (editable) {
             dataArr.push(editableId)
             await db.update('UPDATE PLACES SET name = ?,url = ?,lat = ?,long = ?, CATID = ? WHERE id = ?', dataArr);
