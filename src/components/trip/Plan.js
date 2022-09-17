@@ -69,7 +69,7 @@ export const Plans = ({ navigation, route }) => {
 
     const listItems = plans.map((eledate, datekey) =>
         <View key={datekey} style={{ marginBottom: 10 }}>
-            <Title style={{ color: colors.text }}>{eledate.date}</Title>
+            <Title style={{ color: colors.text }}>{moment(eledate.date).format("MMMM D YYYY")}</Title>
             {
                 eledate.plans.map((ele, key) => 
                     <View key={key}>
@@ -78,7 +78,7 @@ export const Plans = ({ navigation, route }) => {
                         } style={{ padding: 2 }}>
                             <Card>
                                 <Card.Content>
-                                    <Title>{ele.event} - {ele.venue}</Title>
+                                    <Title style={{textTransform: "capitalize"}}>{ele.event} - {ele.venue}</Title>
                                     <Paragraph>{datetimeFormate(ele.startDate)}, {datetimeFormate(ele.endDate)}</Paragraph>
                                 </Card.Content>
                             </Card>
