@@ -124,23 +124,16 @@ export const Places = ({ navigation, route }) => {
     const listItems = list.map((ele, key) =>
         <View key={key}>
             <TouchableOpacity>
-            {/* <Card>
-    <Card.Title title="Card Title" subtitle="Card Subtitle" />
-
-  </Card> */}
                 <Card>
                     <Card.Title
                         title={<Title>{ele.name}</Title>}
-                        // subtitle="Card Subtitle"
-                        // style={{ backgroundColor: colors.text }}
                         right={(props) => {
                             return <View style={{flexDirection:"row"}}>
                                 <IconButton {...props} icon="location-arrow" onPress={() => {redirecToMap(ele)}} />
                                 <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} /> 
                             </View>
                         }}
-                        // right={(props) => <IconFA onPress={() => { edit(key) }} style={{ paddingRight: 5 }} size={20} color="gray" name="pencil" />}
-                    />
+x                    />
                 </ Card>
 
             </TouchableOpacity>
@@ -151,22 +144,18 @@ export const Places = ({ navigation, route }) => {
         {listItems}
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+            <IconFA onPress={hideModal} style={{textAlign:"right",paddingBottom:20}} name='remove' size={20} color='gray' />
                 <TextInput label="Place Name" value={name} onChangeText={name => setName(name)} />
-                {/* <TextInput label="Gmap Location URL" value={url} onChangeText={url => setURL(url)} /> */}
                 <TextInput label="Map URl" value={url} onChangeText={url => setURL(url)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
-                    <View style={{ width: 100 }}>
-                        <Button mode="contained" onPress={hideModal}>
-                            <IconFA name='close' size={20} color='white' />
-                        </Button>
-                    </View>
+                
 
                     <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={() => deleteCat()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
                     </View>
-                    <View style={{ width: 100 }}>
+                    <View style={{ width: 100,marginLeft:10}}>
                         <Button mode="contained" onPress={() => saveCategory()}>
                             <IconFA name='save' size={20} color='white' />
                         </Button>
