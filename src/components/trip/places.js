@@ -4,7 +4,7 @@ import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 import Toast from "../shared/Toast"
-import { Title, TextInput, Button, Card, Portal, Modal, Dialog } from 'react-native-paper';
+import { Title, TextInput, Button, Card, Portal, Modal, Dialog, IconButton } from 'react-native-paper';
 import db from "../../db/db_connection"
 import geo from "../../utlis/geoService"
 
@@ -21,12 +21,12 @@ export const Places = ({ navigation, route }) => {
     const [editableId, seteditableId] = React.useState(false);
     const [visibleDialog, setvisibleDialog] = React.useState(false);
 
-    
+
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
     const hideDialog = () => setvisibleDialog(false);
 
-    
+
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20 };
 
     useEffect(() => {
@@ -56,14 +56,14 @@ export const Places = ({ navigation, route }) => {
         }
 
 
-        let response={lat:"",long:""}
-        if(url && url != ""){
-            let location=url.split(",")
-            response.lat=location[0]
-            response.long=location[1]
+        let response = { lat: "", long: "" }
+        if (url && url != "") {
+            let location = url.split(",")
+            response.lat = location[0]
+            response.long = location[1]
             // response = await geo.getlatlngByURL(url)
         }
-        let dataArr = [name,url,response.lat,response.long, route.params.catId];
+        let dataArr = [name, url, response.lat, response.long, route.params.catId];
         if (editable) {
             dataArr.push(editableId)
             await db.update('UPDATE PLACES SET name = ?,url = ?,lat = ?,long = ?, CATID = ? WHERE id = ?', dataArr);
@@ -81,7 +81,7 @@ export const Places = ({ navigation, route }) => {
 
     }
 
-    function edit(key){
+    function edit(key) {
         showModal();
         seteditable(true);
         let data = list[key]
@@ -117,16 +117,23 @@ export const Places = ({ navigation, route }) => {
 
     const listItems = list.map((ele, key) =>
         <View key={key}>
-            <TouchableOpacity  style={{ padding: 5 }}>
-                <Card.Title
-                         title={<Title onPress={() =>
+            <TouchableOpacity style={{ padding: 5 }}>
+            {/* <Card>
+    <Card.Title title="Card Title" subtitle="Card Subtitle" />
+
+  </Card> */}
+                <Card>
+                    <Card.Title
+                        title={<Title onPress={() =>
                             redirecToMap(ele)
                         }>{ele.name}</Title>}
-                    // subtitle="Card Subtitle"
-                    style={{backgroundColor:colors.text}}
-                    right={(props) => <IconFA onPress={() => { edit(key) }} style={{paddingRight:5 }} size={20} color="gray" name="pencil"/>}
-                />
-              
+                        // subtitle="Card Subtitle"
+                        // style={{ backgroundColor: colors.text }}
+                        right={(props) => <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} />}
+                        // right={(props) => <IconFA onPress={() => { edit(key) }} style={{ paddingRight: 5 }} size={20} color="gray" name="pencil" />}
+                    />
+                </ Card>
+
             </TouchableOpacity>
         </View>
     );
@@ -178,19 +185,19 @@ export const Places = ({ navigation, route }) => {
         </View>
 
         <View>
-                <Portal>
-                    <Dialog visible={visibleDialog} onDismiss={hideDialog}>
-                        <Dialog.Title>Are you sure want to delete?</Dialog.Title>
-                        {/* <Dialog.Content>
+            <Portal>
+                <Dialog visible={visibleDialog} onDismiss={hideDialog}>
+                    <Dialog.Title>Are you sure want to delete?</Dialog.Title>
+                    {/* <Dialog.Content>
                             <Paragraph>This is simple dialog</Paragraph>
                         </Dialog.Content> */}
-                        <Dialog.Actions>
-                            <Button onPress={hideDialog}>Cancel</Button>
-                            <Button onPress={confirmDelete}>Confirm</Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
-            </View>
+                    <Dialog.Actions>
+                        <Button onPress={hideDialog}>Cancel</Button>
+                        <Button onPress={confirmDelete}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
+        </View>
 
         <Toast ref={childRef} text="Updated Successfully"></Toast>
     </View>

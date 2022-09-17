@@ -4,7 +4,7 @@ import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 import Toast from "../shared/Toast"
-import { Title, TextInput, Button, Card, Portal, Modal, Dialog } from 'react-native-paper';
+import { Title, TextInput, Button, Card, Portal, Modal, Dialog, IconButton, Avatar } from 'react-native-paper';
 import db from "../../db/db_connection"
 export const PlaceCategories = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -17,12 +17,12 @@ export const PlaceCategories = ({ navigation, route }) => {
     const [editableId, seteditableId] = React.useState(false);
     const [visibleDialog, setvisibleDialog] = React.useState(false);
 
-    
+
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
     const hideDialog = () => setvisibleDialog(false);
 
-    
+
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20 };
 
     useEffect(() => {
@@ -54,7 +54,7 @@ export const PlaceCategories = ({ navigation, route }) => {
             dataArr.push(editableId)
             await db.update('UPDATE CATEGORY SET name = ?, TripID = ? WHERE id = ?', dataArr);
         } else {
-        await db.insert("INSERT INTO CATEGORY (name,TripID) VALUES (?,?)", dataArr)
+            await db.insert("INSERT INTO CATEGORY (name,TripID) VALUES (?,?)", dataArr)
         }
 
         getdata()
@@ -66,7 +66,7 @@ export const PlaceCategories = ({ navigation, route }) => {
 
     }
 
-    function edit(key){
+    function edit(key) {
         showModal();
         seteditable(true);
         let getData = list[key]
@@ -93,16 +93,18 @@ export const PlaceCategories = ({ navigation, route }) => {
 
     const listItems = list.map((ele, key) =>
         <View key={key}>
-            <TouchableOpacity  style={{ padding: 5 }}>
-                <Card.Title
-                         title={<Title onPress={() =>
+            <TouchableOpacity style={{ padding: 2 }}>
+                <Card>
+                    <Card.Title
+                        title={<Title onPress={() =>
                             navigation.navigate('Places', {catId:ele.ID})
                         }>{ele.name}</Title>}
-                    // subtitle="Card Subtitle"
-                    style={{backgroundColor:colors.text}}
-                    right={(props) => <IconFA onPress={() => { edit(key) }} style={{paddingRight:5 }} size={20} color="gray" name="pencil"/>}
-                />
-              
+                        onPress={() =>
+                            navigation.navigate('Places', { catId: ele.ID })
+                        }
+                        right={(props) => <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} />}
+                    />
+                </Card>
             </TouchableOpacity>
         </View>
     );
@@ -113,7 +115,7 @@ export const PlaceCategories = ({ navigation, route }) => {
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <TextInput label="Category Name" value={name} onChangeText={name => setName(name)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
-                
+
                     <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={hideModal}>
                             <IconFA name='close' size={20} color='white' />
@@ -153,19 +155,19 @@ export const PlaceCategories = ({ navigation, route }) => {
         </View>
 
         <View>
-                <Portal>
-                    <Dialog visible={visibleDialog} onDismiss={hideDialog}>
-                        <Dialog.Title>Are you sure want to delete?</Dialog.Title>
-                        {/* <Dialog.Content>
+            <Portal>
+                <Dialog visible={visibleDialog} onDismiss={hideDialog}>
+                    <Dialog.Title>Are you sure want to delete?</Dialog.Title>
+                    {/* <Dialog.Content>
                             <Paragraph>This is simple dialog</Paragraph>
                         </Dialog.Content> */}
-                        <Dialog.Actions>
-                            <Button onPress={hideDialog}>Cancel</Button>
-                            <Button onPress={confirmDelete}>Confirm</Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
-            </View>
+                    <Dialog.Actions>
+                        <Button onPress={hideDialog}>Cancel</Button>
+                        <Button onPress={confirmDelete}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
+        </View>
 
         <Toast ref={childRef} text="Updated Successfully"></Toast>
     </View>
