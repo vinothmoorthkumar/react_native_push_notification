@@ -11,6 +11,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 export const TopSights = ({ navigation, route }) => {
 
     const [locations, setLocations] = React.useState([]);
+    const [loader, setLoader] = React.useState(false);
 
     useEffect(() => {
         // db.delete("DROP TABLE Destination");
@@ -40,6 +41,8 @@ export const TopSights = ({ navigation, route }) => {
                 console.log("online list")
                 NetInfo.fetch().then(state => {
                     if (state.isInternetReachable) {
+                        setLoader(true)
+
                         geo.thingstodo(route.params.destination).then(function (response) {
                             // setVisible(true);
                             let cstArr = [];
@@ -70,7 +73,7 @@ export const TopSights = ({ navigation, route }) => {
                             //     db.insert("INSERT INTO Destination (image, name,lat,long, TripID) VALUES (?,?,?,?,?)", dataArr)
                             // });
                             setLocations(response)
-
+                            setLoader(false)
                         })
                             .catch(function (error) {
                                 console.log(error);
@@ -120,9 +123,9 @@ export const TopSights = ({ navigation, route }) => {
     );
 
     return <View style={[styles.container, {  }]}>
-            {/* <View style={styles.loader} >
+        {loader &&<View style={styles.loader} >
                 <ActivityIndicator size='large' animation={true} />
-            </View> */}
+        </View>}
         <ScrollView >
             {listLocation}
 

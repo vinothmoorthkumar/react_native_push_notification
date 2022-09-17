@@ -9,7 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 
-import { Button, TextInput, Text, Dialog, Provider, Portal } from 'react-native-paper';
+import { Button, TextInput, Text, Dialog, Provider, Portal ,ActivityIndicator} from 'react-native-paper';
 import axios from "axios";
 
 import db from "../../db/db_connection"
@@ -38,6 +38,7 @@ export const AddTrip = ({ navigation, route }) => {
     const [showAutoComplete, setShowAutoComplete] = useState(false)
     const [visible, setVisible] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
+    const [loader, setLoader] = React.useState(false);
 
     const childRef=useRef(null);
     const hideDialog = () => setVisible(false);
@@ -146,6 +147,8 @@ export const AddTrip = ({ navigation, route }) => {
             childRef.current.alert();
             return 
         }
+        setLoader(true)
+
         let destinationImage="";
         if(destination){
             let placeDetails = await geo.getPlaceDetails(placeId)
@@ -177,6 +180,8 @@ export const AddTrip = ({ navigation, route }) => {
         } else {
             db.insert("INSERT INTO TRIP (destination,placeId,destinationImage, name, startDate, endDate) VALUES (?,?,?,?,?,?)", dataArr)
         }
+        setLoader(false)
+
         navigation.navigate('Home')
     }
 
@@ -326,6 +331,8 @@ export const AddTrip = ({ navigation, route }) => {
             </View>
         </Provider>
         <Toast ref={childRef} text={errorText}></Toast>
-
+        {loader &&<View style={styles.loader} >
+                <ActivityIndicator size='large' animation={true} />
+        </View>}
     </View>;
 };
