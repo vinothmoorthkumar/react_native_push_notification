@@ -8,6 +8,7 @@ import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
+import moment from "moment";
 
 import { Button, TextInput, Text, Dialog, Provider, Portal ,ActivityIndicator} from 'react-native-paper';
 import axios from "axios";
@@ -191,14 +192,16 @@ export const AddTrip = ({ navigation, route }) => {
     }
 
     function getstartDateFormate(date) {
-        date.setUTCHours(0, 0, 0, 0)
-        var isoDate = date.toISOString()
+        // date.setUTCHours(0, 0, 0, 0)
+        // var isoDate = date.toISOString()
+        var isoDate = moment(date).startOf('day').toISOString()
+
         return isoDate;
     }
 
     function getendDateFormate(date) {
-        date.setUTCHours(23, 59, 59, 999);
-        var isoDate = date.toISOString()
+        // date.setUTCHours(23, 59, 59);
+        var isoDate = moment(date).endOf('day').toISOString()
         return isoDate;
     }
 
