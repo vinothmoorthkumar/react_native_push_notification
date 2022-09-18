@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
@@ -20,7 +20,11 @@ export const PlaceCategories = ({ navigation, route }) => {
 
 
     const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
+    const hideModal = () => {
+        setName("")
+        seteditable(false)
+        setVisible(false)
+    };
     const hideDialog = () => setvisibleDialog(false);
 
 
@@ -125,7 +129,12 @@ export const PlaceCategories = ({ navigation, route }) => {
         {listItems}
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-            <IconFA onPress={hideModal} style={{textAlign:"right",paddingBottom:20}} name='remove' size={20} color='gray' />
+            <View style={{flexDirection:'row', justifyContent: "space-between",}}>
+                {editable && <Title>Update Category</Title>}
+                {!editable && <Title>Add Category</Title>}
+                <IconFA onPress={hideModal} style={{textAlign:"right",paddingBottom:20}} name='remove' size={20} color='gray' />
+            </View>
+
                 <TextInput label="Category Name" value={name} onChangeText={name => setName(name)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
 
