@@ -24,7 +24,12 @@ export const Places = ({ navigation, route }) => {
 
 
     const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
+    const hideModal = () => {
+        setName("")
+        setURL("")
+        seteditable(false)
+        setVisible(false)
+    };
     const hideDialog = () => setvisibleDialog(false);
 
 
@@ -155,17 +160,20 @@ x                    />
         {listItems}
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-            <IconFA onPress={hideModal} style={{textAlign:"right",paddingBottom:20}} name='remove' size={20} color='gray' />
+            <View style={{flexDirection:'row', justifyContent: "space-between",}}>
+                {editable && <Title>Update Place</Title>}
+                {!editable && <Title>Add Place</Title>}
+                <IconFA onPress={hideModal} style={{textAlign:"right",paddingBottom:20}} name='remove' size={20} color='gray' />
+            </View>
                 <TextInput label="Place Name" value={name} onChangeText={name => setName(name)} />
                 <TextInput label="Map URl" value={url} onChangeText={url => setURL(url)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
                 
-
-                    <View style={{ width: 100 }}>
+                {editable && <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={() => deleteCat()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
-                    </View>
+                    </View>}  
                     <View style={{ width: 100,marginLeft:10}}>
                         <Button mode="contained" onPress={() => saveCategory()}>
                             <IconFA name='save' size={20} color='white' />
