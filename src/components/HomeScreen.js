@@ -76,9 +76,9 @@ export const HomeScreen = ({ navigation }) => {
   function ListComponent({ ele,type,index }) {
     return (
       <View style={{ marginBottom: 10 }}>
-        <TouchableRipple rippleColor="rgba(0, 0, 0, .32)"  onPress={() =>
+        <TouchableOpacity onPress={() =>
           navigation.navigate('Plans', { id: ele.ID, placeId: ele.placeId, destination: ele.destination })
-        }  onLongPress={()=>{cardLongPress(ele)}}  style={{ padding: 2 }}>
+        }  style={{ padding: 2 }}>
           <View>
           <Card>
             <Card.Title title={ele.name} titleStyle={{textTransform: "capitalize"}} subtitle={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()}
@@ -92,7 +92,7 @@ export const HomeScreen = ({ navigation }) => {
             <Card.Cover source={{ uri: ele.destinationImage || defaultImagae}} />
           </Card>
           </View>
-        </TouchableRipple>
+        </TouchableOpacity>
         
       </View>
     );
