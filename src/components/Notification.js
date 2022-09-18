@@ -31,45 +31,54 @@ export const Notification = () => {
     NotificationListener();
     console.log("//listner added")
     
-    NetInfo.addEventListener(state => {
-      throttleFunction(state,3000)
+    // NetInfo.addEventListener(state => {
+    //   throttleFunction(state,3000)
 
-    })
+    // })
 
   }, [])
-  var  timerId;
-  var  throttleFunction  =  function (state, delay) {
-    // If setTimeout is already scheduled, no need to do anything
-    if (timerId) {
-      clearTimeout(timerId);
-    }
+  // var  timerId;
+  // var  throttleFunction  =  function (state, delay) {
+  //   // If setTimeout is already scheduled, no need to do anything
+  //   if (timerId) {
+  //     clearTimeout(timerId);
+  //   }
   
-    // Schedule a setTimeout after delay seconds
-    timerId  =  setTimeout(function () {
-      if (state.isInternetReachable) {
-        triggerNotification()
-      }
-      timerId  =  undefined;
-    }, delay)
-  }
+  //   // Schedule a setTimeout after delay seconds
+  //   timerId  =  setTimeout(function () {
+  //     if (state.isInternetReachable) {
+  //       triggerNotification()
+  //     }
+  //     timerId  =  undefined;
+  //   }, delay)
+  // }
 
   function triggerNotification() {
-    PushNotification.localNotification({
+    PushNotification.localNotificationSchedule({
       channelId: "test1",
-      message: "back to online"
+      message: "My Notification Message", // (required)
+      date: new Date(Date.now() + (10 * 1000)), // in 60 secs
+      // actions: ["ReplyInput"],
+      // reply_placeholder_text: "Write your response...", // (required)
+      // reply_button_text: "Reply" // (required)
     });
+    // PushNotification.localNotification({
+    //   channelId: "test1",
+    //   message: "back to online"
+    // });
   }
+
 
 
   return (
     <View>
-      {/* <View style={{ paddingHorizontal: 20 }}>
+      <View style={{ paddingHorizontal: 20 }}>
         <Text style={{ fontSize: 24, fontWeight: "bold", color: "black" }}>Title test</Text>
-        <Button onPress={() => { triggerNotification() }}
+                <Button onPress={() => { triggerNotification() }}
           title="Add List"
           color="#841584"
           accessibilityLabel="Learn more about this purple button" />
-      </View> */}
+      </View>
     </View>
   );
 
