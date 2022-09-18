@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, TouchableOpacity } from 'react-native';
-import { List, Button, Card, Title, IconButton, Text, Portal,Dialog,Paragraph } from 'react-native-paper';
+import { List, Button, Card, Title, IconButton, Text, Portal,Dialog,TouchableRipple } from 'react-native-paper';
 import { styles } from "../style/style";
 import { StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
@@ -76,30 +76,23 @@ export const HomeScreen = ({ navigation }) => {
   function ListComponent({ ele,type,index }) {
     return (
       <View style={{ marginBottom: 10 }}>
- 
-        <TouchableOpacity onPress={() =>
+        <TouchableRipple rippleColor="rgba(0, 0, 0, .32)"  onPress={() =>
           navigation.navigate('Plans', { id: ele.ID, placeId: ele.placeId, destination: ele.destination })
         }  onLongPress={()=>{cardLongPress(ele)}}  style={{ padding: 2 }}>
+          <View>
           <Card>
             <Card.Title title={ele.name} titleStyle={{textTransform: "capitalize"}} subtitle={new Date(ele.startDate).toDateString() + ", " + new Date(ele.endDate).toDateString()}
             
-            // right={(props)=>{
-            //   return        <View key={index}>
-            //     <Menu
-            //                   visible={ele.visible}
-                              
-            //                   // onDismiss={closeMenu}
-            //                   anchor={<IconButton {...props} icon="ellipsis-v" onPress={() => {toggleVisibleMenu(type,ele,index)}} />}>
-            //                   <Menu.Item onPress={() => {}} title="Item 1" />
-            //                 </Menu>
-            //   </View>
-            // }}
+            right={(props)=>{
+              return <IconButton {...props} icon="ellipsis-v" onPress={() => {cardLongPress(ele)}} />
+            }}
             />
             <Card.Content>
             </Card.Content>
             <Card.Cover source={{ uri: ele.destinationImage || defaultImagae}} />
           </Card>
-        </TouchableOpacity>
+          </View>
+        </TouchableRipple>
         
       </View>
     );
@@ -139,6 +132,7 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
+
 
       {/* {listItems.length > 0 ? (<ScrollView >
         {listItems}

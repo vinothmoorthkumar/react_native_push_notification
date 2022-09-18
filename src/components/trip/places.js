@@ -139,14 +139,13 @@ export const Places = ({ navigation, route }) => {
 
     const listItems = list.map((ele, key) =>
         <View key={key}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {redirecToMap(ele)}}>
                 <Card>
                     <Card.Title
                         title={<Title>{ele.name}</Title>}
                         right={(props) => {
                             return <View style={{flexDirection:"row"}}>
-                                <IconButton {...props} icon="location-arrow" onPress={() => {redirecToMap(ele)}} />
-                                <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} /> 
+                                <IconButton {...props} icon="ellipsis-v" onPress={() => {edit(key)}} /> 
                             </View>
                         }}
 x                    />

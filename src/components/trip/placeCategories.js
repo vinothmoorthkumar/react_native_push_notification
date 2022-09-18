@@ -118,7 +118,7 @@ export const PlaceCategories = ({ navigation, route }) => {
                         onPress={() =>
                             navigation.navigate('Places', { catId: ele.ID })
                         }
-                        right={(props) => <IconButton {...props} icon="pencil" onPress={() => {edit(key)}} />}
+                        right={(props) => <IconButton {...props} icon="ellipsis-v" onPress={() => {edit(key)}} />}
                     />
                 </Card>
             </TouchableOpacity>
