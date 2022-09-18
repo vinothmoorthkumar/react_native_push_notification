@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react'
 import {
     View,
     Pressable,
-    Text
+    
 } from 'react-native';
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button,useTheme, TextInput,  Dialog, Provider, Portal } from 'react-native-paper';
+import { Button,useTheme, TextInput,  Dialog, Provider, Portal,Switch,Text } from 'react-native-paper';
 import db from "../../db/db_connection"
 import PushNotification from "react-native-push-notification";
 import moment from "moment";
@@ -104,7 +104,10 @@ export const AddPlan = ({ navigation, route }) => {
         } else {
             let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
         }
-        reminderNotification()
+
+        if(reminder){
+            reminderNotification()
+        }
         navigation.navigate('Plans', {destination: route.params.destination,  id: tripId })
     }
 
@@ -133,11 +136,13 @@ export const AddPlan = ({ navigation, route }) => {
         let notificationObj={
             channelId: "reminder",
             title: "Reminder",
-            message: `${event} at ${startTime.toLocaleTimeString()}`, // (required)
-            date: new Date(formatDate(startDate,startTime)), // in 30 secs
+            message: `${event} at ${moment(startTime).format('h:mm a')}`, // (required)
+            // date: new Date(Date.now() + 60 * 1000), // in 30 secs
+            date: new Date(moment(formatDate(startDate,startTime)).subtract(5, "minutes")), // in 30 secs
           };
         PushNotification.localNotificationSchedule(notificationObj);
     }
+    const onToggleSwitch = () => setReminder(!reminder);
 
     return <View style={[styles.container]}>
         <TextInput label="Event" value={event} onChangeText={event => setevent(event)} />
@@ -212,7 +217,10 @@ export const AddPlan = ({ navigation, route }) => {
             />)
         }
 
-
+        {/* <View style={{ alignSelf: 'flex-start', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
+            <IconFA name={reminder?"bell":"bell-slash"} size={20} color='red' />
+            <Switch value={reminder} onValueChange={onToggleSwitch} />
+        </View> */}
 
 
         <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
@@ -236,7 +244,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <View style={{ alignSelf: 'flex-end',width:200,marginTop:  10}}>
                 <Button mode="contained" style={{backgroundColor:"darkred"}} icon={reminder?"bell":"bell-slash"} onPress={() => setReminder(!reminder)}>
-                    Reminder
+                    Alert
                 </Button>
         </View>
 
