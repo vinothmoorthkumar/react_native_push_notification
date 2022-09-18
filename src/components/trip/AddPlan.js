@@ -7,8 +7,10 @@ import {
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button, TextInput,  Dialog, Provider, Portal } from 'react-native-paper';
+import { Button,useTheme, TextInput,  Dialog, Provider, Portal } from 'react-native-paper';
 import db from "../../db/db_connection"
+import PushNotification from "react-native-push-notification";
+import moment from "moment";
 
 export const AddPlan = ({ navigation, route }) => {
     const [visibleStarDate, setVisibleStarDate] = React.useState(false);
@@ -28,10 +30,12 @@ export const AddPlan = ({ navigation, route }) => {
     const [endTime, setEndTime] = React.useState(new Date());
     const [visible, setVisible] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
+    const [reminder, setReminder] = React.useState(false);
 
     const childRef=useRef(null);
 
     const hideDialog = () => setVisible(false);
+    const { colors } = useTheme();
 
 
     useEffect(() => {
@@ -100,6 +104,7 @@ export const AddPlan = ({ navigation, route }) => {
         } else {
             let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
         }
+        reminderNotification()
         navigation.navigate('Plans', {destination: route.params.destination,  id: tripId })
     }
 
@@ -122,6 +127,17 @@ export const AddPlan = ({ navigation, route }) => {
         setEndTime(currentTime);
         setVisibleEndTime(false);
     };
+
+
+    const reminderNotification = ()=>{
+        let notificationObj={
+            channelId: "reminder",
+            title: "Reminder",
+            message: `${event} at ${startTime.toLocaleTimeString()}`, // (required)
+            date: new Date(formatDate(startDate,startTime)), // in 30 secs
+          };
+        PushNotification.localNotificationSchedule(notificationObj);
+    }
 
     return <View style={[styles.container]}>
         <TextInput label="Event" value={event} onChangeText={event => setevent(event)} />
@@ -216,6 +232,12 @@ export const AddPlan = ({ navigation, route }) => {
                     <IconFA name='save' size={20} color='white' />
                 </Button>
             </View>
+        </View>
+
+        <View style={{ alignSelf: 'flex-end',width:200,marginTop:  10}}>
+                <Button mode="contained" style={{backgroundColor:"darkred"}} icon={reminder?"bell":"bell-slash"} onPress={() => setReminder(!reminder)}>
+                    Reminder
+                </Button>
         </View>
 
 

@@ -21,7 +21,7 @@ export const Notification = () => {
 
     PushNotification.createChannel(
       {
-        channelId: "test1", // (required)
+        channelId: "reminder", // (required)
         channelName: "firstChannelName", // (required)
       },
       (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
@@ -55,7 +55,7 @@ export const Notification = () => {
 
   function triggerNotification() {
     PushNotification.localNotificationSchedule({
-      channelId: "test1",
+      channelId: "reminder",
       message: "My Notification Message", // (required)
       date: new Date(Date.now() + (10 * 1000)), // in 60 secs
       // actions: ["ReplyInput"],
@@ -63,7 +63,7 @@ export const Notification = () => {
       // reply_button_text: "Reply" // (required)
     });
     // PushNotification.localNotification({
-    //   channelId: "test1",
+    //   channelId: "reminder",
     //   message: "back to online"
     // });
   }
@@ -72,13 +72,13 @@ export const Notification = () => {
 
   return (
     <View>
-      <View style={{ paddingHorizontal: 20 }}>
+      {/* <View style={{ paddingHorizontal: 20 }}>
         <Text style={{ fontSize: 24, fontWeight: "bold", color: "black" }}>Title test</Text>
                 <Button onPress={() => { triggerNotification() }}
           title="Add List"
           color="#841584"
           accessibilityLabel="Learn more about this purple button" />
-      </View>
+      </View> */}
     </View>
   );
 
