@@ -9,6 +9,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import SplashScreen from 'react-native-splash-screen'
 
 import {
   NavigationContainer,
@@ -58,7 +59,11 @@ const CustomdarkTheme = {
 };
 
 const App = () => {
-
+  React.useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 350);
+  },[])
   const Stack = createNativeStackNavigator();
   const scheme = useColorScheme();
   const theme = scheme == 'dark' ? CustomdarkTheme : CustomlightTheme
