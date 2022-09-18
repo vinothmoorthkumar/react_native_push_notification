@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react'
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
@@ -98,21 +98,24 @@ export const CheckList = ({ navigation, route }) => {
   );
 
   return <View style={[styles.container]}>
-    {listItems.length > 0 && <Title style={{ color: colors.Text }}>Yet to pack</Title>
-    }
-    {listItems}
-    {unlistItems.length > 0 && <Title style={{ color: colors.Text }}>Packed</Title>
-    }
-    {unlistItems}
-    {
-      listItems.length > 0 && (<View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
-        <View style={{ width: 100 }}>
-          <Button mode="contained" onPress={() => saveTrip()}>
-            <IconFA name='save' size={20} color='white' />
-          </Button>
-        </View>
-      </View>)
-    }
+            <ScrollView >
+            {listItems.length > 0 && <Title style={{ color: colors.Text }}>Yet to pack</Title>
+            }
+            {listItems}
+            {unlistItems.length > 0 && <Title style={{ color: colors.Text }}>Packed</Title>
+            }
+            {unlistItems}
+            {
+              listItems.length > 0 && (<View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
+                <View style={{ width: 100 }}>
+                  <Button mode="contained" onPress={() => saveTrip()}>
+                    <IconFA name='save' size={20} color='white' />
+                  </Button>
+                </View>
+              </View>)
+            }
+        </ScrollView>
+
 
     <View style={{ position: "absolute", bottom: 20, right: 20 }}>
       <TouchableOpacity onPress={addItem}>
