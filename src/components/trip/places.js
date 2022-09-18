@@ -13,13 +13,14 @@ export const Places = ({ navigation, route }) => {
     const childRef = useRef(null);
 
     const [visible, setVisible] = React.useState(false);
-    const [name, setName] = React.useState(false);
+    const [name, setName] = React.useState("");
     const [url, setURL] = React.useState("");
 
     const [list, setList] = React.useState([]);
     const [editable, seteditable] = React.useState(false);
     const [editableId, seteditableId] = React.useState(false);
     const [visibleDialog, setvisibleDialog] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
 
 
     const showModal = () => setVisible(true);
@@ -49,12 +50,18 @@ export const Places = ({ navigation, route }) => {
 
 
     async function saveCategory() {
-        if (!name.trim()) {
-            setErrorText("Please Enter Trip Name")
+        if (!name || name=="") {
+            setErrorText("Please Enter Name")
             childRef.current.alert();
             return
         }
 
+
+        if (!url || url=="") {
+            setErrorText("Please Enter URL")
+            childRef.current.alert();
+            return
+        }
 
         let response = { lat: "", long: "" }
         // if (url && url != "") {
@@ -64,9 +71,12 @@ export const Places = ({ navigation, route }) => {
         //     // response = await geo.getlatlngByURL(url)
         // }
         let pattern = /\bhttps?:\/\/\S+/;
-        console.log("url",url)
         let data = url.match(pattern);
-        console.log("data",data)
+        if (!data || !data[0]) {
+            setErrorText("Must be url")
+            childRef.current.alert();
+            return
+        }
         let convertedUrl=data[0]
 
         let dataArr = [name, convertedUrl, response.lat, response.long, route.params.catId];
@@ -84,7 +94,8 @@ export const Places = ({ navigation, route }) => {
         setURL("");
         seteditableId(0)
         hideModal();
-
+        setErrorText("Updated Successfully")
+        childRef.current.alert();
     }
 
     function edit(key) {
@@ -197,6 +208,6 @@ x                    />
             </Portal>
         </View>
 
-        <Toast ref={childRef} text="Updated Successfully"></Toast>
+        <Toast ref={childRef} text={errorText}></Toast>
     </View>
 };

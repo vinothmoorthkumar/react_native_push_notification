@@ -11,11 +11,12 @@ export const PlaceCategories = ({ navigation, route }) => {
     const childRef = useRef(null);
 
     const [visible, setVisible] = React.useState(false);
-    const [name, setName] = React.useState(false);
+    const [name, setName] = React.useState("");
     const [list, setList] = React.useState([]);
     const [editable, seteditable] = React.useState(false);
     const [editableId, seteditableId] = React.useState(false);
     const [visibleDialog, setvisibleDialog] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
 
 
     const showModal = () => setVisible(true);
@@ -53,8 +54,8 @@ export const PlaceCategories = ({ navigation, route }) => {
     }
 
     async function saveCategory() {
-        if (!name.trim()) {
-            setErrorText("Please Enter Trip Name")
+        if (!name || name=="") {
+            setErrorText("Please Enter Name")
             childRef.current.alert();
             return
         }
@@ -72,6 +73,8 @@ export const PlaceCategories = ({ navigation, route }) => {
         setName("");
         seteditableId(0)
         hideModal();
+        setErrorText("Updated Successfully")
+        childRef.current.alert();
 
     }
 
@@ -126,11 +129,11 @@ export const PlaceCategories = ({ navigation, route }) => {
                 <TextInput label="Category Name" value={name} onChangeText={name => setName(name)} />
                 <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
 
-                    <View style={{ width: 100 }}>
+                  {editable && <View style={{ width: 100 }}>
                         <Button mode="contained" onPress={() => deleteCat()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
-                    </View>
+                    </View>}  
                     <View style={{ width: 100,marginLeft:10 }}>
                         <Button mode="contained" onPress={() => saveCategory()}>
                             <IconFA name='save' size={20} color='white' />
@@ -173,6 +176,6 @@ export const PlaceCategories = ({ navigation, route }) => {
             </Portal>
         </View>
 
-        <Toast ref={childRef} text="Updated Successfully"></Toast>
+        <Toast ref={childRef} text={errorText}></Toast>
     </View>
 };
