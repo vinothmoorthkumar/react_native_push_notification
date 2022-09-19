@@ -148,6 +148,10 @@ export const AddPlan = ({ navigation, route }) => {
     }
     const onToggleSwitch = () => setReminder(!reminder);
 
+    const timeConverter=(time)=>{
+        return moment(time).format("h:mm a")
+    }
+
     return <View style={[styles.container]}>
         <TextInput label="Event" value={event} onChangeText={event => setevent(event)} />
         <TextInput label="Venue" value={venue} onChangeText={venue => setvenue(venue)} />
@@ -171,7 +175,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleStarTime(true)}>
             <View pointerEvents="none">
-                <TextInput label="Start Time" value={startTime.toLocaleTimeString()} />
+                <TextInput label="Start Time" value={timeConverter(startTime)} />
             </View>
         </Pressable>
 
@@ -205,7 +209,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleEndTime(true)}>
             <View pointerEvents="none">
-                <TextInput label="End Time" value={endTime.toLocaleTimeString()} />
+                <TextInput label="End Time" value={timeConverter(endTime)} />
             </View>
         </Pressable>
 
