@@ -1,5 +1,5 @@
 import React from 'react'
-import { Appbar, Menu } from 'react-native-paper';
+import { Appbar, Menu, useTheme } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
@@ -11,6 +11,7 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
     const closeMenu = () => setVisible(false);
     const route = useRoute();
     const allowedPages = ["Plans","Home"];
+    const { colors } = useTheme();
     const checkRoute = allowedPages.some(ele => ele == route.name)
     const PlansMenu = <>
 
@@ -26,10 +27,10 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
     </>
 
     return (
-        <Appbar.Header>
-            {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+        <Appbar.Header style={{backgroundColor:colors.background}}>
+            {back ? <Appbar.BackAction  onPress={navigation.goBack} /> : null}
 
-            <Appbar.Content title={options.title} />
+            <Appbar.Content titleStyle={{color:colors.text}}  title={options.title} />
             {checkRoute ? (
                 <Menu
                     visible={visible}

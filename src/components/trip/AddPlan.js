@@ -155,13 +155,13 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     return <View style={[styles.container]}>
-        <TextInput label="Event" style={{backgroundColor:colors.background}} value={event} onChangeText={event => setevent(event)} />
-        <TextInput label="Venue" style={{backgroundColor:colors.background}} value={venue} onChangeText={venue => setvenue(venue)} />
+        <TextInput label="Event" reminder value={event} onChangeText={event => setevent(event)} />
+        <TextInput label="Venue" reminder value={venue} onChangeText={venue => setvenue(venue)} />
 
         {/* Start date and Time */}
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
-                <TextInput style={{backgroundColor:colors.background}} label="Start Date" value={startDate.toDateString()} />
+                <TextInput reminder label="Start Date" value={startDate.toDateString()} />
             </View>
         </Pressable>
 
@@ -177,7 +177,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleStarTime(true)}>
             <View pointerEvents="none">
-                <TextInput style={{backgroundColor:colors.background}} label="Start Time" value={timeConverter(startTime)} />
+                <TextInput reminder label="Start Time" value={timeConverter(startTime)} />
             </View>
         </Pressable>
 
@@ -195,7 +195,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => showEndDatePicker()}>
             <View pointerEvents="none">
-                <TextInput style={{backgroundColor:colors.background}} label="End Date" value={endDate.toDateString()} />
+                <TextInput reminder label="End Date" value={endDate.toDateString()} />
             </View>
         </Pressable>
         {
@@ -211,7 +211,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleEndTime(true)}>
             <View pointerEvents="none">
-                <TextInput  style={{backgroundColor:colors.background}}label="End Time" value={timeConverter(endTime)} />
+                <TextInput  reminderlabel="End Time" value={timeConverter(endTime)} />
             </View>
         </Pressable>
 

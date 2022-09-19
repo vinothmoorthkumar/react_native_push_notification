@@ -54,7 +54,7 @@ const CustomdarkTheme = {
     ...PaperDefaultTheme.colors,
     background: "#333333",
     text: "#ffffff",
-    inputText:"#000000"
+    inputText:"#fff"
   },
 };
 
