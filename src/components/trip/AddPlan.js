@@ -42,8 +42,10 @@ export const AddPlan = ({ navigation, route }) => {
         async function getdata() {
             let results = await db.select("SELECT * FROM PLAN WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
+            console.log("DDD",data)
             setevent(data.event);
             setvenue(data.venue);
+            setReminder(data.ALERT)
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
             setStartTime(new Date(data.startDate));
@@ -97,12 +99,12 @@ export const AddPlan = ({ navigation, route }) => {
         }
 
      
-        let dataArr = [event, venue, formatDate(startDate,startTime),formatDate(endDate,endTime), tripId];
+        let dataArr = [event, venue, formatDate(startDate,startTime),formatDate(endDate,endTime),reminder, tripId];
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?, endDate = ?, TripID = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?, endDate = ?, alert = ?, TripID = ? WHERE id = ?', dataArr);
         } else {
-            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate, TripID) VALUES (?,?,?,?,?)", dataArr);
+            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate,alert, TripID) VALUES (?,?,?,?,?,?)", dataArr);
         }
 
         if(reminder){
@@ -248,7 +250,7 @@ export const AddPlan = ({ navigation, route }) => {
         </View>
 
         <View style={{ alignSelf: 'flex-end',width:200,marginTop:  10}}>
-                <Button mode="contained" style={{backgroundColor:"darkred"}} icon={reminder?"bell":"bell-slash"} onPress={() => setReminder(!reminder)}>
+                <Button mode="contained" style={{backgroundColor:reminder?"darkgreen":"darkred"}} icon={reminder?"bell":"bell-slash"} onPress={() => setReminder(!reminder)}>
                     Alert
                 </Button>
         </View>
