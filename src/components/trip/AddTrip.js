@@ -303,14 +303,14 @@ export const AddTrip = ({ navigation, route }) => {
             <View style={{ width: 100 }}>
                 {
                     editable && (
-                        <Button mode="contained" onPress={() => deleteTrip()}>
+                        <Button style={{backgroundColor:"darkred"}} mode="contained" onPress={() => deleteTrip()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
                     )
                 }
 
             </View>
-            <View style={{ width: 100 }}>
+            <View style={{ width: 100,marginLeft:2 }}>
                 <Button mode="contained" onPress={() => saveTrip()}>
                     <IconFA name='save' size={20} color='white' />
                 </Button>

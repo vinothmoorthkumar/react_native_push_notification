@@ -155,13 +155,13 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     return <View style={[styles.container]}>
-        <TextInput label="Event" value={event} onChangeText={event => setevent(event)} />
-        <TextInput label="Venue" value={venue} onChangeText={venue => setvenue(venue)} />
+        <TextInput label="Event" style={{backgroundColor:colors.background}} value={event} onChangeText={event => setevent(event)} />
+        <TextInput label="Venue" style={{backgroundColor:colors.background}} value={venue} onChangeText={venue => setvenue(venue)} />
 
         {/* Start date and Time */}
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
-                <TextInput label="Start Date" value={startDate.toDateString()} />
+                <TextInput style={{backgroundColor:colors.background}} label="Start Date" value={startDate.toDateString()} />
             </View>
         </Pressable>
 
@@ -177,7 +177,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleStarTime(true)}>
             <View pointerEvents="none">
-                <TextInput label="Start Time" value={timeConverter(startTime)} />
+                <TextInput style={{backgroundColor:colors.background}} label="Start Time" value={timeConverter(startTime)} />
             </View>
         </Pressable>
 
@@ -195,7 +195,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => showEndDatePicker()}>
             <View pointerEvents="none">
-                <TextInput label="End Date" value={endDate.toDateString()} />
+                <TextInput style={{backgroundColor:colors.background}} label="End Date" value={endDate.toDateString()} />
             </View>
         </Pressable>
         {
@@ -211,7 +211,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleEndTime(true)}>
             <View pointerEvents="none">
-                <TextInput label="End Time" value={timeConverter(endTime)} />
+                <TextInput  style={{backgroundColor:colors.background}}label="End Time" value={timeConverter(endTime)} />
             </View>
         </Pressable>
 
@@ -234,7 +234,7 @@ export const AddPlan = ({ navigation, route }) => {
             <View style={{ width: 100 }}>
                 {
                     editable && (
-                        <Button mode="contained" onPress={() => deleteTrip()}>
+                        <Button style={{backgroundColor:"darkred"}} mode="contained" onPress={() => deleteTrip()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
                     )
@@ -242,8 +242,8 @@ export const AddPlan = ({ navigation, route }) => {
                 }
 
             </View>
-            <View style={{ width: 100 }}>
-                <Button mode="contained" onPress={() => saveTrip()}>
+            <View style={{ width: 100,marginLeft:2 }}>
+                <Button style={{color:"red"}} mode="contained" onPress={() => saveTrip()}>
                     <IconFA name='save' size={20} color='white' />
                 </Button>
             </View>
