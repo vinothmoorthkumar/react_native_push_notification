@@ -9,7 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { Button,useTheme, TextInput,  Dialog, Provider, Portal,Switch,Text } from 'react-native-paper';
 import db from "../../db/db_connection"
-import PushNotification from "react-native-push-notification";
+import PushNotification, {Importance} from "react-native-push-notification";
 import moment from "moment";
 
 export const AddPlan = ({ navigation, route }) => {
@@ -136,6 +136,10 @@ export const AddPlan = ({ navigation, route }) => {
         let notificationObj={
             channelId: "reminder",
             title: "Reminder",
+            allowWhileIdle: true,
+            usesChronometer:true,
+            priority: 'high',
+            importance: Importance.HIGH,
             message: `${event} at ${moment(startTime).format('h:mm a')}`, // (required)
             // date: new Date(Date.now() + 60 * 1000), // in 30 secs
             date: new Date(moment(formatDate(startDate,startTime)).subtract(5, "minutes")), // in 30 secs

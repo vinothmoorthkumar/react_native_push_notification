@@ -69,7 +69,6 @@ export const Notification = () => {
   }
 
 
-
   return (
     <View>
       {/* <View style={{ paddingHorizontal: 20 }}>
