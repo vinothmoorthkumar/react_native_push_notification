@@ -164,7 +164,6 @@ export const AddPlan = ({ navigation, route }) => {
                 testID="dateTimePicker"
                 value={startDate}
                 mode={mode}
-                is24Hour={true}
                 display="default"
                 onChange={onChange}
             />)
@@ -180,7 +179,6 @@ export const AddPlan = ({ navigation, route }) => {
             visibleStartTime && (<DateTimePicker
                 value={startTime}
                 mode="time"
-                is24Hour={true}
                 display="default"
                 onChange={onChangeStartTime}
             />)
@@ -215,7 +213,6 @@ export const AddPlan = ({ navigation, route }) => {
             visibleEndTime && (<DateTimePicker
                 value={endTime}
                 mode="time"
-                is24Hour={true}
                 display="default"
                 onChange={onChangeEndTime}
             />)
