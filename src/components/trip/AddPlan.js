@@ -10,13 +10,16 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import { Button,useTheme, TextInput,  Dialog, Provider, Portal,Switch,Text } from 'react-native-paper';
 import db from "../../db/db_connection"
 import PushNotification, {Importance} from "react-native-push-notification";
-import moment from "moment";
+import moment from "moment-timezone";
+import DropDown from "react-native-paper-dropdown";
 
 export const AddPlan = ({ navigation, route }) => {
     const [visibleStarDate, setVisibleStarDate] = React.useState(false);
     const [visibleStartTime, setVisibleStarTime] = React.useState(false);
     const [visibleEndTime, setVisibleEndTime] = React.useState(false);
     const [visibleEndDate, setVisibleEndDate] = React.useState(false);
+    const [showDropDown, setShowDropDown] = React.useState(false);
+    const [timezone, settimezone] = React.useState("");
 
     const [mode, setMode] = React.useState('date');
 
@@ -31,6 +34,7 @@ export const AddPlan = ({ navigation, route }) => {
     const [visible, setVisible] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
     const [reminder, setReminder] = React.useState(false);
+    const [timezones, setTimezons] = React.useState([]);
 
     const childRef=useRef(null);
 
@@ -39,6 +43,13 @@ export const AddPlan = ({ navigation, route }) => {
 
 
     useEffect(() => {
+        let listTZ= moment.tz.names().map(ele=>{
+            return {
+                label: ele,
+                value: ele,
+              }
+        })
+        setTimezons(listTZ)
         async function getdata() {
             let results = await db.select("SELECT * FROM PLAN WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
@@ -78,6 +89,21 @@ export const AddPlan = ({ navigation, route }) => {
         setEnddate(currentDate);
         setVisibleEndDate(false);
     };
+
+    // const genderList = [
+    //     {
+    //       label: "Male",
+    //       value: "male",
+    //     },
+    //     {
+    //       label: "Female",
+    //       value: "female",
+    //     },
+    //     {
+    //       label: "Others",
+    //       value: "others",
+    //     },
+    //   ];
 
     function showEndDatePicker() {
         setVisibleEndDate(true);
@@ -157,7 +183,20 @@ export const AddPlan = ({ navigation, route }) => {
     return <View style={[styles.container]}>
         <TextInput label="Event" reminder value={event} onChangeText={event => setevent(event)} />
         <TextInput label="Venue" reminder value={venue} onChangeText={venue => setvenue(venue)} />
-
+        <DropDown
+              label={"TimeZone"}
+              inputProps={{
+                right: <TextInput.Icon name={showDropDown?'chevron-up':'chevron-down'} size={15} />,
+              }}
+              right={ <TextInput.Icon name={visible ? "remove" : "remove"} />}
+              renderDropdownIcon={true}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={timezone}
+              setValue={settimezone}
+              list={timezones}
+            />
         {/* Start date and Time */}
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
@@ -224,10 +263,7 @@ export const AddPlan = ({ navigation, route }) => {
             />)
         }
 
-        {/* <View style={{ alignSelf: 'flex-start', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
-            <IconFA name={reminder?"bell":"bell-slash"} size={20} color='red' />
-            <Switch value={reminder} onValueChange={onToggleSwitch} />
-        </View> */}
+
 
 
         <View style={{ alignSelf: 'flex-end', justifyContent: "space-between", flexDirection: 'row', marginTop: 10 }}>
