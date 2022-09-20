@@ -3,12 +3,13 @@ import {
     View,
     Pressable,
     ScrollView,
+    TouchableOpacity,
 
 } from 'react-native';
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button, useTheme, TextInput, Dialog, Provider, Portal, Searchbar, Text, Divider } from 'react-native-paper';
+import { Button, useTheme, TextInput, Dialog, Provider, Portal, Searchbar, Text, Divider,TouchableRipple } from 'react-native-paper';
 import db from "../../db/db_connection"
 import PushNotification, { Importance } from "react-native-push-notification";
 import moment from "moment-timezone";
@@ -307,10 +308,9 @@ export const AddPlan = ({ navigation, route }) => {
                             <ScrollView style={{marginTop:10, height:"80%"}}>
                                 {
                                         tzList.map((ele,key)=>{
-                                            return <View key={key}>
-                                                <Text onPress={()=>{setTimezoneDialog(ele)}} style={{padding:10}} >{ele.text}</Text>
-                                                <Divider />
-                                            </View>
+                                            return <TouchableRipple onPress={()=>{setTimezoneDialog(ele)}} key={key}>
+                                                <Text  style={{padding:10}} >{ele.text}</Text>
+                                            </TouchableRipple>
                                         })
                                     }
                                 
