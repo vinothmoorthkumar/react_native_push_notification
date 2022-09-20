@@ -296,30 +296,29 @@ export const AddPlan = ({ navigation, route }) => {
         <Provider>
             <View>
                 <Portal>
-                    <Dialog  visible={visibleTimezone}>
-                        <Dialog.Title>Select Timezone</Dialog.Title>
+                    <Dialog style={{overflow:"hidden"}} visible={visibleTimezone}>
+                    <Dialog.Title>Select Timezone</Dialog.Title>
                         <Dialog.Content >
                             <Searchbar
                             placeholder="Search"
                             onChangeText={onChangeSearch}
                             value={searchQuery}
                             />
-                            <ScrollView style={{marginTop:10, height:300}}>
+                            <ScrollView style={{marginTop:10, height:"80%"}}>
                                 {
-                                    tzList.map((ele,key)=>{
-                                        return <View key={key}>
-                                            <Text onPress={()=>{setTimezoneDialog(ele)}} style={{padding:10}} >{ele.text}</Text>
-                                            <Divider />
-                                        </View>
-                                    })
-                                }
+                                        tzList.map((ele,key)=>{
+                                            return <View key={key}>
+                                                <Text onPress={()=>{setTimezoneDialog(ele)}} style={{padding:10}} >{ele.text}</Text>
+                                                <Divider />
+                                            </View>
+                                        })
+                                    }
+                                
                             </ScrollView>
 
                             
                         </Dialog.Content>
-                        {/* <Dialog.Actions>
-                            <Button>Done</Button>
-                        </Dialog.Actions> */}
+
                     </Dialog>
                 </Portal>
             </View>
