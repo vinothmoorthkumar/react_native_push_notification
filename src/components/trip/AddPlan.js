@@ -74,7 +74,6 @@ export const AddPlan = ({ navigation, route }) => {
             })
             settimezone(gettz.value);
             settimezoneDisplay(gettz.text)
-            console.log("DDDD", gettz.value, timezone)
         }
 
 
