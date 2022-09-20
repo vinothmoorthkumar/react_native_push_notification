@@ -160,16 +160,20 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     const reminderNotification = () => {
-        let time = new Date(moment(new Date(formatDate(startDate, startTime))).subtract(5, "minutes"))
+        let gettz=tzList.find(ele => { return ele.value == timezone })
+
+        // let time = new Date(moment(new Date(formatDate(startDate, startTime))).subtract(5, "minutes"))
+        let time =  new Date( moment.tz(formatDate(startDate, startTime),"MM/DD/YYYY hh:mm A", gettz.utc[0]).subtract(5, "minutes").format());
         let notificationObj = {
             channelId: "reminder",
+            // showWhen: true,
+            // when: new Date().getTime(),
             title: "Reminder",
             allowWhileIdle: true,
             usesChronometer: true,
             priority: 'high',
             importance: Importance.HIGH,
-            message: `${event} at ${moment(new Date(startTime)).format('h:mm a')}`, // (required)
-            // date: new Date(Date.now() + 60 * 1000), // in 30 secs
+            message: `${event} at ${moment(new Date(startTime)).format('h:mm a')+ ` ${timezone}`}`, // (required)
             date: time // in 30 secs
         };
         PushNotification.localNotificationSchedule(notificationObj);
