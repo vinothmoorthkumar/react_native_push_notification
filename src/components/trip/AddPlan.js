@@ -2,24 +2,30 @@ import React, { useEffect, useRef } from 'react'
 import {
     View,
     Pressable,
-    
+    ScrollView,
+
 } from 'react-native';
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button,useTheme, TextInput,  Dialog, Provider, Portal,Switch,Text } from 'react-native-paper';
+import { Button, useTheme, TextInput, Dialog, Provider, Portal, Searchbar, Text, Divider } from 'react-native-paper';
 import db from "../../db/db_connection"
-import PushNotification, {Importance} from "react-native-push-notification";
+import PushNotification, { Importance } from "react-native-push-notification";
 import moment from "moment-timezone";
-import DropDown from "react-native-paper-dropdown";
-
+// import DropDown from "react-native-paper-dropdown";
+import tzList from "../../utlis/timezoneList"
 export const AddPlan = ({ navigation, route }) => {
     const [visibleStarDate, setVisibleStarDate] = React.useState(false);
     const [visibleStartTime, setVisibleStarTime] = React.useState(false);
     const [visibleEndTime, setVisibleEndTime] = React.useState(false);
     const [visibleEndDate, setVisibleEndDate] = React.useState(false);
-    const [showDropDown, setShowDropDown] = React.useState(false);
     const [timezone, settimezone] = React.useState("");
+    const [timezoneDisplay, settimezoneDisplay] = React.useState("");
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const onChangeSearch = query => setSearchQuery(query);
+    const [visibleTimezone, setVisibleTimezone] = React.useState(false);
+    const showTimeZoneDialog = () => setVisibleTimezone(true);
 
     const [mode, setMode] = React.useState('date');
 
@@ -34,26 +40,17 @@ export const AddPlan = ({ navigation, route }) => {
     const [visible, setVisible] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
     const [reminder, setReminder] = React.useState(false);
-    const [timezones, setTimezons] = React.useState([]);
 
-    const childRef=useRef(null);
+    const childRef = useRef(null);
 
     const hideDialog = () => setVisible(false);
     const { colors } = useTheme();
 
 
     useEffect(() => {
-        let listTZ= moment.tz.names().map(ele=>{
-            return {
-                label: ele,
-                value: ele,
-              }
-        })
-        setTimezons(listTZ)
         async function getdata() {
             let results = await db.select("SELECT * FROM PLAN WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
-            console.log("DDD",data)
             setevent(data.event);
             setvenue(data.venue);
             setReminder(data.ALERT)
@@ -72,8 +69,8 @@ export const AddPlan = ({ navigation, route }) => {
     }, [route.params?.post])
 
 
-    const formatDate=(date,time)=>{
-        let dateObj=`${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${time.getHours()}:${time.getMinutes()}`
+    const formatDate = (date, time) => {
+        let dateObj = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${time.getHours()}:${time.getMinutes()}`
         var x = new Date(dateObj).toISOString()
         return x;
     }
@@ -90,42 +87,27 @@ export const AddPlan = ({ navigation, route }) => {
         setVisibleEndDate(false);
     };
 
-    // const genderList = [
-    //     {
-    //       label: "Male",
-    //       value: "male",
-    //     },
-    //     {
-    //       label: "Female",
-    //       value: "female",
-    //     },
-    //     {
-    //       label: "Others",
-    //       value: "others",
-    //     },
-    //   ];
-
     function showEndDatePicker() {
         setVisibleEndDate(true);
     }
 
-     function deleteTrip() {
+    function deleteTrip() {
         setVisible(true)
     }
-    function confirmDelete(){
+    function confirmDelete() {
         db.delete("DELETE FROM PLAN WHERE ID=" + route.params.id);
         navigation.navigate('Plans', { destination: route.params.destination, id: tripId })
     }
 
     async function saveTrip() {
-        if(!event.trim()){
+        if (!event.trim()) {
             setErrorText("Please Enter Event")
             childRef.current.alert();
-            return 
+            return
         }
 
-     
-        let dataArr = [event, venue, formatDate(startDate,startTime),formatDate(endDate,endTime),reminder, tripId];
+
+        let dataArr = [event, venue, formatDate(startDate, startTime), formatDate(endDate, endTime), reminder, tripId];
         if (editable) {
             dataArr.push(route.params.id)
             await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?, endDate = ?, alert = ?, TripID = ? WHERE id = ?', dataArr);
@@ -133,10 +115,10 @@ export const AddPlan = ({ navigation, route }) => {
             let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate,alert, TripID) VALUES (?,?,?,?,?,?)", dataArr);
         }
 
-        if(reminder){
+        if (reminder) {
             reminderNotification()
         }
-        navigation.navigate('Plans', {destination: route.params.destination,  id: tripId })
+        navigation.navigate('Plans', { destination: route.params.destination, id: tripId })
     }
 
 
@@ -159,44 +141,46 @@ export const AddPlan = ({ navigation, route }) => {
         setVisibleEndTime(false);
     };
 
+    const setTimezoneDialog=(ele)=>{
+        settimezone(ele.abbr);
+        settimezoneDisplay(ele.text);
 
-    const reminderNotification = ()=>{
-        let notificationObj={
+        setVisibleTimezone(false)
+    }
+
+    const reminderNotification = () => {
+        let notificationObj = {
             channelId: "reminder",
             title: "Reminder",
             allowWhileIdle: true,
-            usesChronometer:true,
+            usesChronometer: true,
             priority: 'high',
             importance: Importance.HIGH,
             message: `${event} at ${moment(startTime).format('h:mm a')}`, // (required)
             // date: new Date(Date.now() + 60 * 1000), // in 30 secs
-            date: new Date(moment(formatDate(startDate,startTime)).subtract(5, "minutes")), // in 30 secs
-          };
+            date: new Date(moment(formatDate(startDate, startTime)).subtract(5, "minutes")), // in 30 secs
+        };
         PushNotification.localNotificationSchedule(notificationObj);
     }
     const onToggleSwitch = () => setReminder(!reminder);
 
-    const timeConverter=(time)=>{
+    const timeConverter = (time) => {
         return moment(time).format("h:mm a")
     }
 
     return <View style={[styles.container]}>
         <TextInput label="Event" reminder value={event} onChangeText={event => setevent(event)} />
         <TextInput label="Venue" reminder value={venue} onChangeText={venue => setvenue(venue)} />
-        <DropDown
-              label={"TimeZone"}
-              inputProps={{
-                right: <TextInput.Icon name={showDropDown?'chevron-up':'chevron-down'} size={15} />,
-              }}
-              right={ <TextInput.Icon name={visible ? "remove" : "remove"} />}
-              renderDropdownIcon={true}
-              visible={showDropDown}
-              showDropDown={() => setShowDropDown(true)}
-              onDismiss={() => setShowDropDown(false)}
-              value={timezone}
-              setValue={settimezone}
-              list={timezones}
-            />
+
+        {/* Timezone */}
+        <Pressable onPress={() => showTimeZoneDialog()}>
+            <View pointerEvents="none">
+                <TextInput reminder label="TimeZone" value={timezoneDisplay} />
+            </View>
+        </Pressable>
+
+
+
         {/* Start date and Time */}
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
@@ -250,7 +234,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleEndTime(true)}>
             <View pointerEvents="none">
-                <TextInput  reminderlabel="End Time" value={timeConverter(endTime)} />
+                <TextInput reminderlabel="End Time" value={timeConverter(endTime)} />
             </View>
         </Pressable>
 
@@ -270,7 +254,7 @@ export const AddPlan = ({ navigation, route }) => {
             <View style={{ width: 100 }}>
                 {
                     editable && (
-                        <Button style={{backgroundColor:"darkred"}} mode="contained" onPress={() => deleteTrip()}>
+                        <Button style={{ backgroundColor: "darkred" }} mode="contained" onPress={() => deleteTrip()}>
                             <IconFA name='trash' size={20} color='white' />
                         </Button>
                     )
@@ -278,17 +262,17 @@ export const AddPlan = ({ navigation, route }) => {
                 }
 
             </View>
-            <View style={{ width: 100,marginLeft:2 }}>
-                <Button style={{color:"red"}} mode="contained" onPress={() => saveTrip()}>
+            <View style={{ width: 100, marginLeft: 2 }}>
+                <Button style={{ color: "red" }} mode="contained" onPress={() => saveTrip()}>
                     <IconFA name='save' size={20} color='white' />
                 </Button>
             </View>
         </View>
 
-        <View style={{ alignSelf: 'flex-end',width:200,marginTop:  10}}>
-                <Button mode="contained" style={{backgroundColor:reminder?"darkgreen":"darkred"}} icon={reminder?"bell":"bell-slash"} onPress={() => setReminder(!reminder)}>
-                    Alert
-                </Button>
+        <View style={{ alignSelf: 'flex-end', width: 200, marginTop: 10 }}>
+            <Button mode="contained" style={{ backgroundColor: reminder ? "darkgreen" : "darkred" }} icon={reminder ? "bell" : "bell-slash"} onPress={() => setReminder(!reminder)}>
+                Alert
+            </Button>
         </View>
 
 
@@ -304,6 +288,38 @@ export const AddPlan = ({ navigation, route }) => {
                             <Button onPress={hideDialog}>Cancel</Button>
                             <Button onPress={confirmDelete}>Confirm</Button>
                         </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+            </View>
+        </Provider>
+
+        <Provider>
+            <View>
+                <Portal>
+                    <Dialog  visible={visibleTimezone}>
+                        <Dialog.Title>Select Timezone</Dialog.Title>
+                        <Dialog.Content >
+                            <Searchbar
+                            placeholder="Search"
+                            onChangeText={onChangeSearch}
+                            value={searchQuery}
+                            />
+                            <ScrollView style={{marginTop:10, height:300}}>
+                                {
+                                    tzList.map((ele,key)=>{
+                                        return <View key={key}>
+                                            <Text onPress={()=>{setTimezoneDialog(ele)}} style={{padding:10}} >{ele.text}</Text>
+                                            <Divider />
+                                        </View>
+                                    })
+                                }
+                            </ScrollView>
+
+                            
+                        </Dialog.Content>
+                        {/* <Dialog.Actions>
+                            <Button>Done</Button>
+                        </Dialog.Actions> */}
                     </Dialog>
                 </Portal>
             </View>

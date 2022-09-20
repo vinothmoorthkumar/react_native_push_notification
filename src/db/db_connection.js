@@ -22,7 +22,6 @@ const db = SQLite.openDatabase({
             tx.executeSql(
                 "ALTER TABLE PLAN ADD COLUMN ALERT INTEGER DEFAULT 0",
             [],(tx, result1) => {
-                // console.log("DDDDDD",result1)
             }, (error)=>{
                 // console.log('Failed to select:', error);
             });
