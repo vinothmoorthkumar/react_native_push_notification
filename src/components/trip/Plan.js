@@ -11,6 +11,7 @@ import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Prov
 import NetInfo from "@react-native-community/netinfo";
 import db from "../../db/db_connection"
 import moment from "moment-timezone";
+import tzList from "../../utlis/timezoneList"
 
 export const Plans = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -59,8 +60,9 @@ export const Plans = ({ navigation, route }) => {
         return groupArrays;
     }
 
-    function datetimeFormate(date){
-        return moment(new Date(date)).format("MMM DD h:mm a")
+    function datetimeFormate(date,timezone){
+        let gettz = tzList.find(ele => { return ele.value == timezone})
+        return moment(new Date(date)).format("MMM DD h:mm a")+` ${gettz.abbr}`
     }
 
     const listItems = plans.map((eledate, datekey) =>
@@ -75,7 +77,7 @@ export const Plans = ({ navigation, route }) => {
                             <Card>
                                 <Card.Content>
                                     <Title style={{textTransform: "capitalize"}}>{ele.event} - {ele.venue}</Title>
-                                    <Paragraph>{datetimeFormate(ele.startDate)}, {datetimeFormate(ele.endDate)}</Paragraph>
+                                    <Paragraph>{datetimeFormate(ele.startDate,ele.TIMEZONE)}, {datetimeFormate(ele.endDate,ele.TIMEZONE)}</Paragraph>
                                 </Card.Content>
                             </Card>
                         </TouchableOpacity>
