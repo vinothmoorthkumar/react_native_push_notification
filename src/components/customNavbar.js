@@ -28,7 +28,7 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
 
     return (
         <Appbar.Header style={{backgroundColor:colors.background}}>
-            {back ? <Appbar.BackAction color={{color:colors.text}} onPress={navigation.goBack} /> : null}
+            {back ? <Appbar.BackAction icon="bars" color="gray" onPress={navigation.goBack} /> : null}
 
             <Appbar.Content titleStyle={{color:colors.text}}  title={options.title} />
             {checkRoute ? (

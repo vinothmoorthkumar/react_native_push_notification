@@ -10,7 +10,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Provider } from 'react-native-paper';
 import NetInfo from "@react-native-community/netinfo";
 import db from "../../db/db_connection"
-import moment from "moment";
+import moment from "moment-timezone";
 
 export const Plans = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -32,7 +32,8 @@ export const Plans = ({ navigation, route }) => {
                 const row = results.rows.item(i);
                 lists.push(row);
             }
-            setPlans(groupByDate(lists))
+            let groupeddate=groupByDate(lists);
+            setPlans(groupeddate)
         }
         getdata();
     }, [isFocused])
@@ -64,7 +65,7 @@ export const Plans = ({ navigation, route }) => {
 
     const listItems = plans.map((eledate, datekey) =>
         <View key={datekey} style={{ marginBottom: 10 }}>
-            <Title style={{ color: colors.text }}>{moment(eledate.date).format("MMMM D YYYY")}</Title>
+            <Title style={{ color: colors.text }}>{moment(new Date(eledate.date)).format("MMMM D YYYY")}</Title>
             {
                 eledate.plans.map((ele, key) => 
                     <View key={key}>
