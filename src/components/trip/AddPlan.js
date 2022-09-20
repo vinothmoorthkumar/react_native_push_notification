@@ -170,7 +170,7 @@ export const AddPlan = ({ navigation, route }) => {
     const onToggleSwitch = () => setReminder(!reminder);
 
     const timeConverter = (time) => {
-        return moment(time).format("h:mm a")
+        return moment(new Date(time)).format("h:mm a")
     }
 
     return <View style={[styles.container]}>
