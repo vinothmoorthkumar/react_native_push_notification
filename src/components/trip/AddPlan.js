@@ -55,8 +55,10 @@ export const AddPlan = ({ navigation, route }) => {
             setevent(data.event);
             setvenue(data.venue);
             settimezone(data.TIMEZONE);
-            let gettz= tzList.find(ele=>{return ele.abbr==data.TIMEZONE})
-            settimezoneDisplay(gettz.text)
+            if(data.TIMEZONE){
+                let gettz= tzList.find(ele=>{return ele.abbr==data.TIMEZONE})
+                settimezoneDisplay(gettz.text)
+            }
             setReminder(data.ALERT)
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
@@ -74,11 +76,10 @@ export const AddPlan = ({ navigation, route }) => {
 
 
     const formatDate = (date, time) => {
-        let dateObj = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${time.getHours()}:${time.getMinutes()}`
-        // var x = new Date(dateObj).toISOString()
-        // moment.utc('2015-01-22T16:11:36.36-07:00').format('l LT')
-
-        return moment.utc(dateObj).format('l LT');
+        let sTime = moment(new Date(time)).format("h:mm a")
+        let sDate = moment(date).format("M/DD/YYYY")
+        let output=moment(`${sDate} ${sTime}`,"MM/DD/YYYY h:mm a").format('l LT');
+        return output;
     }
 
 
@@ -154,6 +155,7 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     const reminderNotification = () => {
+        let time=new Date(moment(new Date(formatDate(startDate, startTime))).subtract(5, "minutes"))
         let notificationObj = {
             channelId: "reminder",
             title: "Reminder",
@@ -161,9 +163,9 @@ export const AddPlan = ({ navigation, route }) => {
             usesChronometer: true,
             priority: 'high',
             importance: Importance.HIGH,
-            message: `${event} at ${moment(startTime).format('h:mm a')}`, // (required)
+            message: `${event} at ${moment(new Date(startTime)).format('h:mm a')}`, // (required)
             // date: new Date(Date.now() + 60 * 1000), // in 30 secs
-            date: new Date(moment(formatDate(startDate, startTime)).subtract(5, "minutes")), // in 30 secs
+            date: time // in 30 secs
         };
         PushNotification.localNotificationSchedule(notificationObj);
     }
@@ -211,7 +213,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         {
             visibleStartTime && (<DateTimePicker
-                value={startTime}
+                value={new Date(startTime)}
                 mode="time"
                 display="default"
                 onChange={onChangeStartTime}
@@ -245,7 +247,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         {
             visibleEndTime && (<DateTimePicker
-                value={endTime}
+                value={new Date(endTime)}
                 mode="time"
                 display="default"
                 onChange={onChangeEndTime}
