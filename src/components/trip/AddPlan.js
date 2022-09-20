@@ -75,8 +75,10 @@ export const AddPlan = ({ navigation, route }) => {
 
     const formatDate = (date, time) => {
         let dateObj = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${time.getHours()}:${time.getMinutes()}`
-        var x = new Date(dateObj).toISOString()
-        return x;
+        // var x = new Date(dateObj).toISOString()
+        // moment.utc('2015-01-22T16:11:36.36-07:00').format('l LT')
+
+        return moment.utc(dateObj).format('l LT');
     }
 
 
@@ -109,7 +111,6 @@ export const AddPlan = ({ navigation, route }) => {
             childRef.current.alert();
             return
         }
-
 
         let dataArr = [event, venue, formatDate(startDate, startTime),timezone, formatDate(endDate, endTime), reminder, tripId];
         if (editable) {
