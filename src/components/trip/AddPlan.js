@@ -60,8 +60,8 @@ export const AddPlan = ({ navigation, route }) => {
             setReminder(data.ALERT)
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
-            setStartTime(new Date(data.startDate));
-            setEndTime(new Date(data.endDate));
+            setStartTime(data.startDate);
+            setEndTime(data.endDate);
         }
         if (route.params?.id) {
             seteditable(true)
