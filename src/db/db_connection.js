@@ -20,7 +20,7 @@ const db = SQLite.openDatabase({
         [],(tx, results) => {
 
             tx.executeSql(
-                "ALTER TABLE PLAN ADD COLUMN ALERT INTEGER DEFAULT 0",
+                "ALTER TABLE PLAN ADD COLUMN TIMEZONE TEXT",
             [],(tx, result1) => {
             }, (error)=>{
                 // console.log('Failed to select:', error);

@@ -54,6 +54,9 @@ export const AddPlan = ({ navigation, route }) => {
             let data = results.rows.item(0);
             setevent(data.event);
             setvenue(data.venue);
+            settimezone(data.TIMEZONE);
+            let gettz= tzList.find(ele=>{return ele.abbr==data.TIMEZONE})
+            settimezoneDisplay(gettz.text)
             setReminder(data.ALERT)
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
@@ -108,12 +111,12 @@ export const AddPlan = ({ navigation, route }) => {
         }
 
 
-        let dataArr = [event, venue, formatDate(startDate, startTime), formatDate(endDate, endTime), reminder, tripId];
+        let dataArr = [event, venue, formatDate(startDate, startTime),timezone, formatDate(endDate, endTime), reminder, tripId];
         if (editable) {
             dataArr.push(route.params.id)
-            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?, endDate = ?, alert = ?, TripID = ? WHERE id = ?', dataArr);
+            await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?,TIMEZONE = ?, endDate = ?, alert = ?, TripID = ? WHERE id = ?', dataArr);
         } else {
-            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate, endDate,alert, TripID) VALUES (?,?,?,?,?,?)", dataArr);
+            let result = await db.insert("INSERT INTO PLAN (event, venue, startDate,TIMEZONE, endDate,alert, TripID) VALUES (?,?,?,?,?,?,?)", dataArr);
         }
 
         if (reminder) {
