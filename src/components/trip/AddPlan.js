@@ -9,7 +9,7 @@ import {
 import { styles } from "../../style/style";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { Button, useTheme, TextInput, Dialog, Provider, Portal, Searchbar, Text, Divider,TouchableRipple } from 'react-native-paper';
+import { Button, useTheme, TextInput, Dialog, Provider, Portal, Searchbar, Text, Divider, TouchableRipple } from 'react-native-paper';
 import db from "../../db/db_connection"
 import PushNotification, { Importance } from "react-native-push-notification";
 import moment from "moment-timezone";
@@ -55,10 +55,8 @@ export const AddPlan = ({ navigation, route }) => {
             setevent(data.event);
             setvenue(data.venue);
             settimezone(data.TIMEZONE);
-            if(data.TIMEZONE){
-                let gettz= tzList.find(ele=>{return ele.abbr==data.TIMEZONE})
-                settimezoneDisplay(gettz.text)
-            }
+            let gettz = tzList.find(ele => { return ele.value == data.TIMEZONE })
+            settimezoneDisplay(gettz.text)
             setReminder(data.ALERT)
             setStartdate(new Date(data.startDate));
             setEnddate(new Date(data.endDate));
@@ -68,6 +66,15 @@ export const AddPlan = ({ navigation, route }) => {
         if (route.params?.id) {
             seteditable(true)
             getdata();
+        } else {
+            let guesstz = moment.tz.guess()
+            let gettz = tzList.find(ele => {
+                let index = ele.utc.indexOf(guesstz)
+                return index > -1
+            })
+            settimezone(gettz.value);
+            settimezoneDisplay(gettz.text)
+            console.log("DDDD", gettz.value, timezone)
         }
 
 
@@ -78,7 +85,7 @@ export const AddPlan = ({ navigation, route }) => {
     const formatDate = (date, time) => {
         let sTime = moment(new Date(time)).format("h:mm a")
         let sDate = moment(date).format("M/DD/YYYY")
-        let output=moment(`${sDate} ${sTime}`,"MM/DD/YYYY h:mm a").format('l LT');
+        let output = moment(`${sDate} ${sTime}`, "MM/DD/YYYY h:mm a").format('l LT');
         return output;
     }
 
@@ -113,7 +120,7 @@ export const AddPlan = ({ navigation, route }) => {
             return
         }
 
-        let dataArr = [event, venue, formatDate(startDate, startTime),timezone, formatDate(endDate, endTime), reminder, tripId];
+        let dataArr = [event, venue, formatDate(startDate, startTime), timezone, formatDate(endDate, endTime), reminder, tripId];
         if (editable) {
             dataArr.push(route.params.id)
             await db.update('UPDATE PLAN SET event = ?, venue = ?, startDate = ?,TIMEZONE = ?, endDate = ?, alert = ?, TripID = ? WHERE id = ?', dataArr);
@@ -147,15 +154,14 @@ export const AddPlan = ({ navigation, route }) => {
         setVisibleEndTime(false);
     };
 
-    const setTimezoneDialog=(ele)=>{
-        settimezone(ele.abbr);
+    const setTimezoneDialog = (ele) => {
+        settimezone(ele.value);
         settimezoneDisplay(ele.text);
-
         setVisibleTimezone(false)
     }
 
     const reminderNotification = () => {
-        let time=new Date(moment(new Date(formatDate(startDate, startTime))).subtract(5, "minutes"))
+        let time = new Date(moment(new Date(formatDate(startDate, startTime))).subtract(5, "minutes"))
         let notificationObj = {
             channelId: "reminder",
             title: "Reminder",
@@ -303,26 +309,26 @@ export const AddPlan = ({ navigation, route }) => {
         <Provider>
             <View>
                 <Portal>
-                    <Dialog style={{overflow:"hidden"}} visible={visibleTimezone}>
-                    <Dialog.Title>Select Timezone</Dialog.Title>
+                    <Dialog style={{ overflow: "hidden" }} visible={visibleTimezone}>
+                        <Dialog.Title>Select Timezone</Dialog.Title>
                         <Dialog.Content >
                             <Searchbar
-                            placeholder="Search"
-                            onChangeText={onChangeSearch}
-                            value={searchQuery}
+                                placeholder="Search"
+                                onChangeText={onChangeSearch}
+                                value={searchQuery}
                             />
-                            <ScrollView style={{marginTop:10, height:"80%"}}>
+                            <ScrollView style={{ marginTop: 10, height: "80%" }}>
                                 {
-                                        tzList.map((ele,key)=>{
-                                            return <TouchableRipple onPress={()=>{setTimezoneDialog(ele)}} key={key}>
-                                                <Text  style={{padding:10}} >{ele.text}</Text>
-                                            </TouchableRipple>
-                                        })
-                                    }
-                                
+                                    tzList.map((ele, key) => {
+                                        return <TouchableRipple onPress={() => { setTimezoneDialog(ele) }} key={key}>
+                                            <Text style={{ padding: 10 }} >{ele.text}</Text>
+                                        </TouchableRipple>
+                                    })
+                                }
+
                             </ScrollView>
 
-                            
+
                         </Dialog.Content>
 
                     </Dialog>
