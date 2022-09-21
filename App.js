@@ -39,7 +39,7 @@ const CustomlightTheme = {
   colors: {
     ...DefaultTheme.colors,
     ...PaperDefaultTheme.colors,
-    background: "#FCDE9C",
+    background: "#D3D5D4",
     primary: '#0D3B66',
     secondary: '#EE964B',
     tertiary: '#0D3B66'

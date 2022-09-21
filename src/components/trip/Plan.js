@@ -7,7 +7,7 @@ import { useTheme } from 'react-native-paper';
 import { styles } from "../../style/style";
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-import { Card, Title, Paragraph, Modal, Portal, Text, Appbar, List, Dialog, Provider } from 'react-native-paper';
+import { Card, Title, Paragraph, TouchableRipple, Portal, Text, Appbar, List, Dialog, Provider } from 'react-native-paper';
 import NetInfo from "@react-native-community/netinfo";
 import db from "../../db/db_connection"
 import moment from "moment-timezone";
@@ -77,12 +77,41 @@ export const Plans = ({ navigation, route }) => {
 
     function datetimeFormate(date,timezone){
         let gettz = tzList.find(ele => { return ele.value == timezone})
-        return moment(new Date(date)).format("MMM DD h:mm a")+` ${gettz.abbr}`
+        return moment(new Date(date)).format("h:mm a")+` ${gettz.abbr}`
     }
 
+    function randomColor() {
+        const icons = ["#36EEE0", "#F652A0", "#BCECE0", "#BD97CB", "#66D2D6"]
+        const random = Math.floor(Math.random() * icons.length);
+        return icons[random]
+      }
+
     const listItems = plans.map((eledate, datekey) =>
-        <View key={datekey} style={{ marginBottom: 10 }}>
-            <Title style={{ color: colors.text }}>{moment(new Date(eledate.date)).format("MMMM D YYYY")}</Title>
+    {
+        let getcolor= randomColor();
+        return <View key={datekey} style={{ marginBottom: 10 }}>
+            <Title style={{ color: colors.text }}>{moment(new Date(eledate.date)).format("ddd MMM DD")}</Title>
+
+    {
+                 eledate.plans.map((ele, key) => 
+                 <View key={key} style={{marginBottom:5}}>
+                    <TouchableOpacity onPress={() =>
+                            navigation.navigate('AddPlan', { destination: route.params.destination,tripId: route.params.id, id: ele.ID })
+                        } >
+                            <View style={{flexDirection:"row", backgroundColor:"white",padding:10,borderRadius:5,borderLeftColor:getcolor, borderStyle:"solid",borderLeftWidth:3}}>
+                                <View style={{borderLeftColor:"red", paddingRight:5}}>
+                                    <Text variant="titleMedium">{datetimeFormate(ele.startDate,ele.TIMEZONE)}</Text>
+                                </View>
+                                <View style={{paddingLeft:5,borderLeftColor:getcolor, borderStyle:"solid",borderLeftWidth:2}}>
+                                    <Text variant="titleMedium">{ele.event}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                 </View>)
+    }
+
+ 
+            {/* <Title style={{ color: colors.text }}>{moment(new Date(eledate.date)).format("ddd MMM DD")}</Title>
             {
                 eledate.plans.map((ele, key) => 
                     <View key={key}>
@@ -91,19 +120,31 @@ export const Plans = ({ navigation, route }) => {
                         } style={{ padding: 2 }}>
                             <Card>
                                 <Card.Content>
-                                    <Title style={{textTransform: "capitalize"}}>{ele.event} - {ele.venue}</Title>
+                                    <Title style={{textTransform: "capitalize"}}>{ele.event}</Title>
                                     <Paragraph>{datetimeFormate(ele.startDate,ele.TIMEZONE)}, {datetimeFormate(ele.endDate,ele.TIMEZONE)}</Paragraph>
                                 </Card.Content>
                             </Card>
                         </TouchableOpacity>
                     </View>
                 )
-            }
+            } */}
 
         </View>
+}
     );
 
     return <View style={[styles.container]}>
+        {/* <Title style={{ color: colors.text }}>Fri Sep 02</Title>
+        <TouchableOpacity>
+            <View style={{flexDirection:"row", backgroundColor:"white",padding:10,borderRadius:10,borderLeftColor:"#74bbfb", borderStyle:"solid",borderLeftWidth:3}}>
+                <View style={{borderLeftColor:"red", paddingRight:5}}>
+                    <Text variant="titleMedium">7:27pm AST</Text>
+                </View>
+                <View style={{paddingLeft:5,borderLeftColor:"#74bbfb", borderStyle:"solid",borderLeftWidth:2}}>
+                    <Text variant="titleMedium">Swimming</Text>
+                </View>
+            </View>
+        </TouchableOpacity> */}
         {listItems.length > 0 ? (<ScrollView >
             {listItems}
         </ScrollView>) : <Text style={{ color: colors.TextInput }}>Press + button to create Plan</Text>}
