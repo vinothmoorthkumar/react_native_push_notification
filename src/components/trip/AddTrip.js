@@ -236,7 +236,7 @@ export const AddTrip = ({ navigation, route }) => {
                         autoCapitalize: 'none',
                         style: {
                             backgroundColor: colors.label,
-                            color: colors.inputText,
+                            color: "black",
                         },
                         placeholderTextColor: colors.inputText
                     }}

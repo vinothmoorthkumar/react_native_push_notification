@@ -170,6 +170,23 @@ export const PlaceCategories = ({ navigation, route }) => {
             </TouchableOpacity>
         </View>
 
+        <View style={{ position: "absolute", bottom: 100, right: 25 }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination, tripId: route.params.tripId }) }}>
+                <View style={{
+                    position: 'relative',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 40,
+                    height: 40,
+                    borderRadius: 100,
+                    backgroundColor: 'red'
+                }}>
+                    <IconFA size={40} />
+                    <IconFA name='street-view' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+                </View>
+            </TouchableOpacity>
+        </View>
+
         <View>
             <Portal>
                 <Dialog visible={visibleDialog} onDismiss={hideDialog}>

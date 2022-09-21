@@ -42,7 +42,7 @@ export const Plans = ({ navigation, route }) => {
     function groupByDate(data) {
         // this gives an object with dates as keys
         const groups = data.reduce((groups, plan) => {
-            const date = plan.startDate.split('T')[0];
+            const date = plan.startDate.split(' ')[0];
             if (!groups[date]) {
                 groups[date] = [];
             }
@@ -93,7 +93,7 @@ export const Plans = ({ navigation, route }) => {
             {listItems}
         </ScrollView>) : <Text style={{ color: colors.TextInput }}>Press + button to create Plan</Text>}
 
-        <View style={{ position: "absolute", bottom: 150, right: 25 }}>
+        {/* <View style={{ position: "absolute", bottom: 150, right: 25 }}>
             <TouchableOpacity onPress={() => { navigation.navigate('TopSights', { destination: route.params.destination, tripId: route.params.id }) }}>
                 <View style={{
                     position: 'relative',
@@ -106,6 +106,23 @@ export const Plans = ({ navigation, route }) => {
                 }}>
                     <IconFA size={40} />
                     <IconFA name='street-view' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
+                </View>
+            </TouchableOpacity>
+        </View> */}
+
+        <View style={{ position: "absolute", bottom: 150, right: 25 }}>
+            <TouchableOpacity onPress={() => { navigation.navigate('CheckList', { id: route.params.id }) }}>
+                <View style={{
+                    position: 'relative',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 40,
+                    height: 40,
+                    borderRadius: 100,
+                    backgroundColor: 'red'
+                }}>
+                    <IconFA size={40} />
+                    <IconFA name='check' size={20} color='white' style={{ position: 'absolute', zIndex: 99 }} />
                 </View>
             </TouchableOpacity>
         </View>

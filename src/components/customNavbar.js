@@ -10,14 +10,10 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
     const route = useRoute();
-    const allowedPages = ["Plans","Home"];
+    const allowedPages = [""];
     const { colors } = useTheme();
     const checkRoute = allowedPages.some(ele => ele == route.name)
     const PlansMenu = <>
-
-        {route.name=="Home" && <View>
-            <Menu.Item onPress={() => { navigation.navigate('Documents') ,closeMenu()}} title="Documents" />
-        </View>}
 
         {route.name=="Plans" && <View>
             {/* <Menu.Item onPress={() => { navigation.navigate('AddTrip', { id: route.params.id }) ,closeMenu()}} title="Edit Trip" /> */}
@@ -28,7 +24,7 @@ export function CustomNavigationBar({ options, navigation, back, title }) {
 
     return (
         <Appbar.Header style={{backgroundColor:colors.background}}>
-            {back ? <Appbar.BackAction icon="bars" color="gray" onPress={navigation.goBack} /> : null}
+            {back ? <Appbar.BackAction color="#ffffff" onPress={navigation.goBack} /> : null}
 
             <Appbar.Content titleStyle={{color:colors.text}}  title={options.title} />
             {checkRoute ? (

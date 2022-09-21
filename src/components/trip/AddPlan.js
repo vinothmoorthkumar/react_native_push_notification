@@ -198,7 +198,7 @@ export const AddPlan = ({ navigation, route }) => {
         {/* Timezone */}
         <Pressable onPress={() => showTimeZoneDialog()}>
             <View pointerEvents="none">
-                <TextInput reminder label="TimeZone" value={timezoneDisplay} />
+                <TextInput reminder label="TimeZone" multiline={true} value={timezoneDisplay} />
             </View>
         </Pressable>
 
@@ -318,26 +318,30 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Provider>
                 <Portal>
-                    <Dialog style={{ overflow: "hidden", alignSelf: "center" }} visible={visibleTimezone} onDismiss={()=>{setVisibleTimezone(false)}}>
+                    <Dialog style={{ overFlow:"hidden",alignSelf: "center", minWidth:"90%" }} visible={visibleTimezone} onDismiss={()=>{setVisibleTimezone(false)}}>
                         <Dialog.Title>
                             Select Timezone
                         </Dialog.Title>
                         <Dialog.Content >
-                            <Searchbar
-                                placeholder="Search"
-                                onChangeText={onChangeSearch}
-                                value={searchQuery}
-                            />
-                            <ScrollView style={{ marginTop: 10, height: "80%" }}>
-                                {
-                                    timezoneList.map((ele, key) => {
-                                        return <TouchableRipple onPress={() => { setTimezoneDialog(ele) }} key={key}>
-                                            <Text style={{ padding: 10 }} >{ele.text}</Text>
-                                        </TouchableRipple>
-                                    })
-                                }
+                            <View>
+                                <Searchbar
+                                        placeholder="Search"
+                                        onChangeText={onChangeSearch}
+                                        value={searchQuery}
+                                    />
+                                    <View  style={{height:"85%"}}>
+                                        <ScrollView >
+                                            {
+                                                timezoneList.map((ele, key) => {
+                                                    return <TouchableRipple onPress={() => { setTimezoneDialog(ele) }} key={key}>
+                                                        <Text style={{ padding: 10 }} >{ele.text}</Text>
+                                                    </TouchableRipple>
+                                                })
+                                            }
 
-                            </ScrollView>
+                                        </ScrollView>
+                                    </View>
+                            </View>
 
 
                         </Dialog.Content>
