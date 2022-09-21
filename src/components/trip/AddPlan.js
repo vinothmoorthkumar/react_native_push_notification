@@ -23,8 +23,8 @@ export const AddPlan = ({ navigation, route }) => {
     const [timezone, settimezone] = React.useState("");
     const [timezoneDisplay, settimezoneDisplay] = React.useState("");
     const [searchQuery, setSearchQuery] = React.useState('');
+    const [timezoneList, settimezoneList] = React.useState([]);
 
-    const onChangeSearch = query => setSearchQuery(query);
     const [visibleTimezone, setVisibleTimezone] = React.useState(false);
     const showTimeZoneDialog = () => setVisibleTimezone(true);
 
@@ -49,6 +49,7 @@ export const AddPlan = ({ navigation, route }) => {
 
 
     useEffect(() => {
+        settimezoneList(tzList);
         async function getdata() {
             let results = await db.select("SELECT * FROM PLAN WHERE ID=" + route.params.id, [])
             let data = results.rows.item(0);
@@ -88,7 +89,13 @@ export const AddPlan = ({ navigation, route }) => {
         return output;
     }
 
-
+    const onChangeSearch = query =>{
+        let listfound=tzList.filter(ele=>
+            ele.text.toLowerCase().includes(query.toLowerCase())
+        )
+        settimezoneList(listfound)
+        setSearchQuery(query)
+    };
 
     function showDatePicker() {
         setVisibleStarDate(true);
@@ -310,10 +317,11 @@ export const AddPlan = ({ navigation, route }) => {
         </Provider>
 
         <Provider>
-            <View>
                 <Portal>
-                    <Dialog style={{ overflow: "hidden" }} visible={visibleTimezone}>
-                        <Dialog.Title>Select Timezone</Dialog.Title>
+                    <Dialog style={{ overflow: "hidden", alignSelf: "center" }} visible={visibleTimezone} onDismiss={()=>{setVisibleTimezone(false)}}>
+                        <Dialog.Title>
+                            Select Timezone
+                        </Dialog.Title>
                         <Dialog.Content >
                             <Searchbar
                                 placeholder="Search"
@@ -322,7 +330,7 @@ export const AddPlan = ({ navigation, route }) => {
                             />
                             <ScrollView style={{ marginTop: 10, height: "80%" }}>
                                 {
-                                    tzList.map((ele, key) => {
+                                    timezoneList.map((ele, key) => {
                                         return <TouchableRipple onPress={() => { setTimezoneDialog(ele) }} key={key}>
                                             <Text style={{ padding: 10 }} >{ele.text}</Text>
                                         </TouchableRipple>
@@ -333,10 +341,8 @@ export const AddPlan = ({ navigation, route }) => {
 
 
                         </Dialog.Content>
-
                     </Dialog>
                 </Portal>
-            </View>
         </Provider>
 
         <Toast ref={childRef} text={errorText}></Toast>
