@@ -34,7 +34,6 @@ export const Plans = ({ navigation, route }) => {
                 lists.push(row);
             }
             let groupeddate=groupByDate(lists);
-            console.log("groupeddate",groupeddate.sort( compare ))
             setPlans(groupeddate.sort( compare ))
         }
         getdata();
