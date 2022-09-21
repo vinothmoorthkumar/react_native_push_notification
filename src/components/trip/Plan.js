@@ -34,10 +34,26 @@ export const Plans = ({ navigation, route }) => {
                 lists.push(row);
             }
             let groupeddate=groupByDate(lists);
-            setPlans(groupeddate)
+            console.log("groupeddate",groupeddate.sort( compare ))
+            setPlans(groupeddate.sort( compare ))
         }
         getdata();
     }, [isFocused])
+
+
+    function compare( a, b ) {
+        // console.log("#####",a.date)
+        // if ( a.date < b.date ){
+        //   return -1;
+        // }
+        // if ( a.date > b.date ){
+        //   return 1;
+        // }
+        // return 0;
+        return new Date(a.date) - new Date(b.date);
+      }
+      
+      
 
     function groupByDate(data) {
         // this gives an object with dates as keys
