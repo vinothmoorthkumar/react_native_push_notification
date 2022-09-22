@@ -238,7 +238,7 @@ export const AddTrip = ({ navigation, route }) => {
                             backgroundColor: colors.label,
                             color: "black",
                         },
-                        placeholderTextColor: colors.inputText
+                        placeholderTextColor: colors.primary
                     }}
 
                     rightButtonsContainerStyle={{
