@@ -192,7 +192,7 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     return <View style={[styles.container]}>
-        <TextInput label="Event" reminder value={event} onChangeText={event => setevent(event)} />
+        <TextInput theme={{ colors: { text: "#fff"}}} label="Event" value={event} onChangeText={event => setevent(event)} />
         <TextInput label="Venue" reminder value={venue} onChangeText={venue => setvenue(venue)} />
 
         {/* Timezone */}
