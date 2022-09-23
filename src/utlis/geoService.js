@@ -1,4 +1,5 @@
 import axios from "axios";
+import Config from "react-native-config";
 
 // const geturl = async link => {
 //     try {
@@ -23,8 +24,7 @@ import axios from "axios";
 // geturl("https://unshorten.me/json/https://goo.gl/maps/Lu1xF4mdvj6LWprN6").then(x => x.status).then(console.log);
 
 
-
-const API= "AIzaSyD2oP_9oLhqRNDnH3VHsmGnqJtZ0Xi0C88"
+const API= Config.GOOGLE_MAPS_API_KEY;
 const geoLocation = {
     suggestions: async function (q) {
         return new Promise(async function(resolve, reject) {
