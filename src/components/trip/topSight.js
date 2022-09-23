@@ -108,13 +108,13 @@ export const TopSights = ({ navigation, route }) => {
     }
 
     const listLocation = locations.map((ele, key) =>
-        <View key={key} style={{ marginBottom: 10 }}>
+        <View key={key} style={{ marginBottom: 1}}>
             <List.Item
                 title={<Title onPress={() =>
                     redirecToMap(ele)
                 }>{ele.name}</Title>}
                 description=""
-                style={{backgroundColor:"white", padding:10}}
+                style={{backgroundColor:"white", padding:10, borderRadius:5 }}
                 left={props => <Image source={{ uri: ele.photoUri }} style={{ width: 50, height: 50, borderRadius: 40 }} />
                 }
                 right={props => <IconFA onPress={() => { addtofav(key) }} name={ele.fav?'heart':'heart-o'} style={{ marginTop:15 }}  size={20} color='red' />}
