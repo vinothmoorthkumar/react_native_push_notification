@@ -18,13 +18,13 @@ const db = SQLite.openDatabase({
             + "PLAN"
             + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,ALERT INTEGER DEFAULT 0, event TEXT,venue TEXT,startDate TEXT,endDate TEXT, TripID int, FOREIGN KEY (TripID) REFERENCES TRIP(ID));",
         [],(tx, results) => {
-
-            tx.executeSql(
-                "ALTER TABLE PLAN ADD COLUMN TIMEZONE TEXT",
-            [],(tx, result1) => {
-            }, (error)=>{
-                // console.log('Failed to select:', error);
-            });
+            // tx.executeSql(
+            //     "ALTER TABLE PLAN ADD COLUMN TEST2 TEXT",
+            // [],(tx, result1) => {
+            //     console.log("!!!!",result1)
+            // }, (error)=>{
+            //     // console.log('Failed to select:', error);
+            // });
         }, (error)=>{
             console.log('Failed to select:', error);
         });
@@ -62,11 +62,58 @@ const db = SQLite.openDatabase({
 
             "CREATE TABLE IF NOT EXISTS "
             + "PLACES"
-            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,url TEXT,lat TEXT,long TEXT,CATID int, FOREIGN KEY (CATID) REFERENCES CATEGORY(ID));",
+            + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,url TEXT,lat TEXT,long TEXT,latDelta TEXT,longDelta TEXT, CATID int, FOREIGN KEY (CATID) REFERENCES CATEGORY(ID));",
         [],(tx, results) => {
+
+            tx.executeSql(
+                "ALTER TABLE PLACES ADD COLUMN latDelta TEXT",
+            [],(tx, result1) => {
+              
+            }, (error)=>{
+
+                // console.log('Failed to select:', error);
+            });
+
+            tx.executeSql(
+                "ALTER TABLE PLACES ADD COLUMN longDelta TEXT",
+            [],(tx, result1) => {
+            }, (error)=>{
+                
+                // console.log('Failed to select:', error);
+            });
+
+      
+            
         }, (error)=>{
             console.log('Failed to select:', error);
         });
+
+          //get coloumns in table
+
+        // await tx.executeSql(
+        //     "SELECT GROUP_CONCAT(NAME,',') FROM PRAGMA_TABLE_INFO('PLACES')",
+        // [],(tx, results) => {
+        //     console.log("@!!")
+        //     const count = results.rows.length;
+        //     for (let i = 0; i < count; i++) {
+        //         const row = results.rows.item(i);
+        //         console.log("!!!",row)
+        //     }
+        // }, (error)=>{
+        //     console.log('Failed to select:', error);
+        // });
+
+        // await tx.executeSql(
+        //     "ALTER TABLE PLACES ADD COLUMN longDelta TEXT",
+        // [],(tx, result1) => {
+        //     console.log("$$$$$",result1)
+        // }, (error)=>{
+        //     console.log('Failed to select:', error);
+        // });
+
+      
+
+
     })
 }, error => { console.log(error) })
 
