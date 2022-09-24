@@ -281,7 +281,6 @@ export const Places = ({ navigation, route }) => {
     );
 
     return <View style={[styles.container]}>
-        <Button onPress={permissionHandle}> "Get Location"</Button>
         {listItems}
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
