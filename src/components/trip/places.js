@@ -154,9 +154,9 @@ export const Places = ({ navigation, route }) => {
     }
 
     function redirecToMap(ele) {
-        // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
-        // var url = scheme + `${ele.lat},${ele.long}`;
-        // Linking.openURL(ele.url);
+        var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        var url = scheme + `${ele.lat},${ele.long}`;
+        Linking.openURL(url);
     }
 
     const markLocation = (reg) => {
