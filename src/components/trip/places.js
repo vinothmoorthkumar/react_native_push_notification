@@ -12,7 +12,11 @@ import geo from "../../utlis/geoService"
 import MapView, { PROVIDER_GOOGLE, Animated, Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Config from "react-native-config";
+import RNLocation from 'react-native-location';
 
+RNLocation.configure({
+ distanceFilter: 5.0
+})
 export const Places = ({ navigation, route }) => {
     const { colors } = useTheme();
     const childRef = useRef(null);
@@ -58,6 +62,19 @@ export const Places = ({ navigation, route }) => {
 
         getdata();
 
+        // if (hasLocationPermission) {
+        //     Geolocation.getCurrentPosition(
+        //         (position) => {
+        //           console.log(position);
+        //         },
+        //         (error) => {
+        //           // See error code charts below.
+        //           console.log(error.code, error.message);
+        //         },
+        //         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        //     );
+        //   }
+
 
     }, [route.params?.catId])
 
@@ -72,6 +89,58 @@ export const Places = ({ navigation, route }) => {
         setList(lists)
         applymarkers(lists)
     }
+
+    const permissionHandle = async () => {
+        console.log('here')
+        let permission = await RNLocation.checkPermission({
+          ios: 'whenInUse', // or 'always'
+          android: {
+            detail: 'coarse' // or 'fine'
+          }
+        });
+     
+        console.log('here2')
+        console.log(permission)
+        let location;
+        if(!permission) {
+            permission = await RNLocation.requestPermission({
+               ios: "whenInUse",
+               android: {
+                 detail: "coarse",
+                 rationale: {
+                   title: "We need to access your location",
+                   message: "We use your location to show where you are on the map",
+                   buttonPositive: "OK",
+                   buttonNegative: "Cancel"
+                 }
+               }
+             })
+             console.log(permission)
+             location = await RNLocation.getLatestLocation({timeout: 100})
+             showMapDialog()
+             console.log(location, location.longitude, location.latitude, 
+                   location.timestamp)
+        } else {
+            console.log("Here 7")
+            location = await RNLocation.getLatestLocation({timeout: 200})
+
+            console.log(location)
+        }
+
+        showMapDialog()
+        setRegion(
+            {
+                latitude: location.latitude || 37.78825,
+                longitude: location.longitude ||-122.4324,
+                latitudeDelta: location.altitudeAccuracy || latitudeDelta,
+                longitudeDelta: location.altitudeAccuracy || longitudeDelta,
+            }
+        )
+
+     
+      }
+
+      
 
     const applymarkers = (list) => {
 
@@ -212,6 +281,7 @@ export const Places = ({ navigation, route }) => {
     );
 
     return <View style={[styles.container]}>
+        <Button onPress={permissionHandle}> "Get Location"</Button>
         {listItems}
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
@@ -316,7 +386,7 @@ export const Places = ({ navigation, route }) => {
 
 
         <View style={{ position: "absolute", bottom: 100, right: 25 }}>
-            <TouchableOpacity onPress={showMapDialog}>
+            <TouchableOpacity onPress={permissionHandle}>
                 <View style={{
                     position: 'relative',
                     justifyContent: 'center',
@@ -371,7 +441,7 @@ export const Places = ({ navigation, route }) => {
                     <IconFA onPress={hideMapDialog} style={{ textAlign: "right", paddingBottom: 20 }} name='remove' size={20} color='gray' />
                 </View>
                 <View style={{ height: "80%" }}>
-                        <MapView style={stylesMap.map} region={region}> 
+                        <MapView style={stylesMap.map} region={region} showsUserLocation={true}> 
                             {markers && markers.map((marker, index) => (
                                 <Marker
                                 key={index}
