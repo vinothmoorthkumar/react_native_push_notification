@@ -110,14 +110,14 @@ export const PlaceCategories = ({ navigation, route }) => {
     const listItems = list.map((ele, key) =>
         <View key={key}>
             <TouchableOpacity onPress={() =>
-                            navigation.navigate('Places', {catId:ele.ID})
+                            navigation.navigate('Places', {catId:ele.ID, destination: route.params.destination, tripId: route.params.tripId})
                         } style={{ padding: 2 }}>
                 <Card>
                     <Card.Title
                         title={<Title >{ele.name}</Title>}
-                        onPress={() =>
-                            navigation.navigate('Places', { catId: ele.ID })
-                        }
+                        // onPress={() =>
+                        //     navigation.navigate('Places', { catId: ele.ID })
+                        // }
                         right={(props) => <IconButton {...props} icon="ellipsis-v" onPress={() => {edit(key)}} />}
                     />
                 </Card>

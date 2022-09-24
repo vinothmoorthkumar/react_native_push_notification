@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Icon } from 'react'
+import React, { useState, useEffect, useRef, Icon, SafeAreaView } from 'react'
 import { StyleSheet } from 'react-native';
 
 import { View, TouchableOpacity, Linking } from 'react-native';
@@ -10,6 +10,8 @@ import { Title,Text, TextInput, Button, Card, Portal, Modal, Dialog, IconButton 
 import db from "../../db/db_connection"
 import geo from "../../utlis/geoService"
 import MapView, { PROVIDER_GOOGLE, Animated, Marker } from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Config from "react-native-config";
 
 export const Places = ({ navigation, route }) => {
     const { colors } = useTheme();
@@ -21,11 +23,13 @@ export const Places = ({ navigation, route }) => {
 
     const [list, setList] = React.useState([]);
     const [editable, seteditable] = React.useState(false);
+    const latitudeDelta = 0.025;
+    const longitudeDelta = 0.025;
     const [region, setRegion] = React.useState({
         latitude: 37.78825,
         longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: latitudeDelta,
+        longitudeDelta: longitudeDelta,
     });
 
     const [editableId, seteditableId] = React.useState(false);
@@ -189,15 +193,72 @@ export const Places = ({ navigation, route }) => {
         <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", }}>
-                    {editable && <Title>Update Place</Title>}
+                    {editable && <Title>{name}</Title>}
                     {!editable && <Title>Add Place</Title>}
                     <IconFA onPress={hideModal} style={{ textAlign: "right", paddingBottom: 20 }} name='remove' size={20} color='gray' />
                 </View>
-                <TextInput label="Place Name" value={name} onChangeText={name => setName(name)} />
+
+                
+                <View  style={{padding: 10,zIndex:100,backgroundColor: '#ecf0f1',position:"absolute", top:50,left:0,right:0, color:"back"}}>
+                    <GooglePlacesAutocomplete
+                    fetchDetails={true}
+                          textInputProps={{
+                            placeholderTextColor: '#000',
+                            // returnKeyType: "search"
+                          }}
+                                container={{
+                                    flex: 0,
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                    top: 20,
+                                    zIndex: 100,
+                                    elevation: 3,
+                                    paddingHorizontal: 15,
+                                }}
+                              listView={{
+                                position: 'absolute',
+                                zIndex: 100,
+                                elevation: 3,
+                                top: 30,
+                                paddingHorizontal: 15,
+                              }}
+
+                             styles={{
+                                textInput:{
+                                    color:"black"
+                                },
+                                description: {
+                                  fontWeight: 'bold',
+                                  color:"black"
+
+                                },
+                                predefinedPlacesDescription: {
+                                  color: '#1faadb',
+                                },
+                              }}
+                              
+                            placeholder='Enter name'
+                            onPress={(data, details = null) => {
+                                setName(details.name)
+                                setRegion({
+                                    latitudeDelta:latitudeDelta,
+                                    longitudeDelta:longitudeDelta,
+                                    latitude:details.geometry.location.lat,
+                                    longitude:details.geometry.location.lng,
+                                })
+                            }}
+                            query={{
+                                key: Config.GOOGLE_MAPS_API_KEY,
+                                language: 'en',
+                            }}
+                            />
+                </View>
+              
+
+                {/* <TextInput label="Place Name" value={name} onChangeText={name => setName(name)} /> */}
                 {/* <TextInput label="Map URl" value={url} onChangeText={url => setURL(url)} /> */}
-                <Text variant="labelLarge" style={{paddingVertical:2}}>Mark locaction on Map</Text>
-                <View style={{ height: "70%" }}>
-                    {/*Render our MapView*/}
+                {/* <Text variant="labelLarge" style={{paddingVertical:2}}>Mark locaction on Map</Text> */}
+                <View style={{ height: "70%",marginTop:80 }}>
 
                     <IconFA name="map-marker"
                         style={{
@@ -211,13 +272,6 @@ export const Places = ({ navigation, route }) => {
                         size={40}
                         color="#f00" />
                     <MapView region={region} style={stylesMap.map} zoomEnabled={true} zoomTapEnabled={true} onRegionChangeComplete={markLocation}>
-                        {/* 
-                        <Marker
-                            // key={index}
-                            coordinate={region}
-                        // title={marker.title}
-                        // description={marker.description}
-                        /> */}
                     </MapView>
 
                 </View>
