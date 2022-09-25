@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 project.ext.envConfigFiles = [
-    productiondebug: ".env.production",
-    developmentdebug: ".env.development",
+    prodrelease: ".env.production",
+    devdebug: ".env.development"
 ]
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
@@ -260,8 +260,8 @@ android {
 
     flavorDimensions "default"
     productFlavors {
-        production {}
-        development {}
+        dev {}
+        prod {}
     }
 
 
