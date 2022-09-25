@@ -132,7 +132,7 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
-        <Text>Dev {__DEV__.toString()}</Text>
+        {/* <Text>Dev {__DEV__.toString()}</Text> */}
 
 
       {/* {listItems.length > 0 ? (<ScrollView >
