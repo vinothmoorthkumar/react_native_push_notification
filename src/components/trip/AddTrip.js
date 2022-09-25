@@ -194,15 +194,15 @@ export const AddTrip = ({ navigation, route }) => {
     function getstartDateFormate(date) {
         // date.setUTCHours(0, 0, 0, 0)
         // var isoDate = date.toISOString()
-        var isoDate = moment(date).startOf('day').toISOString()
+        // var isoDate = moment(date).startOf('day').toISOString()
 
-        return isoDate;
+        return moment(date).format("YYYY-MM-DD");
     }
 
     function getendDateFormate(date) {
         // date.setUTCHours(23, 59, 59);
-        var isoDate = moment(date).endOf('day').toISOString()
-        return isoDate;
+        // var isoDate = moment(date).endOf('day').toISOString()
+        return moment(date).format("YYYY-MM-DD");
     }
 
     return <View style={[styles.container]}>

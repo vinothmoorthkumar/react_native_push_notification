@@ -25,8 +25,9 @@ export const HomeScreen = ({ navigation }) => {
     async function getTrip() {
       let pastresults = await db.select("SELECT * FROM TRIP WHERE TRIP.endDate < date('now') ORDER BY startDate ASC", [])
 
-      let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate<=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day') and endDate>=strftime('%Y-%m-%dT%H:%M:%fZ', 'now','start of day')", [])
-
+      let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate<=strftime('%Y-%m-%d', 'now') and endDate>=strftime('%Y-%m-%d', 'now')", [])
+      // let currentresults = await db.select("SELECT * FROM TRIP", [])
+      
       let upcomingresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate > date('now', '+1 day') ORDER BY startDate ASC ", [])
 
       setpast(structureArr(pastresults))
