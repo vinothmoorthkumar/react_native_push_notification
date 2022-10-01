@@ -23,12 +23,14 @@ export const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     // db.delete("DROP TABLE TRIP");
     async function getTrip() {
-      let pastresults = await db.select("SELECT * FROM TRIP WHERE TRIP.endDate < date('now') ORDER BY startDate ASC", [])
+      let pastresults = await db.select("SELECT * FROM TRIP WHERE endDate < date('now') ORDER BY startDate ASC", [])
 
       let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate<=strftime('%Y-%m-%d', 'now') and endDate>=strftime('%Y-%m-%d', 'now')", [])
-      // let currentresults = await db.select("SELECT * FROM TRIP", [])
-      
-      let upcomingresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate > date('now', '+1 day') ORDER BY startDate ASC ", [])
+      // let currentresults = await db.select("SELECT * FROM TRIP WHERE startDate>strftime('%Y-%m-%d', 'now')", [])
+      // let currentresults = await db.select("SELECT strftime('%Y-%m-%d', 'now')", [])
+      // console.log("%%%%%%%%%%%%%%%%%",structureArr(currentresults))
+      // let upcomingresults = await db.select("SELECT * FROM TRIP WHERE TRIP.startDate > date('now', '+1 day') ORDER BY startDate ASC ", [])
+      let upcomingresults = await db.select("SELECT * FROM TRIP WHERE startDate > strftime('%Y-%m-%d','now') ORDER BY startDate ASC ", [])
 
       setpast(structureArr(pastresults))
       setTrips(structureArr(currentresults))
