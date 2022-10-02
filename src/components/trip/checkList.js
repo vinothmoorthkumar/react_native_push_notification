@@ -84,7 +84,7 @@ export const CheckList = ({ navigation, route }) => {
   const listItems = item.map((ele, key) =>
     <View key={key} style={{ flexDirection: 'row' }}>
       <Checkbox status={ele.checked ? 'checked' : 'unchecked'} onPress={() => { setChecked(!ele.checked, key) }} />
-      <TextInput autoFocus={true} style={{ alignSelf: "stretch", width: 250, height: 40, color: colors.TextInput }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
+      <TextInput autoFocus={true}     blurOnSubmit={false}  style={{ alignSelf: "stretch", width: 250, height: 40, color: colors.TextInput }} value={ele.item} onChangeText={eleData => setData(eleData, key)} />
       <IconFA onPress={() => { deleteFromUnChecked(key) }} name='remove' style={{ margin: 10 }} size={20} color={styles.Button} />
     </View>
   );
@@ -98,7 +98,7 @@ export const CheckList = ({ navigation, route }) => {
   );
 
   return <View style={[styles.container]}>
-            <ScrollView >
+            <ScrollView keyboardShouldPersistTaps="always">
             {listItems.length > 0 && <Title style={{ color: colors.Text }}>Yet to pack</Title>
             }
             {listItems}
