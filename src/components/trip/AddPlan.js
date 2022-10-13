@@ -192,13 +192,13 @@ export const AddPlan = ({ navigation, route }) => {
     }
 
     return <View style={[styles.container]}>
-        <TextInput theme={{ colors: { text: "#fff"}}} label="Event" value={event} onChangeText={event => setevent(event)} />
-        <TextInput label="Venue" reminder value={venue} onChangeText={venue => setvenue(venue)} />
+        <TextInput style={{backgroundColor:"transparent"}} label="Event" value={event} onChangeText={event => setevent(event)} />
+        <TextInput style={{backgroundColor:"transparent"}}  label="Venue" reminder value={venue} onChangeText={venue => setvenue(venue)} />
 
         {/* Timezone */}
         <Pressable onPress={() => showTimeZoneDialog()}>
             <View pointerEvents="none">
-                <TextInput reminder label="TimeZone" multiline={true} value={timezoneDisplay} />
+                <TextInput style={{backgroundColor:"transparent"}}  reminder label="TimeZone" multiline={true} value={timezoneDisplay} />
             </View>
         </Pressable>
 
@@ -207,7 +207,7 @@ export const AddPlan = ({ navigation, route }) => {
         {/* Start date and Time */}
         <Pressable onPress={() => showDatePicker()}>
             <View pointerEvents="none">
-                <TextInput reminder label="Start Date" value={startDate.toDateString()} />
+                <TextInput style={{backgroundColor:"transparent"}}  reminder label="Start Date" value={startDate.toDateString()} />
             </View>
         </Pressable>
 
@@ -223,7 +223,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleStarTime(true)}>
             <View pointerEvents="none">
-                <TextInput reminder label="Start Time" value={timeConverter(startTime)} />
+                <TextInput style={{backgroundColor:"transparent"}}  reminder label="Start Time" value={timeConverter(startTime)} />
             </View>
         </Pressable>
 
@@ -241,7 +241,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => showEndDatePicker()}>
             <View pointerEvents="none">
-                <TextInput reminder label="End Date" value={endDate.toDateString()} />
+                <TextInput style={{backgroundColor:"transparent"}}  reminder label="End Date" value={endDate.toDateString()} />
             </View>
         </Pressable>
         {
@@ -257,7 +257,7 @@ export const AddPlan = ({ navigation, route }) => {
 
         <Pressable onPress={() => setVisibleEndTime(true)}>
             <View pointerEvents="none">
-                <TextInput reminderlabel="End Time" value={timeConverter(endTime)} />
+                <TextInput style={{backgroundColor:"transparent"}}  reminderlabel="End Time" value={timeConverter(endTime)} />
             </View>
         </Pressable>
 

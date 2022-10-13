@@ -52,6 +52,7 @@ const CustomdarkTheme = {
   colors: {
     ...DarkTheme.colors,
     ...PaperDefaultTheme.colors,
+    onSurfaceVariant: "white",
     background: "#333333",
     text: "#ffffff",
     inputText:"#fff"
